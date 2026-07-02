@@ -1,0 +1,7 @@
+baseURL = 'https://nirvanacelesteblog.dpdns.org/'
+languageCode = 'zh-cn'
+title = 'Nirvana Celeste Space'
+theme = 'PaperMod'
+
+[params]
+  math = true # 以后写算法题解时，用来支持 LaTeX 数学公式
