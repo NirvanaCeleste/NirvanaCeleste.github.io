@@ -1,3 +1,67 @@
+<style>
+    /* 核心样式：确保覆盖在最顶层，且不干扰正常页面 */
+    .splash-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(10, 10, 10, 0.96);
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: sans-serif;
+    }
+    .splash-overlay.hidden { display: none !important; }
+
+    /* SVG 树木动画 */
+    .tree-animation-container { margin-bottom: 25px; display: flex; justify-content: center; }
+    .growing-tree path { fill: none; stroke: #ffffff; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; animation: growLines 2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .growing-tree .branch-left { animation-delay: 0.6s; }
+    .growing-tree .branch-right { animation-delay: 0.9s; }
+    .growing-tree .leaf { fill: #ffffff; transform: scale(0); transform-origin: center; animation: popLeaf 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .growing-tree .leaf-1 { transform-origin: 60px 90px; animation-delay: 1.4s; }
+    .growing-tree .leaf-2 { transform-origin: 140px 75px; animation-delay: 1.6s; }
+    .growing-tree .leaf-3 { transform-origin: 100px 75px; animation-delay: 1.8s; }
+
+    @keyframes growLines { to { stroke-dashoffset: 0; } }
+    @keyframes popLeaf { to { transform: scale(1); } }
+
+    /* 弹窗卡片 */
+    .intro-modal-card { background: #16161a; border: 2px solid #ffffff; border-radius: 12px; padding: 30px; max-width: 520px; width: 90%; color: #ffffff; box-shadow: 0 20px 40px rgba(0,0,0,0.8); text-align: left; }
+    .animate-pop { transform: scale(0.8); opacity: 0; animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards; }
+    @keyframes modalPop { to { transform: scale(1); opacity: 1; } }
+
+    .modal-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 8px; text-align: center; }
+    .modal-body-content p { font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px; color: #dddddd; }
+    .modal-body-content p.en { color: #aaaaaa; font-size: 0.9rem; }
+    .modal-divider { border: 0; border-top: 1px dashed #444; margin: 15px 0; }
+
+    /* 社交标签组 */
+    .social-links-zone { margin: 15px 0; display: flex; gap: 10px; }
+    .social-links-zone a { padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; text-decoration: none; color: #fff; transition: transform 0.2s; }
+    .social-links-zone a:hover { transform: scale(1.05); }
+    .badge-bili { background: #00aeec; }
+    .badge-yt { background: #ff0000; }
+    .badge-tw { background: #14171a; border: 1px solid #555; }
+
+    /* 退出按钮 */
+    .modal-enter-btn { display: block; width: 100%; padding: 12px; margin-top: 20px; background: #ffffff; color: #000000; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+    .modal-enter-btn:hover { background: #e0e0e0; }
+
+    /* 整体退出效果 */
+    .fade-out-exit { opacity: 1; animation: fadeExit 0.6s ease forwards; }
+    @keyframes fadeExit { to { opacity: 0; transform: translateY(-30px); } }
+
+    /* 手机端响应式适配 (此处调整了 scale 和 margin，确保文字和按钮不被遮挡) */
+    @media screen and (max-width: 600px) {
+        .tree-animation-container { transform: scale(0.4); margin: -20px 0 -20px 0; height: 120px; pointer-events: none; }
+        .intro-modal-card { padding: 15px !important; width: 92% !important; max-height: 75vh; overflow-y: auto; }
+        .modal-title { font-size: 1.2rem !important; }
+        .modal-body-content p { font-size: 0.85rem !important; line-height: 1.4 !important; }
+        .modal-enter-btn { padding: 10px !important; }
+    }
+</style>
+
 <div id="welcome-splash" class="splash-overlay hidden">
     <div class="tree-animation-container">
         <svg class="growing-tree" viewBox="0 0 200 200" width="160" height="160">
@@ -13,15 +77,15 @@
         <h2 class="modal-title">✨ Nirvana Celeste Space</h2>
         <div class="modal-body-content">
             <p><strong>👋 如果你是从 Discord OMORI 社区来的，欢迎你，朋友！有关 OMORI 模组的工作放在了对应分区。</strong></p>
-            <p><strong>👋 If you are here from the OMORI Discord community, welcome, friend! You can find my OMORI mod work in the corresponding section.</strong></p>
+            <p class="en"><strong>👋 If you are here from the OMORI Discord community, welcome, friend! You can find my OMORI mod work in the corresponding section.</strong></p>
             <hr class="modal-divider">
 
             <p><strong>关于本站 / About:</strong></p>
             <p>这个网页基于 GitHub、Cloudflare 和 DigitalPlat 开发，旨在记录我的学习和开发经历，如 OMORI 模组《未竟之事》和 ACM 题解等。</p>
-            <p>This website is built on GitHub, Cloudflare, and DigitalPlat, serving as a space to document my learning and development journey, such as the OMORI mod "Unwritten" and my ACM competitive programming solutions.</p>
+            <p class="en">This website is built on GitHub, Cloudflare, and DigitalPlat, serving as a space to document my learning and development journey, such as the OMORI mod "Unwritten" and my ACM competitive programming solutions.</p>
             
             <p>网站目前较为简陋，但旨在提供一个打破地理限制的访问空间。</p>
-            <p>The site is currently a work in progress, but it is intended to provide accessible space regardless of your location.</p>
+            <p class="en">The site is currently a work in progress, but it is intended to provide accessible space regardless of your location.</p>
 
             <div class="social-links-zone">
                 <a href="https://space.bilibili.com/414300544" target="_blank" class="badge-bili">Bilibili</a>
@@ -34,17 +98,17 @@
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    if (!localStorage.getItem("has_visited_before")) {
-        const splash = document.getElementById("welcome-splash");
-        if (splash) {
-            splash.classList.remove("hidden");
-            document.getElementById("close-splash-btn").addEventListener("click", function() {
-                splash.classList.add("fade-out-exit");
-                localStorage.setItem("has_visited_before", "true");
-                setTimeout(() => { splash.remove(); }, 600);
-            });
+    document.addEventListener("DOMContentLoaded", function() {
+        if (!localStorage.getItem("has_visited_before")) {
+            const splash = document.getElementById("welcome-splash");
+            if (splash) {
+                splash.classList.remove("hidden");
+                document.getElementById("close-splash-btn").addEventListener("click", function() {
+                    splash.classList.add("fade-out-exit");
+                    localStorage.setItem("has_visited_before", "true");
+                    setTimeout(() => { splash.remove(); }, 600);
+                });
+            }
         }
-    }
-});
+    });
 </script>
