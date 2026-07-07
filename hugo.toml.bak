@@ -1,0 +1,28 @@
+baseURL = 'https://nirvanacelesteblog.dpdns.org/'
+languageCode = 'zh-cn'
+title = 'Nirvana Celeste Space'
+theme = 'PaperMod'
+
+[params]
+  math = true # 以后写算法题解时，用来支持 LaTeX 数学公式
+  
+  # 解决 Cloudflare 冲突导致的排版错乱
+  assets.disableHLJS = true
+  assets.disableFingerprinting = true
+
+[params.comments]
+  enable = true
+
+[params.giscus]
+  repo = "NirvanaCeleste/NirvanaCeleste.github.io"
+  repoId = "R_kgDOTLg_BA"
+  category = "General"
+  categoryId = "DIC_kwDOTLg_BM4DAs4c"
+  mapping = "url"
+  strict = "0"
+  reactionsEnabled = "1"
+  emitMetadata = "0"
+  inputPosition = "bottom"
+  theme = "preferred_color_scheme" # 自动跟随博客的明暗（黑白）模式切换
+  lang = "zh-CN"
+  loading = "lazy"

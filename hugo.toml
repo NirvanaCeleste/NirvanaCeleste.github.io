@@ -1,7 +1,23 @@
-baseURL = 'https://nirvanacelesteblog.dpdns.org/'
+baseURL = 'https://NirvanaCeleste.github.io/'
 languageCode = 'zh-cn'
 title = 'Nirvana Celeste Space'
-theme = 'PaperMod'
+theme = 'blowfish'
 
 [params]
-  math = true # 以后写算法题解时，用来支持 LaTeX 数学公式
+  mainSections = ['acm', 'omori']
+  enableSidebar = true
+  enableSearch = true
+
+[menu]
+  [[menu.main]]
+    name = '主页'
+    url = '/'
+    weight = 1
+  [[menu.main]]
+    name = 'ACM 题解'
+    url = '/acm/'
+    weight = 2
+  [[menu.main]]
+    name = 'OMORI 模组'
+    url = '/omori/'
+    weight = 3

@@ -1,0 +1,15 @@
+{{ define "main" }}
+  {{ .Content }}
+  
+  <h2 class="mt-8 mb-4">最近发布</h2>
+  <div class="grid gap-4">
+    {{ range where .Site.RegularPages "Section" "in" .Site.Params.mainSections }}
+      <div class="p-4 border rounded shadow-sm">
+        <a href="{{ .RelPermalink }}" class="text-xl font-bold">{{ .Title }}</a>
+        <p class="text-sm text-gray-500">{{ .Date.Format "2006-01-02" }}</p>
+      </div>
+    {{ end }}
+  </div>
+
+  {{ partial "splash.html" . }}
+{{ end }}

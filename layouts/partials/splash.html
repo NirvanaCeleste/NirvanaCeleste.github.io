@@ -1,0 +1,50 @@
+<div id="welcome-splash" class="splash-overlay hidden">
+    <div class="tree-animation-container">
+        <svg class="growing-tree" viewBox="0 0 200 200" width="160" height="160">
+            <path class="trunk" d="M100,160 Q100,120 100,80" />
+            <path class="branch branch-left" d="M100,120 Q80,100 60,90" />
+            <path class="branch branch-right" d="M100,100 Q120,80 140,75" />
+            <circle class="leaf leaf-1" cx="60" cy="90" r="8" />
+            <circle class="leaf leaf-2" cx="140" cy="75" r="10" />
+            <circle class="leaf leaf-3" cx="100" cy="75" r="12" />
+        </svg>
+    </div>
+    <div class="intro-modal-card animate-pop">
+        <h2 class="modal-title">✨ Nirvana Celeste Space</h2>
+        <div class="modal-body-content">
+            <p><strong>👋 如果你是从 Discord OMORI 社区来的，欢迎你，朋友！有关 OMORI 模组的工作放在了对应分区。</strong></p>
+            <p><strong>👋 If you are here from the OMORI Discord community, welcome, friend! You can find my OMORI mod work in the corresponding section.</strong></p>
+            <hr class="modal-divider">
+
+            <p><strong>关于本站 / About:</strong></p>
+            <p>这个网页基于 GitHub、Cloudflare 和 DigitalPlat 开发，旨在记录我的学习和开发经历，如 OMORI 模组《未竟之事》和 ACM 题解等。</p>
+            <p>This website is built on GitHub, Cloudflare, and DigitalPlat, serving as a space to document my learning and development journey, such as the OMORI mod "Unwritten" and my ACM competitive programming solutions.</p>
+            
+            <p>网站目前较为简陋，但旨在提供一个打破地理限制的访问空间。</p>
+            <p>The site is currently a work in progress, but it is intended to provide accessible space regardless of your location.</p>
+
+            <div class="social-links-zone">
+                <a href="https://space.bilibili.com/414300544" target="_blank" class="badge-bili">Bilibili</a>
+                <a href="https://www.youtube.com/@OmoriModUnwrittenStory" target="_blank" class="badge-yt">YouTube</a>
+                <a href="https://x.com/NirvanaCelesteZ" target="_blank" class="badge-tw">Twitter(X)</a>
+            </div>
+        </div>
+        <button id="close-splash-btn" class="modal-enter-btn">Enter Space</button>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    if (!localStorage.getItem("has_visited_before")) {
+        const splash = document.getElementById("welcome-splash");
+        if (splash) {
+            splash.classList.remove("hidden");
+            document.getElementById("close-splash-btn").addEventListener("click", function() {
+                splash.classList.add("fade-out-exit");
+                localStorage.setItem("has_visited_before", "true");
+                setTimeout(() => { splash.remove(); }, 600);
+            });
+        }
+    }
+});
+</script>
