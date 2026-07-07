@@ -85,33 +85,28 @@
     animation: fadeExit 0.6s ease forwards;
 }
 @keyframes fadeExit { to { opacity: 0; transform: translateY(-30px); } }
-/* --- 手机端适配优化 --- */
+
 @media screen and (max-width: 600px) {
-  /* 1. 缩小动画容器 */
+  /* 1. 强行把动画的高度限制死，并居中缩放 */
   .tree-animation-container {
-    transform: scale(0.6); /* 缩放至 60% */
-    margin-bottom: 5px;   /* 减小下方间距，腾出空间 */
-  }
-
-  /* 2. 压缩弹窗卡片宽度，确保不顶到屏幕边缘 */
-  .intro-modal-card {
-    width: 95%;           /* 稍微增加宽度比例，利用空间 */
-    padding: 15px;        /* 减小内边距 */
-  }
-
-  /* 3. 调整字体大小，防止文字溢出 */
-  .modal-title { font-size: 1.2rem; }
-  .modal-body-content p { font-size: 0.85rem; line-height: 1.4; }
-
-  /* 4. 让社交标签组在手机上换行显示，避免挤在一起 */
-  .social-links-zone {
-    flex-wrap: wrap;
+    transform: scale(0.45);   /* 进一步缩小到 45% */
+    margin: -20px 0 -20px 0;   /* 负 margin 强行把上下间距吃掉 */
+    height: 150px;            /* 强制固定高度，防止它撑开页面 */
+    overflow: hidden;         /* 超出部分直接切掉，不显示 */
+    display: flex;
     justify-content: center;
+    align-items: center;
   }
-}
 
-/* --- 强制预防性修复 --- */
-/* 防止动画层盖住按钮导致点击失效 */
-.tree-animation-container {
-  pointer-events: none; /* 让鼠标点击直接穿透动画层 */
+  /* 2. 减小卡片间距，确保在小屏幕上不滚动 */
+  .intro-modal-card {
+    padding: 10px !important;
+    margin-top: 10px;
+    max-height: 80vh;         /* 限制最大高度 */
+    overflow-y: auto;         /* 如果内容太多，让卡片内部滚动 */
+  }
+
+  /* 3. 字体继续缩小，保证进入按钮在首屏可见 */
+  .modal-title { font-size: 1.1rem !important; margin-bottom: 5px !important; }
+  .modal-enter-btn { padding: 10px !important; font-size: 0.9rem !important; }
 }
