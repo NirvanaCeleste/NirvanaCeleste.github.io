@@ -85,3 +85,33 @@
     animation: fadeExit 0.6s ease forwards;
 }
 @keyframes fadeExit { to { opacity: 0; transform: translateY(-30px); } }
+/* --- 手机端适配优化 --- */
+@media screen and (max-width: 600px) {
+  /* 1. 缩小动画容器 */
+  .tree-animation-container {
+    transform: scale(0.6); /* 缩放至 60% */
+    margin-bottom: 5px;   /* 减小下方间距，腾出空间 */
+  }
+
+  /* 2. 压缩弹窗卡片宽度，确保不顶到屏幕边缘 */
+  .intro-modal-card {
+    width: 95%;           /* 稍微增加宽度比例，利用空间 */
+    padding: 15px;        /* 减小内边距 */
+  }
+
+  /* 3. 调整字体大小，防止文字溢出 */
+  .modal-title { font-size: 1.2rem; }
+  .modal-body-content p { font-size: 0.85rem; line-height: 1.4; }
+
+  /* 4. 让社交标签组在手机上换行显示，避免挤在一起 */
+  .social-links-zone {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* --- 强制预防性修复 --- */
+/* 防止动画层盖住按钮导致点击失效 */
+.tree-animation-container {
+  pointer-events: none; /* 让鼠标点击直接穿透动画层 */
+}
