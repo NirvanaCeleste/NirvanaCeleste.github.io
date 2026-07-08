@@ -1,112 +1,57 @@
-/* 遮罩层 */
-.splash-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(10, 10, 10, 0.96);
-    z-index: 99999;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: sans-serif;
+/* 全局半透明背景图（全站都保留） */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: url('/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;
 }
-.splash-overlay.hidden { display: none !important; }
 
-/* SVG 树木动态生长动画 */
-.tree-animation-container { margin-bottom: 25px; }
-.growing-tree path {
-    fill: none;
-    stroke: #ffffff;
-    stroke-width: 4;
-    stroke-linecap: round;
-    stroke-dasharray: 100;
-    stroke-dashoffset: 100;
-    animation: growLines 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+/* ========== 仅帖子详情页生效：导航白底 + 正文白底 ========== */
+body.single {
+  /* 详情页导航栏纯白底 */
 }
-.growing-tree .branch-left { animation-delay: 0.6s; }
-.growing-tree .branch-right { animation-delay: 0.9s; }
-.growing-tree .leaf {
-    fill: #ffffff;
-    transform: scale(0);
-    transform-origin: center;
-    animation: popLeaf 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+body.single header.navbar,
+body.single .navbar.is-sticky {
+  background: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
 }
-.growing-tree .leaf-1 { transform-origin: 60px 90px; animation-delay: 1.4s; }
-.growing-tree .leaf-2 { transform-origin: 140px 75px; animation-delay: 1.6s; }
-.growing-tree .leaf-3 { transform-origin: 100px 75px; animation-delay: 1.8s; }
-
-@keyframes growLines { to { stroke-dashoffset: 0; } }
-@keyframes popLeaf { to { transform: scale(1); } }
-
-/* 弹窗卡片样式 */
-.intro-modal-card {
-    background: #16161a;
-    border: 2px solid #ffffff;
-    border-radius: 12px;
-    padding: 30px;
-    max-width: 520px;
-    width: 90%;
-    color: #ffffff;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-    text-align: left;
+body.single .navbar * {
+  background-color: inherit !important;
 }
-.animate-pop {
-    transform: scale(0.8); opacity: 0;
-    animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards;
+
+/* 帖子正文宽幅白底，解决你说的“太小”问题 */
+body.single .main-wrapper,
+body.single article.post {
+  background-color: #fff !important;
+  border-radius: 8px;
+  padding: 2rem 3rem; /* 加宽左右内边距，视觉更大 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  max-width: 1400px; /* 放大最大宽度，不再窄小 */
+  width: 92%; /* 适配移动端，左右留少量边距 */
 }
-@keyframes modalPop { to { transform: scale(1); opacity: 1; } }
 
-.modal-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 8px; text-align: center;}
-.modal-body-content p { font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px; color: #dddddd; }
-.modal-body-content p.en { color: #aaaaaa; font-size: 0.9rem; }
-.modal-divider { border: 0; border-top: 1px dashed #444; margin: 15px 0; }
-
-/* 社交标签组 */
-.social-links-zone { margin: 15px 0; display: flex; gap: 10px; }
-.social-links-zone a {
-    padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; text-decoration: none; color: #fff; transition: transform 0.2s;
+/* 帖子页脚白底 */
+body.single .footer-wrapper {
+  background-color: #fff !important;
+  margin-top: 0 !important;
+  padding: 1.5rem 3rem;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
 }
-.social-links-zone a:hover { transform: scale(1.05); }
-.badge-bili { background: #00aeec; }
-.badge-yt { background: #ff0000; }
-.badge-tw { background: #14171a; border: 1px solid #555; }
 
-/* 退出按钮 */
-.modal-enter-btn {
-    display: block; width: 100%; padding: 12px; margin-top: 20px;
-    background: #ffffff; color: #000000; border: none; border-radius: 6px;
-    font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s;
-}
-.modal-enter-btn:hover { background: #e0e0e0; }
-
-/* 整体退出效果 */
-.fade-out-exit {
-    opacity: 1;
-    animation: fadeExit 0.6s ease forwards;
-}
-@keyframes fadeExit { to { opacity: 0; transform: translateY(-30px); } }
-
-@media screen and (max-width: 600px) {
-  /* 1. 强行把动画的高度限制死，并居中缩放 */
-  .tree-animation-container {
-    transform: scale(0.45);   /* 进一步缩小到 45% */
-    margin: -20px 0 -20px 0;   /* 负 margin 强行把上下间距吃掉 */
-    height: 150px;            /* 强制固定高度，防止它撑开页面 */
-    overflow: hidden;         /* 超出部分直接切掉，不显示 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* 暗黑模式适配 */
+@media (prefers-color-scheme: dark) {
+  body.single header.navbar,
+  body.single .main-wrapper,
+  body.single .footer-wrapper {
+    background-color: #18181b !important;
   }
-
-  /* 2. 减小卡片间距，确保在小屏幕上不滚动 */
-  .intro-modal-card {
-    padding: 10px !important;
-    margin-top: 10px;
-    max-height: 80vh;         /* 限制最大高度 */
-    overflow-y: auto;         /* 如果内容太多，让卡片内部滚动 */
-  }
-
-  /* 3. 字体继续缩小，保证进入按钮在首屏可见 */
-  .modal-title { font-size: 1.1rem !important; margin-bottom: 5px !important; }
-  .modal-enter-btn { padding: 10px !important; font-size: 0.9rem !important; }
 }

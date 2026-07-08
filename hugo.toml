@@ -1,23 +1,33 @@
 baseURL = 'https://NirvanaCeleste.github.io/'
-languageCode = 'zh-cn'
-title = 'Nirvana Celeste Space'
+locale = 'zh-cn'
+title = "NirvanaCeleste's Blog"
 theme = 'blowfish'
 
 [params]
   mainSections = ['acm', 'omori']
   enableSidebar = true
   enableSearch = true
+  math = true
 
 [menu]
   [[menu.main]]
-    name = '主页'
+    name = '🏠 主页'
     url = '/'
     weight = 1
   [[menu.main]]
-    name = 'ACM 题解'
+    name = '💻 ACM 题解'
     url = '/acm/'
     weight = 2
   [[menu.main]]
-    name = 'OMORI 模组'
+    name = '🎮 OMORI 模组'
     url = '/omori/'
     weight = 3
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['$$', '$$'], ['\[', '\]']]
+          inline = [['$', '$'], ['\(', '\)']]

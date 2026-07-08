@@ -1,4 +1,4 @@
 ---
-title: "Nirvana Celeste Space"
+title: "NirvanaCeleste's Blog"
 layout: home
 ---
