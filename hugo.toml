@@ -9,6 +9,23 @@ theme = 'blowfish'
   enableSearch = true
   math = true
 
+  [params.comments]
+    enabled = true
+    provider = "giscus" # 指定使用 giscus
+
+[params.giscus]
+    repo = "NirvanaCeleste/NirvanaCeleste.github.io"
+    repoId = "R_kgDOTLg_BA"
+    category = "General"
+    categoryId = "DIC_kwDOTLg_BM4DAs4c"
+    mapping = "pathname"
+    strict = "0"
+    reactionsEnabled = "1"
+    emitMetadata = "0"
+    inputPosition = "bottom"
+    theme = "light"
+    lang = "zh-CN"
+
 [menu]
   [[menu.main]]
     name = '🏠 主页'
@@ -25,9 +42,15 @@ theme = 'blowfish'
 
 [markup]
   [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true  # 这一行必须加上，否则 Giscus 的脚本会被安全机制删掉
+    
     [markup.goldmark.extensions]
       [markup.goldmark.extensions.passthrough]
         enable = true
         [markup.goldmark.extensions.passthrough.delimiters]
           block = [['$$', '$$'], ['\[', '\]']]
           inline = [['$', '$'], ['\(', '\)']]
+
+[module]
+proxy = "https://goproxy.cn"

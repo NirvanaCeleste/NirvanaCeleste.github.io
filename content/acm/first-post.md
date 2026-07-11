@@ -2,6 +2,7 @@
 title: "AtCoder Beginner Contest 463"
 date: 2026-07-07
 draft: false
+comments: true
 ---
 
 ## A

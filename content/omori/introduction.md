@@ -2,6 +2,7 @@
 title: "简介 Introduction"
 date: 2026-07-02T22:15:00+08:00
 draft: false
+comments: true
 ---
 
 这个网页是基于Github、Cloudflare、DigitalPlat Domains开发的，旨在记录我的学习和开发经历，如OMORI模组《未竟之事》和ACM学习题解等。
