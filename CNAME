@@ -1,1 +1,3 @@
-nirvanacelesteblog.dpdns.org
+baseURL = "https://nirvanacelesteblog.dpdns.org/"
+relativeURLs = true
+canonifyURLs = true
