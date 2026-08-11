@@ -1,347 +1,93 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ACM练习记录 on NirvanaCeleste's Blog</title><link>https://NirvanaCeleste.github.io/acm/</link><description>Recent content in ACM练习记录 on NirvanaCeleste's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© 2026</copyright><lastBuildDate>Tue, 04 Aug 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://NirvanaCeleste.github.io/acm/index.xml" rel="self" type="application/rss+xml"/><item><title>Codeforces Round 1114 (Div. 3)</title><link>https://NirvanaCeleste.github.io/acm/6post/</link><pubDate>Tue, 04 Aug 2026 00:00:00 +0000</pubDate><guid>https://NirvanaCeleste.github.io/acm/6post/</guid><description>&lt;p&gt;&lt;figure&gt;&lt;img
- class="my-0 rounded-md"
- loading="lazy"
- decoding="async"
- fetchpriority="low"
- alt="CF1114Div3"
- src="https://NirvanaCeleste.github.io/img/acm/CF1114Div3.png"
- &gt;&lt;/figure&gt;
-
-&lt;figure&gt;&lt;img
- class="my-0 rounded-md"
- loading="lazy"
- decoding="async"
- fetchpriority="low"
- alt="CF1114Div3_submit"
- src="https://NirvanaCeleste.github.io/img/acm/CF1114Div3_submit.png"
- &gt;&lt;/figure&gt;
-&lt;/p&gt;
-&lt;p&gt;（CF前20分钟交不上东西 吃罚时了 QWQ）&lt;/p&gt;
-
-&lt;h2 class="relative group"&gt;A
- &lt;div id="a" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#a" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://codeforces.com/contest/2254/problem/A" target="_blank" rel="noreferrer"&gt;https://codeforces.com/contest/2254/problem/A&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;爱丽丝、鲍勃和查理正在玩一个关于代币的游戏。他们分别以 $a$、$b$ 和 $c$ 个代币开始。游戏按轮进行。在每轮开始前，他们会检查每个人拥有的代币数量：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;如果任意两个玩家拥有完全相同数量的代币，游戏立即结束。&lt;/li&gt;
-&lt;li&gt;否则，本轮开始，三个玩家拥有的代币数量严格不同。拥有严格最多代币的玩家给拥有严格最少代币的玩家恰好 1 个代币。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;给定起始代币数量 $a$、$b$ 和 $c$，确定游戏在结束前会持续多少轮。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;输入&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;第一行包含一个整数 $t$（$1 \le t \le 10^3$）——测试用例的数量。
-每个测试用例由一行包含三个整数 $a$、$b$ 和 $c$（$1 \le a, b, c \le 10$）。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;输出&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;对于每个测试用例，输出一个整数——游戏在结束前持续的轮数。&lt;/p&gt;
-&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; t;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; a,b,c,ans,maxx,minn;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;	cin&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt;t;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;	&lt;span style="color:#66d9ef"&gt;while&lt;/span&gt;(t){
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;		t&lt;span style="color:#f92672"&gt;--&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;		cin&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt;a&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt;b&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt;c;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;		ans &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;		&lt;span style="color:#66d9ef"&gt;while&lt;/span&gt;(a &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; b &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; b &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; c &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; a &lt;span style="color:#f92672"&gt;!=&lt;/span&gt; c){
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;			maxx &lt;span style="color:#f92672"&gt;=&lt;/span&gt; max(a,max(b,c));
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;			minn &lt;span style="color:#f92672"&gt;=&lt;/span&gt; min(a,min(b,c));
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;			&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(maxx &lt;span style="color:#f92672"&gt;==&lt;/span&gt; a) a&lt;span style="color:#f92672"&gt;--&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;			&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(maxx &lt;span style="color:#f92672"&gt;==&lt;/span&gt; b) b&lt;span style="color:#f92672"&gt;--&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;			&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(maxx &lt;span style="color:#f92672"&gt;==&lt;/span&gt; c) c&lt;span style="color:#f92672"&gt;--&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;			&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(minn &lt;span style="color:#f92672"&gt;==&lt;/span&gt; a) a&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;			&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(minn &lt;span style="color:#f92672"&gt;==&lt;/span&gt; b) b&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;			&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(minn &lt;span style="color:#f92672"&gt;==&lt;/span&gt; c) c&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;			ans&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;		} 
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;		cout&lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt;ans&lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt;endl;	
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;	}
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;	&lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;	
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;/*
-每次将最大值减 1、最小值加 1 模拟一轮，直到出现相等。
-*/&lt;/p&gt;</description></item><item><title>AtCoder Beginner Contest 468</title><link>https://NirvanaCeleste.github.io/acm/7post/</link><pubDate>Sat, 25 Jul 2026 00:00:00 +0000</pubDate><guid>https://NirvanaCeleste.github.io/acm/7post/</guid><description>&lt;p&gt;&lt;figure&gt;&lt;img
- class="my-0 rounded-md"
- loading="lazy"
- decoding="async"
- fetchpriority="low"
- alt="ABC468提交记录"
- src="https://NirvanaCeleste.github.io/img/acm/ABC468_submit.png"
- &gt;&lt;/figure&gt;
-
-&lt;figure&gt;&lt;img
- class="my-0 rounded-md"
- loading="lazy"
- decoding="async"
- fetchpriority="low"
- alt="ABC468"
- src="https://NirvanaCeleste.github.io/img/acm/ABC468.png"
- &gt;&lt;/figure&gt;
-&lt;/p&gt;
-
-&lt;h2 class="relative group"&gt;A
- &lt;div id="a" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#a" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://atcoder.jp/contests/abc468/tasks/abc468_a" target="_blank" rel="noreferrer"&gt;https://atcoder.jp/contests/abc468/tasks/abc468_a&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;&lt;p&gt;给定一个长度为 $N$ 的整数序列 $A=(A_1, A_2, \ldots, A_N)$。求满足 $A_i &lt; A_{i+1} &gt; A_{i+2}$ 的整数 $i$（$1 \le i \le N-2$）的个数。&lt;/p&gt;
-&lt;/blockquote&gt;&lt;p&gt;&lt;strong&gt;输入&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;第一行包含一个整数 $N$（$3 \le N \le 100$）。
-第二行包含 $N$ 个整数 $A_1, A_2, \ldots, A_N$（$1 \le A_i \le 10^9$）。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;输出&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;输出满足条件的 $i$ 的个数。&lt;/p&gt;
-&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; maxn &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;102&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n,ans;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; a[maxn];
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cin&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt;n;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;;i&lt;span style="color:#f92672"&gt;&amp;lt;=&lt;/span&gt;n;i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;) cin&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt;a[i];
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; i&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;;i&lt;span style="color:#f92672"&gt;&amp;lt;=&lt;/span&gt;n&lt;span style="color:#f92672"&gt;-&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;;i&lt;span style="color:#f92672"&gt;++&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(a[i] &lt;span style="color:#f92672"&gt;&amp;lt;&lt;/span&gt; a[i&lt;span style="color:#f92672"&gt;+&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;] &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; a[i&lt;span style="color:#f92672"&gt;+&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;] &lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; a[i&lt;span style="color:#f92672"&gt;+&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;]) ans&lt;span style="color:#f92672"&gt;++&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cout&lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt;ans;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;/*
-遍历每个连续三元组，检查是否为“峰”形结构（中间元素严格大于左右两边）。
-*/&lt;/p&gt;</description></item><item><title>AtCoder Beginner Contest 467</title><link>https://NirvanaCeleste.github.io/acm/4post/</link><pubDate>Sat, 18 Jul 2026 00:00:00 +0000</pubDate><guid>https://NirvanaCeleste.github.io/acm/4post/</guid><description>&lt;p&gt;&lt;figure&gt;&lt;img
- class="my-0 rounded-md"
- loading="lazy"
- decoding="async"
- fetchpriority="low"
- alt="ABC467提交记录"
- src="https://NirvanaCeleste.github.io/img/acm/ABC467_submit.png"
- &gt;&lt;/figure&gt;
-
-&lt;figure&gt;&lt;img
- class="my-0 rounded-md"
- loading="lazy"
- decoding="async"
- fetchpriority="low"
- alt="ABC467"
- src="https://NirvanaCeleste.github.io/img/acm/ABC467.png"
- &gt;&lt;/figure&gt;
-&lt;/p&gt;
-
-&lt;h2 class="relative group"&gt;A
- &lt;div id="a" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#a" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://atcoder.jp/contests/abc467/tasks/abc467_a" target="_blank" rel="noreferrer"&gt;https://atcoder.jp/contests/abc467/tasks/abc467_a&lt;/a&gt;
-简单数学不等式，规避浮点精度误差&lt;/p&gt;
-
-&lt;h4 class="relative group"&gt;问题陈述
- &lt;div id="问题陈述" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e9%97%ae%e9%a2%98%e9%99%88%e8%bf%b0" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h4&gt;
-&lt;p&gt;通过以下式子计算BMI值：$\text{BMI} = \text{体重}[kg] \div \text{身高}[m] \div \text{身高}[m]$。
-在日本，BMI大于等于25的人判定为肥胖。给定身高$H$（厘米）、体重$W$（千克，判断是否肥胖。
-原式浮点等价整数不等式：$400 \times W \ge H \times H$，满足输出&lt;code&gt;Yes&lt;/code&gt;，否则输出&lt;code&gt;No&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h5 class="relative group"&gt;约束
- &lt;div id="约束" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e7%ba%a6%e6%9d%9f" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h5&gt;
-&lt;ul&gt;
-&lt;li&gt;$1 \le H \le 300$&lt;/li&gt;
-&lt;li&gt;$1 \le W \le 300$&lt;/li&gt;
-&lt;li&gt;所有输入均为整数&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 class="relative group"&gt;输入格式
- &lt;div id="输入格式" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%be%93%e5%85%a5%e6%a0%bc%e5%bc%8f" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h5&gt;
-&lt;p&gt;一行两个整数 $H\ W$&lt;/p&gt;</description></item><item><title>Codeforces Round 1109 (Div. 3)</title><link>https://NirvanaCeleste.github.io/acm/5post/</link><pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate><guid>https://NirvanaCeleste.github.io/acm/5post/</guid><description>&lt;p&gt;&lt;figure&gt;&lt;img
- class="my-0 rounded-md"
- loading="lazy"
- decoding="async"
- fetchpriority="low"
- alt="CF1109Div3"
- src="https://NirvanaCeleste.github.io/img/acm/CF1109Div3.png"
- &gt;&lt;/figure&gt;
-
-&lt;figure&gt;&lt;img
- class="my-0 rounded-md"
- loading="lazy"
- decoding="async"
- fetchpriority="low"
- alt="CF1109Div3_submit"
- src="https://NirvanaCeleste.github.io/img/acm/CF1109Div3_submit.png"
- &gt;&lt;/figure&gt;
-&lt;/p&gt;
-
-&lt;h2 class="relative group"&gt;A
- &lt;div id="a" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#a" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://codeforces.com/contest/2244/problem/A" target="_blank" rel="noreferrer"&gt;https://codeforces.com/contest/2244/problem/A&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;在一节几何课上，伊斯坎德尔觉得非常无聊，于是决定在尤拉的笔记本上画画。为此，他在上面画了一排横线。有的线长，有的线短，有的地方还是空的。&lt;/p&gt;
-&lt;p&gt;页面由一个字符串 $s$ 表示，其中字符 &amp;ldquo;*&amp;rdquo; 表示纸张的空白部分，字符 &amp;ldquo;#&amp;rdquo; 表示已画线的一厘米。连续的 &amp;ldquo;#&amp;rdquo; 字符序列构成一行。&lt;/p&gt;
-&lt;p&gt;尤拉决定擦掉所有的线，并让伊斯坎德尔帮助他：他们将同时从两端擦掉其中一条线。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;每秒钟，伊斯坎德尔从右端擦除 $1$ 厘米，尤拉从左端擦除 $1$ 厘米。&lt;/li&gt;
-&lt;li&gt;如果当前线条的长度是 $1$ 或 $2$ 厘米，那么下一秒它就会被完全擦除，过程结束。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;尤拉想选择一条线，以便和伊斯坎德尔一起尽可能长时间地擦除它。帮他确定这个最长时间。如果页面上没有线条，答案是 $0$ 秒。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;输入&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;第一行包含一个整数 $t$（$1 \le t \le 2500$）— 测试用例数。&lt;/p&gt;
-&lt;p&gt;每个测试用例的第一行包含一个整数 $n$（$1 \le n \le 10$）— 字符串 $s$ 的长度。&lt;/p&gt;
-&lt;p&gt;每个测试用例的第二行包含一个长度为 $n$ 的字符串 $s$，由字符 &amp;lsquo;#&amp;rsquo; 和 &amp;lsquo;*&amp;rsquo; 组成。&lt;/p&gt;</description></item><item><title>AtCoder Beginner Contest 463 (VP) E题</title><link>https://NirvanaCeleste.github.io/acm/2post/</link><pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate><guid>https://NirvanaCeleste.github.io/acm/2post/</guid><description>&lt;h2 class="relative group"&gt;E
- &lt;div id="e" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#e" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://atcoder.jp/contests/abc463/tasks/abc463_e" target="_blank" rel="noreferrer"&gt;https://atcoder.jp/contests/abc463/tasks/abc463_e&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;类图论，加强的最短路&lt;/p&gt;
-
-&lt;h4 class="relative group"&gt;问题陈述
- &lt;div id="问题陈述" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e9%97%ae%e9%a2%98%e9%99%88%e8%bf%b0" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h4&gt;
-&lt;p&gt;AtCoder 国家有 $N$ 座城市和 $M$ 条道路。 $i$ 条道路 $(1\le i\le M)$ 双向连接 $u _ i$ 和 $v _ i$ 两个城市，从一个城市到另一个城市只需 $T _ i$ 分钟。&lt;/p&gt;
-&lt;p&gt;此外，每个城市都安装了曲速门，使用曲速门可以在 $X _ i+X _ j+Y$ 分钟内从城市 $i\ (1\le i\le N)$ 到达城市 $j\ (1\le j\le N)$ 。&lt;/p&gt;</description></item><item><title>AtCoder Beginner Contest 466 (VP)</title><link>https://NirvanaCeleste.github.io/acm/3post/</link><pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate><guid>https://NirvanaCeleste.github.io/acm/3post/</guid><description>&lt;h2 class="relative group"&gt;A
- &lt;div id="a" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#a" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://atcoder.jp/contests/abc466/tasks/abc466_a" target="_blank" rel="noreferrer"&gt;https://atcoder.jp/contests/abc466/tasks/abc466_a&lt;/a&gt;
-简单遍历模拟&lt;/p&gt;
-
-&lt;h4 class="relative group"&gt;问题陈述
- &lt;div id="问题陈述" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e9%97%ae%e9%a2%98%e9%99%88%e8%bf%b0" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h4&gt;
-&lt;p&gt;一共有 $N$ 个选项，你需要从中选择一个。选择第 $i$ 个选项时，你的开心值为 $X_i$。
-如果无论选择哪一个选项，开心值都会是负数，请输出 &lt;code&gt;Yes&lt;/code&gt;；否则输出 &lt;code&gt;No&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h5 class="relative group"&gt;约束
- &lt;div id="约束" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e7%ba%a6%e6%9d%9f" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h5&gt;
-&lt;ul&gt;
-&lt;li&gt;$2 \le N \le 10$&lt;/li&gt;
-&lt;li&gt;$-100 \le X_i \le 100$&lt;/li&gt;
-&lt;li&gt;所有输入值均为整数&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 class="relative group"&gt;输入格式
- &lt;div id="输入格式" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e8%be%93%e5%85%a5%e6%a0%bc%e5%bc%8f" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h5&gt;
-&lt;p&gt;第一行整数 $N$
-第二行 $N$ 个整数 $X_1,X_2,\dots,X_N$&lt;/p&gt;</description></item><item><title>AtCoder Beginner Contest 463 (VP)</title><link>https://NirvanaCeleste.github.io/acm/1post/</link><pubDate>Sat, 04 Jul 2026 00:00:00 +0000</pubDate><guid>https://NirvanaCeleste.github.io/acm/1post/</guid><description>&lt;h2 class="relative group"&gt;A
- &lt;div id="a" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#a" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://atcoder.jp/contests/abc463/tasks/abc463_a" target="_blank" rel="noreferrer"&gt;https://atcoder.jp/contests/abc463/tasks/abc463_a&lt;/a&gt;&lt;/p&gt;
-
-&lt;h4 class="relative group"&gt;问题陈述
- &lt;div id="问题陈述" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#%e9%97%ae%e9%a2%98%e9%99%88%e8%bf%b0" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h4&gt;
-&lt;p&gt;有一幅宽度为 $X$ 像素，高度为 $Y$ 像素的图像。请判断宽度与高度之比是否为 $16$ 与 $9$ ，即是否为 $X:Y=16:9$ 。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$1 \leq X \leq 1000$&lt;/li&gt;
-&lt;li&gt;$1 \leq Y \leq 1000$&lt;/li&gt;
-&lt;li&gt;所有输入值均为整数。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class="highlight-wrapper"&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-cpp" data-lang="cpp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#include&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;namespace&lt;/span&gt; std;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;double&lt;/span&gt; x,y,tempa &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;16.0&lt;/span&gt;,tempb &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;9.0&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;double&lt;/span&gt; a &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;double&lt;/span&gt;(tempa&lt;span style="color:#f92672"&gt;/&lt;/span&gt;tempb),b;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;	cin&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt;x&lt;span style="color:#f92672"&gt;&amp;gt;&amp;gt;&lt;/span&gt;y;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;	b &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;double&lt;/span&gt;(x&lt;span style="color:#f92672"&gt;/&lt;/span&gt;y);
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;	&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (a &lt;span style="color:#f92672"&gt;==&lt;/span&gt; b) cout&lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;Yes&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;	&lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; cout&lt;span style="color:#f92672"&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;No&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;	&lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 class="relative group"&gt;B
- &lt;div id="b" class="anchor"&gt;&lt;/div&gt;
- 
- &lt;span
- class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none"&gt;
- &lt;a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#b" aria-label="锚点"&gt;#&lt;/a&gt;
- &lt;/span&gt;
- 
-&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://atcoder.jp/contests/abc463/tasks/abc463_b" target="_blank" rel="noreferrer"&gt;https://atcoder.jp/contests/abc463/tasks/abc463_b&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ACM练习记录 on NirvanaCeleste&#39;s Blog</title>
+    <link>https://NirvanaCeleste.github.io/acm/</link>
+    <description>Recent content in ACM练习记录 on NirvanaCeleste&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© 2026 </copyright>
+    <lastBuildDate>Sat, 08 Aug 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://NirvanaCeleste.github.io/acm/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>JPRS Programming Contest 2026#2 (AtCoder Beginner Contest 470)</title>
+      <link>https://NirvanaCeleste.github.io/acm/8post/</link>
+      <pubDate>Sat, 08 Aug 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://NirvanaCeleste.github.io/acm/8post/</guid>
+      <description>&lt;p&gt;&lt;figure&gt;&lt;img&#xA;    class=&#34;my-0 rounded-md&#34;&#xA;    loading=&#34;lazy&#34;&#xA;    decoding=&#34;async&#34;&#xA;    fetchpriority=&#34;low&#34;&#xA;    alt=&#34;ABC470提交记录&#34;&#xA;    src=&#34;https://NirvanaCeleste.github.io/img/acm/ABC470_submit.png&#34;&#xA;    &gt;&lt;/figure&gt;&#xA;&#xA;&lt;figure&gt;&lt;img&#xA;    class=&#34;my-0 rounded-md&#34;&#xA;    loading=&#34;lazy&#34;&#xA;    decoding=&#34;async&#34;&#xA;    fetchpriority=&#34;low&#34;&#xA;    alt=&#34;ABC470&#34;&#xA;    src=&#34;https://NirvanaCeleste.github.io/img/acm/ABC470.png&#34;&#xA;    &gt;&lt;/figure&gt;&#xA;&lt;/p&gt;&#xA;&#xA;&lt;h2 class=&#34;relative group&#34;&gt;A&#xA;    &lt;div id=&#34;a&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#a&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://atcoder.jp/contests/abc470/tasks/abc470_a&#34;  target=&#34;_blank&#34; rel=&#34;noreferrer&#34;&gt;https://atcoder.jp/contests/abc470/tasks/abc470_a&lt;/a&gt;&lt;/p&gt;&#xA;&lt;blockquote&gt;&lt;p&gt;给定一个正整数 $N$。对于 $i = 1, 2, \dots, N$，如果 $i$ 是 $3$ 的倍数，则输出 &lt;code&gt;Fizz&lt;/code&gt;，否则输出 $i$。&lt;/p&gt;&#xA;&lt;/blockquote&gt;&lt;p&gt;&lt;strong&gt;输入&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;输入格式如下：&lt;/p&gt;&#xA;&lt;div class=&#34;highlight-wrapper&#34;&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;N&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&#xA;&lt;p&gt;&lt;strong&gt;输出&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;输出 $N$ 行答案。&lt;/p&gt;&#xA;&lt;div class=&#34;highlight-wrapper&#34;&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;namespace&lt;/span&gt; std;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; maxn &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;102&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; n;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(){&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    cin&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;n;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; i&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;;i&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt;n;i&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt;){&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(i &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;) cout&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Fizz&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;endl;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; cout&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;i&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;endl;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&#xA;&lt;p&gt;/*&#xA;直接按题意模拟即可：遍历 1 到 N，用取模判断是否为 3 的倍数。&#xA;*/&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>Codeforces Round 1114 (Div. 3)</title>
+      <link>https://NirvanaCeleste.github.io/acm/6post/</link>
+      <pubDate>Tue, 04 Aug 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://NirvanaCeleste.github.io/acm/6post/</guid>
+      <description>&lt;p&gt;&lt;figure&gt;&lt;img&#xA;    class=&#34;my-0 rounded-md&#34;&#xA;    loading=&#34;lazy&#34;&#xA;    decoding=&#34;async&#34;&#xA;    fetchpriority=&#34;low&#34;&#xA;    alt=&#34;CF1114Div3&#34;&#xA;    src=&#34;https://NirvanaCeleste.github.io/img/acm/CF1114Div3.png&#34;&#xA;    &gt;&lt;/figure&gt;&#xA;&#xA;&lt;figure&gt;&lt;img&#xA;    class=&#34;my-0 rounded-md&#34;&#xA;    loading=&#34;lazy&#34;&#xA;    decoding=&#34;async&#34;&#xA;    fetchpriority=&#34;low&#34;&#xA;    alt=&#34;CF1114Div3_submit&#34;&#xA;    src=&#34;https://NirvanaCeleste.github.io/img/acm/CF1114Div3_submit.png&#34;&#xA;    &gt;&lt;/figure&gt;&#xA;&lt;/p&gt;&#xA;&lt;p&gt;（CF前20分钟交不上东西 吃罚时了 QWQ）&lt;/p&gt;&#xA;&#xA;&lt;h2 class=&#34;relative group&#34;&gt;A&#xA;    &lt;div id=&#34;a&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#a&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://codeforces.com/contest/2254/problem/A&#34;  target=&#34;_blank&#34; rel=&#34;noreferrer&#34;&gt;https://codeforces.com/contest/2254/problem/A&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;爱丽丝、鲍勃和查理正在玩一个关于代币的游戏。他们分别以 $a$、$b$ 和 $c$ 个代币开始。游戏按轮进行。在每轮开始前，他们会检查每个人拥有的代币数量：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;如果任意两个玩家拥有完全相同数量的代币，游戏立即结束。&lt;/li&gt;&#xA;&lt;li&gt;否则，本轮开始，三个玩家拥有的代币数量严格不同。拥有严格最多代币的玩家给拥有严格最少代币的玩家恰好 1 个代币。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;给定起始代币数量 $a$、$b$ 和 $c$，确定游戏在结束前会持续多少轮。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;输入&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;第一行包含一个整数 $t$（$1 \le t \le 10^3$）——测试用例的数量。&#xA;每个测试用例由一行包含三个整数 $a$、$b$ 和 $c$（$1 \le a, b, c \le 10$）。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;输出&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;对于每个测试用例，输出一个整数——游戏在结束前持续的轮数。&lt;/p&gt;&#xA;&lt;div class=&#34;highlight-wrapper&#34;&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;namespace&lt;/span&gt; std;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; t;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; a,b,c,ans,maxx,minn;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(){&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;cin&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;t;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt;(t){&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;t&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;cin&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;a&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;b&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;c;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt;(a &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; c &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; a &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; c){&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;&#x9;maxx &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; max(a,max(b,c));&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;&#x9;minn &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; min(a,min(b,c));&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(maxx &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; a) a&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(maxx &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; b) b&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(maxx &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; c) c&lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(minn &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; a) a&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(minn &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; b) b&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(minn &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; c) c&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;&#x9;ans&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;} &#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&#x9;cout&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;ans&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;endl;&#x9;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;}&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;;&#x9;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&#xA;&lt;p&gt;/*&#xA;每次将最大值减 1、最小值加 1 模拟一轮，直到出现相等。&#xA;*/&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>AtCoder Beginner Contest 468</title>
+      <link>https://NirvanaCeleste.github.io/acm/7post/</link>
+      <pubDate>Sat, 25 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://NirvanaCeleste.github.io/acm/7post/</guid>
+      <description>&lt;p&gt;&lt;figure&gt;&lt;img&#xA;    class=&#34;my-0 rounded-md&#34;&#xA;    loading=&#34;lazy&#34;&#xA;    decoding=&#34;async&#34;&#xA;    fetchpriority=&#34;low&#34;&#xA;    alt=&#34;ABC468提交记录&#34;&#xA;    src=&#34;https://NirvanaCeleste.github.io/img/acm/ABC468_submit.png&#34;&#xA;    &gt;&lt;/figure&gt;&#xA;&#xA;&lt;figure&gt;&lt;img&#xA;    class=&#34;my-0 rounded-md&#34;&#xA;    loading=&#34;lazy&#34;&#xA;    decoding=&#34;async&#34;&#xA;    fetchpriority=&#34;low&#34;&#xA;    alt=&#34;ABC468&#34;&#xA;    src=&#34;https://NirvanaCeleste.github.io/img/acm/ABC468.png&#34;&#xA;    &gt;&lt;/figure&gt;&#xA;&lt;/p&gt;&#xA;&#xA;&lt;h2 class=&#34;relative group&#34;&gt;A&#xA;    &lt;div id=&#34;a&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#a&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://atcoder.jp/contests/abc468/tasks/abc468_a&#34;  target=&#34;_blank&#34; rel=&#34;noreferrer&#34;&gt;https://atcoder.jp/contests/abc468/tasks/abc468_a&lt;/a&gt;&lt;/p&gt;&#xA;&lt;blockquote&gt;&lt;p&gt;给定一个长度为 $N$ 的整数序列 $A=(A_1, A_2, \ldots, A_N)$。求满足 $A_i &lt; A_{i+1} &gt; A_{i+2}$ 的整数 $i$（$1 \le i \le N-2$）的个数。&lt;/p&gt;&#xA;&lt;/blockquote&gt;&lt;p&gt;&lt;strong&gt;输入&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;第一行包含一个整数 $N$（$3 \le N \le 100$）。&#xA;第二行包含 $N$ 个整数 $A_1, A_2, \ldots, A_N$（$1 \le A_i \le 10^9$）。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;输出&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;输出满足条件的 $i$ 的个数。&lt;/p&gt;&#xA;&lt;div class=&#34;highlight-wrapper&#34;&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;namespace&lt;/span&gt; std;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; maxn &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;102&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; n,ans;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; a[maxn];&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(){&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    cin&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;n;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; i&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;;i&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt;n;i&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt;) cin&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;a[i];&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; i&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;;i&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt;n&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;;i&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(a[i] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; a[i&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; a[i&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; a[i&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;]) ans&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    cout&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;ans;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&#xA;&lt;p&gt;/*&#xA;遍历每个连续三元组，检查是否为“峰”形结构（中间元素严格大于左右两边）。&#xA;*/&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>AtCoder Beginner Contest 467</title>
+      <link>https://NirvanaCeleste.github.io/acm/4post/</link>
+      <pubDate>Sat, 18 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://NirvanaCeleste.github.io/acm/4post/</guid>
+      <description>&lt;p&gt;&lt;figure&gt;&lt;img&#xA;    class=&#34;my-0 rounded-md&#34;&#xA;    loading=&#34;lazy&#34;&#xA;    decoding=&#34;async&#34;&#xA;    fetchpriority=&#34;low&#34;&#xA;    alt=&#34;ABC467提交记录&#34;&#xA;    src=&#34;https://NirvanaCeleste.github.io/img/acm/ABC467_submit.png&#34;&#xA;    &gt;&lt;/figure&gt;&#xA;&#xA;&lt;figure&gt;&lt;img&#xA;    class=&#34;my-0 rounded-md&#34;&#xA;    loading=&#34;lazy&#34;&#xA;    decoding=&#34;async&#34;&#xA;    fetchpriority=&#34;low&#34;&#xA;    alt=&#34;ABC467&#34;&#xA;    src=&#34;https://NirvanaCeleste.github.io/img/acm/ABC467.png&#34;&#xA;    &gt;&lt;/figure&gt;&#xA;&lt;/p&gt;&#xA;&#xA;&lt;h2 class=&#34;relative group&#34;&gt;A&#xA;    &lt;div id=&#34;a&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#a&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://atcoder.jp/contests/abc467/tasks/abc467_a&#34;  target=&#34;_blank&#34; rel=&#34;noreferrer&#34;&gt;https://atcoder.jp/contests/abc467/tasks/abc467_a&lt;/a&gt;&#xA;简单数学不等式，规避浮点精度误差&lt;/p&gt;&#xA;&#xA;&lt;h4 class=&#34;relative group&#34;&gt;问题陈述&#xA;    &lt;div id=&#34;问题陈述&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#%e9%97%ae%e9%a2%98%e9%99%88%e8%bf%b0&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h4&gt;&#xA;&lt;p&gt;通过以下式子计算BMI值：$\text{BMI} = \text{体重}[kg] \div \text{身高}[m] \div \text{身高}[m]$。&#xA;在日本，BMI大于等于25的人判定为肥胖。给定身高$H$（厘米）、体重$W$（千克，判断是否肥胖。&#xA;原式浮点等价整数不等式：$400 \times W \ge H \times H$，满足输出&lt;code&gt;Yes&lt;/code&gt;，否则输出&lt;code&gt;No&lt;/code&gt;。&lt;/p&gt;&#xA;&#xA;&lt;h5 class=&#34;relative group&#34;&gt;约束&#xA;    &lt;div id=&#34;约束&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#%e7%ba%a6%e6%9d%9f&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h5&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;$1 \le H \le 300$&lt;/li&gt;&#xA;&lt;li&gt;$1 \le W \le 300$&lt;/li&gt;&#xA;&lt;li&gt;所有输入均为整数&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&#xA;&lt;h5 class=&#34;relative group&#34;&gt;输入格式&#xA;    &lt;div id=&#34;输入格式&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#%e8%be%93%e5%85%a5%e6%a0%bc%e5%bc%8f&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h5&gt;&#xA;&lt;p&gt;一行两个整数 $H\ W$&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>Codeforces Round 1109 (Div. 3)</title>
+      <link>https://NirvanaCeleste.github.io/acm/5post/</link>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://NirvanaCeleste.github.io/acm/5post/</guid>
+      <description>&lt;p&gt;&lt;figure&gt;&lt;img&#xA;    class=&#34;my-0 rounded-md&#34;&#xA;    loading=&#34;lazy&#34;&#xA;    decoding=&#34;async&#34;&#xA;    fetchpriority=&#34;low&#34;&#xA;    alt=&#34;CF1109Div3&#34;&#xA;    src=&#34;https://NirvanaCeleste.github.io/img/acm/CF1109Div3.png&#34;&#xA;    &gt;&lt;/figure&gt;&#xA;&#xA;&lt;figure&gt;&lt;img&#xA;    class=&#34;my-0 rounded-md&#34;&#xA;    loading=&#34;lazy&#34;&#xA;    decoding=&#34;async&#34;&#xA;    fetchpriority=&#34;low&#34;&#xA;    alt=&#34;CF1109Div3_submit&#34;&#xA;    src=&#34;https://NirvanaCeleste.github.io/img/acm/CF1109Div3_submit.png&#34;&#xA;    &gt;&lt;/figure&gt;&#xA;&lt;/p&gt;&#xA;&#xA;&lt;h2 class=&#34;relative group&#34;&gt;A&#xA;    &lt;div id=&#34;a&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#a&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://codeforces.com/contest/2244/problem/A&#34;  target=&#34;_blank&#34; rel=&#34;noreferrer&#34;&gt;https://codeforces.com/contest/2244/problem/A&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;在一节几何课上，伊斯坎德尔觉得非常无聊，于是决定在尤拉的笔记本上画画。为此，他在上面画了一排横线。有的线长，有的线短，有的地方还是空的。&lt;/p&gt;&#xA;&lt;p&gt;页面由一个字符串 $s$ 表示，其中字符 &amp;ldquo;*&amp;rdquo; 表示纸张的空白部分，字符 &amp;ldquo;#&amp;rdquo; 表示已画线的一厘米。连续的 &amp;ldquo;#&amp;rdquo; 字符序列构成一行。&lt;/p&gt;&#xA;&lt;p&gt;尤拉决定擦掉所有的线，并让伊斯坎德尔帮助他：他们将同时从两端擦掉其中一条线。&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;每秒钟，伊斯坎德尔从右端擦除 $1$ 厘米，尤拉从左端擦除 $1$ 厘米。&lt;/li&gt;&#xA;&lt;li&gt;如果当前线条的长度是 $1$ 或 $2$ 厘米，那么下一秒它就会被完全擦除，过程结束。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;尤拉想选择一条线，以便和伊斯坎德尔一起尽可能长时间地擦除它。帮他确定这个最长时间。如果页面上没有线条，答案是 $0$ 秒。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;输入&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;第一行包含一个整数 $t$（$1 \le t \le 2500$）— 测试用例数。&lt;/p&gt;&#xA;&lt;p&gt;每个测试用例的第一行包含一个整数 $n$（$1 \le n \le 10$）— 字符串 $s$ 的长度。&lt;/p&gt;&#xA;&lt;p&gt;每个测试用例的第二行包含一个长度为 $n$ 的字符串 $s$，由字符 &amp;lsquo;#&amp;rsquo; 和 &amp;lsquo;*&amp;rsquo; 组成。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>AtCoder Beginner Contest 463 (VP) E题</title>
+      <link>https://NirvanaCeleste.github.io/acm/2post/</link>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://NirvanaCeleste.github.io/acm/2post/</guid>
+      <description>&lt;h2 class=&#34;relative group&#34;&gt;E&#xA;    &lt;div id=&#34;e&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#e&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://atcoder.jp/contests/abc463/tasks/abc463_e&#34;  target=&#34;_blank&#34; rel=&#34;noreferrer&#34;&gt;https://atcoder.jp/contests/abc463/tasks/abc463_e&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;类图论，加强的最短路&lt;/p&gt;&#xA;&#xA;&lt;h4 class=&#34;relative group&#34;&gt;问题陈述&#xA;    &lt;div id=&#34;问题陈述&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#%e9%97%ae%e9%a2%98%e9%99%88%e8%bf%b0&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h4&gt;&#xA;&lt;p&gt;AtCoder 国家有 $N$ 座城市和 $M$ 条道路。 $i$ 条道路 $(1\le i\le M)$ 双向连接 $u _ i$ 和 $v _ i$ 两个城市，从一个城市到另一个城市只需 $T _ i$ 分钟。&lt;/p&gt;&#xA;&lt;p&gt;此外，每个城市都安装了曲速门，使用曲速门可以在 $X _ i+X _ j+Y$ 分钟内从城市 $i\ (1\le i\le N)$ 到达城市 $j\ (1\le j\le N)$ 。&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>AtCoder Beginner Contest 466 (VP)</title>
+      <link>https://NirvanaCeleste.github.io/acm/3post/</link>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://NirvanaCeleste.github.io/acm/3post/</guid>
+      <description>&lt;h2 class=&#34;relative group&#34;&gt;A&#xA;    &lt;div id=&#34;a&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#a&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://atcoder.jp/contests/abc466/tasks/abc466_a&#34;  target=&#34;_blank&#34; rel=&#34;noreferrer&#34;&gt;https://atcoder.jp/contests/abc466/tasks/abc466_a&lt;/a&gt;&#xA;简单遍历模拟&lt;/p&gt;&#xA;&#xA;&lt;h4 class=&#34;relative group&#34;&gt;问题陈述&#xA;    &lt;div id=&#34;问题陈述&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#%e9%97%ae%e9%a2%98%e9%99%88%e8%bf%b0&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h4&gt;&#xA;&lt;p&gt;一共有 $N$ 个选项，你需要从中选择一个。选择第 $i$ 个选项时，你的开心值为 $X_i$。&#xA;如果无论选择哪一个选项，开心值都会是负数，请输出 &lt;code&gt;Yes&lt;/code&gt;；否则输出 &lt;code&gt;No&lt;/code&gt;。&lt;/p&gt;&#xA;&#xA;&lt;h5 class=&#34;relative group&#34;&gt;约束&#xA;    &lt;div id=&#34;约束&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#%e7%ba%a6%e6%9d%9f&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h5&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;$2 \le N \le 10$&lt;/li&gt;&#xA;&lt;li&gt;$-100 \le X_i \le 100$&lt;/li&gt;&#xA;&lt;li&gt;所有输入值均为整数&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&#xA;&lt;h5 class=&#34;relative group&#34;&gt;输入格式&#xA;    &lt;div id=&#34;输入格式&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#%e8%be%93%e5%85%a5%e6%a0%bc%e5%bc%8f&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h5&gt;&#xA;&lt;p&gt;第一行整数 $N$&#xA;第二行 $N$ 个整数 $X_1,X_2,\dots,X_N$&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>AtCoder Beginner Contest 463 (VP)</title>
+      <link>https://NirvanaCeleste.github.io/acm/1post/</link>
+      <pubDate>Sat, 04 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://NirvanaCeleste.github.io/acm/1post/</guid>
+      <description>&lt;h2 class=&#34;relative group&#34;&gt;A&#xA;    &lt;div id=&#34;a&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#a&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://atcoder.jp/contests/abc463/tasks/abc463_a&#34;  target=&#34;_blank&#34; rel=&#34;noreferrer&#34;&gt;https://atcoder.jp/contests/abc463/tasks/abc463_a&lt;/a&gt;&lt;/p&gt;&#xA;&#xA;&lt;h4 class=&#34;relative group&#34;&gt;问题陈述&#xA;    &lt;div id=&#34;问题陈述&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#%e9%97%ae%e9%a2%98%e9%99%88%e8%bf%b0&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h4&gt;&#xA;&lt;p&gt;有一幅宽度为 $X$ 像素，高度为 $Y$ 像素的图像。请判断宽度与高度之比是否为 $16$ 与 $9$ ，即是否为 $X:Y=16:9$ 。&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;$1 \leq X \leq 1000$&lt;/li&gt;&#xA;&lt;li&gt;$1 \leq Y \leq 1000$&lt;/li&gt;&#xA;&lt;li&gt;所有输入值均为整数。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;div class=&#34;highlight-wrapper&#34;&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;namespace&lt;/span&gt; std;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;double&lt;/span&gt; x,y,tempa &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;16.0&lt;/span&gt;,tempb &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;9.0&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;double&lt;/span&gt; a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;double&lt;/span&gt;(tempa&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;tempb),b;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(){&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;cin&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;x&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt;y;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;double&lt;/span&gt;(x&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;y);&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (a &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; b) cout&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Yes&amp;#34;&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; cout&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;No&amp;#34;&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#x9;&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&#xA;&#xA;&lt;h2 class=&#34;relative group&#34;&gt;B&#xA;    &lt;div id=&#34;b&#34; class=&#34;anchor&#34;&gt;&lt;/div&gt;&#xA;    &#xA;    &lt;span&#xA;        class=&#34;absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none&#34;&gt;&#xA;        &lt;a class=&#34;text-primary-300 dark:text-neutral-700 !no-underline&#34; href=&#34;#b&#34; aria-label=&#34;锚点&#34;&gt;#&lt;/a&gt;&#xA;    &lt;/span&gt;&#xA;    &#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://atcoder.jp/contests/abc463/tasks/abc463_b&#34;  target=&#34;_blank&#34; rel=&#34;noreferrer&#34;&gt;https://atcoder.jp/contests/abc463/tasks/abc463_b&lt;/a&gt;&lt;/p&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>
