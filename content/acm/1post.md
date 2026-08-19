@@ -1,6 +1,6 @@
 ﻿---
-title: "AtCoder Beginner Contest 463"
-date: 2026-07-07
+title: "AtCoder Beginner Contest 463 (VP)"
+date: 2026-07-04
 draft: false
 comments: true
 ---

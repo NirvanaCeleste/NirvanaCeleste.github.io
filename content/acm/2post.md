@@ -1,6 +1,6 @@
-﻿---
-title: "AtCoder Beginner Contest 463 E题"
-date: 2026-07-12T00:00:00+08:00
+---
+title: "AtCoder Beginner Contest 463 (VP) E题"
+date: 2026-07-12
 draft: false
 comments: true
 ---
