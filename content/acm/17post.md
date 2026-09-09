@@ -5,8 +5,8 @@ draft: false
 comments: true
 ---
 
-![Educational Codeforces Round 194 (Rated for Div. 2)](/img/acm/Educational Codeforces Round 194 (Rated for Div. 2).png)
-![Educational Codeforces Round 194 (Rated for Div. 2)_submit](/img/acm/Educational Codeforces Round 194 (Rated for Div. 2)_submit.png)
+![EducationalCodeforcesRound194(RatedforDiv.2)](/img/acm/EducationalCodeforcesRound194(RatedforDiv.2).png)
+![EducationalCodeforcesRound194(RatedforDiv.2)_submit](/img/acm/EducationalCodeforcesRound194(RatedforDiv.2)_submit.png)
 
 怎么全是数学题目和构造题目
 
@@ -61,7 +61,7 @@ int main(){
 ## B. Monocarp and Projects
 https://codeforces.com/contest/2260/problem/B
 
-![Educational Codeforces Round 194 (Rated for Div. 2)B](/img/acm/Educational Codeforces Round 194 (Rated for Div. 2)B.png)
+![EducationalCodeforcesRound194(RatedforDiv.2)B](/img/acm/EducationalCodeforcesRound194(RatedforDiv.2)B.png)
 
 > Monocarp 经营着一家公司。考虑未来 $k$ 个月内公司的工作情况。第一个月，公司有 $x$ 名员工（不包括 Monocarp 自己），需要完成 $y$ 个项目。在接下来的每个月，员工数量和项目数量都增加 $1$。换句话说，在第 $i$ 个月（$0 \le i < k$），有 $x+i$ 名员工和 $y+i$ 个项目。每个月，每个员工最多可以完成一个项目。求这 $k$ 个月内总共最多能完成多少个项目。
 
