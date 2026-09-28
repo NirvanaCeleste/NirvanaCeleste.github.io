@@ -1,2 +1,6 @@
-
 public/
+.hugo_build.lock
+*.log
+.buildtest/
+resources/_gen/
+hugo.toml.bak
