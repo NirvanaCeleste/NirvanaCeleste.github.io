@@ -55,3 +55,24 @@ body.single .footer-wrapper {
     background-color: #18181b !important;
   }
 }
+/* ========== OMORI 模组制作指南内联样式 ========== */
+/* <var> = 红色需替换变量; .og-g = 绿色程序名; 与指南原版配色一致 */
+article var {
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Courier New", monospace;
+  font-style: normal;
+  color: #d20f0f;
+  background: rgba(210, 15, 15, 0.07);
+  border-radius: 3px;
+  padding: 0 3px;
+  font-size: 0.92em;
+}
+article .og-g {
+  color: #1d7a35;
+}
+article .og-note, article em {
+  opacity: 0.95;
+}
+@media (prefers-color-scheme: dark) {
+  article var { color: #ff7a7a; background: rgba(255, 122, 122, 0.10); }
+  article .og-g { color: #5bd863; }
+}

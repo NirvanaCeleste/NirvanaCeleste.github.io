@@ -44,7 +44,10 @@ theme = 'blowfish'
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true  # 这一行必须加上，否则 Giscus 的脚本会被安全机制删掉
-    
+
+    [markup.goldmark.parser]
+      wrapStandAloneImageWithinParagraph = false  # 独立成行的图片不再包在 <p> 里（避免 figure 嵌套）
+
     [markup.goldmark.extensions]
       [markup.goldmark.extensions.passthrough]
         enable = true
