@@ -30,6 +30,14 @@
       <span class="upsolve-stat done">✅ 已补 <b>{{ $done }}</b></span>
     </div>
 
+    {{ $total := add (add $wrong $skip) $done }}
+    {{ $pct := 0.0 }}
+    {{ if gt $total 0 }}{{ $pct = mul 100.0 (div (float $done) (float $total)) }}{{ end }}
+    <div class="upsolve-progress-wrap">
+      <div class="upsolve-progress-label">补题进度 <b>{{ $done }}</b> / {{ $total }}</div>
+      <div class="upsolve-progress"><div class="upsolve-progress-fill" style="width: {{ printf "%.1f" $pct }}%"></div></div>
+    </div>
+
     {{ $groups := slice
       (dict "key" "wrong" "icon" "🔥" "label" "比赛时没写对" "hint" "交了没过 / 没调出来的，优先级最高" "count" $wrong)
       (dict "key" "skip"  "icon" "🧊" "label" "根本没尝试"     "hint" "题面都没碰的，按难度挑着补"         "count" $skip)

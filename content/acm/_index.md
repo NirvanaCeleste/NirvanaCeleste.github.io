@@ -3,6 +3,8 @@ title: "ACM 练习记录"
 description: "算法竞赛题解:AtCoder / Codeforces / 牛客"
 ---
 
+{{< cf-rating >}}
+
 按平台与难度筛选:
 
 <span class="tagchips">

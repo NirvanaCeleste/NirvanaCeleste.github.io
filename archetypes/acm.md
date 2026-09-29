@@ -3,6 +3,7 @@ title: "{{ replace .Name "-" " " | title }}"
 date: {{ .Date }}
 draft: false
 comments: true
+showTableOfContents: true
 tags: [题解]
 description: ""
 # 补题清单数据（/acm/upsolve/ 会自动汇总；没用到的题整段删掉即可）

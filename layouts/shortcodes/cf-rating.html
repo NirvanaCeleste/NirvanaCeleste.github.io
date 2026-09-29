@@ -1,0 +1,43 @@
+{{- $path := "static/data/cf-rating.json" -}}
+{{- if fileExists $path -}}
+{{- $data := readFile $path | transform.Unmarshal -}}
+{{- if gt (len $data) 0 -}}
+{{- $n := len $data -}}
+{{- $last := index $data (sub $n 1) -}}
+{{- $minv := (index $data 0).new -}}
+{{- $maxv := $minv -}}
+{{- range $data -}}
+{{- if lt .new $minv }}{{ $minv = .new }}{{ end -}}
+{{- if gt .new $maxv }}{{ $maxv = .new }}{{ end -}}
+{{- end -}}
+{{- $delta := sub $last.new $last.old -}}
+{{- $w := 660.0 }}{{ $h := 130.0 }}{{ $pad := 12.0 -}}
+{{- $span := sub $maxv $minv -}}
+{{- if le $span 0 }}{{ $span = 1 }}{{ end -}}
+{{- $step := div (sub $w (mul 2.0 $pad)) (sub (float $n) 1.0) -}}
+{{- $pts := "" -}}
+{{- range $i, $e := $data -}}
+{{- $x := add $pad (mul $step (float $i)) -}}
+{{- $y := sub (sub $h $pad) (mul (div (sub (float $e.new) (float $minv)) (float $span)) (sub $h (mul 2.0 $pad))) -}}
+{{- $pts = printf "%s%.1f,%.1f " $pts $x $y -}}
+{{- end -}}
+<div class="cfrating-card">
+  <div class="cfrating-head">
+    <span class="cfrating-title">📈 Codeforces rating 走势</span>
+    <span class="cfrating-now">{{ $last.new }}</span>
+    {{- if gt $delta 0 }}<span class="cfrating-delta up">+{{ $delta }}</span>
+    {{- else if lt $delta 0 }}<span class="cfrating-delta down">{{ $delta }}</span>
+    {{- else }}<span class="cfrating-delta flat">±0</span>{{- end }}
+    <span class="cfrating-range">{{ $minv }} ~ {{ $maxv }} · {{ $n }} 场 rated</span>
+  </div>
+  <svg class="cfrating-svg" viewBox="0 0 {{ printf "%.0f" $w }} {{ printf "%.0f" $h }}" preserveAspectRatio="none" role="img" aria-label="rating 走势图">
+    <polyline class="cfrating-area" points="{{ $pts }}{{ printf "%.1f" (sub $w $pad) }},{{ printf "%.1f" (sub $h $pad) }} {{ printf "%.1f" $pad }},{{ printf "%.1f" (sub $h $pad) }}" />
+    <polyline class="cfrating-line" points="{{ $pts }}" />
+  </svg>
+  <div class="cfrating-foot">
+    <span>最近：{{ $last.contest }}（rank {{ $last.rank }}）</span>
+    <a href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">个人主页 ↗</a>
+  </div>
+</div>
+{{- end -}}
+{{- end -}}
