@@ -1,7 +1,6 @@
 baseURL = 'https://NirvanaCeleste.github.io/'
 locale = 'zh-cn'
 title = "NirvanaCeleste's Blog"
-theme = 'blowfish'
 
 [params]
   mainSections = ['acm', 'omori']
@@ -57,3 +56,5 @@ theme = 'blowfish'
 
 [module]
 proxy = "https://goproxy.cn"
+  [[module.imports]]
+    path = "github.com/nunocoracao/blowfish/v2"
