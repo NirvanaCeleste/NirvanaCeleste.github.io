@@ -15,7 +15,6 @@ sitemap: true
       <a class="chip" href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">⚔️ Codeforces · NirvanaCeleste</a>
       <a class="chip" href="https://atcoder.jp/users/NirvanaCeleste" target="_blank" rel="noopener">🎯 AtCoder · NirvanaCeleste</a>
       <a class="chip" href="https://github.com/NirvanaCeleste" target="_blank" rel="noopener">🐙 GitHub · NirvanaCeleste</a>
-      <a class="chip" href="/index.xml">📡 RSS 订阅</a>
     </div>
   </div>
 </div>
