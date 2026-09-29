@@ -5,6 +5,19 @@ aliases: ["/acm/4post/"]
 date: 2026-07-18
 draft: false
 comments: true
+upsolve:
+  - problem: "E"
+    url: "https://atcoder.jp/contests/abc467/tasks/abc467_e"
+    status: "skip"
+    note: "仅空白主函数框架"
+  - problem: "F"
+    url: "https://atcoder.jp/contests/abc467/tasks/abc467_f"
+    status: "skip"
+    note: "仅空白主函数框架"
+  - problem: "G"
+    url: "https://atcoder.jp/contests/abc467/tasks/abc467_g"
+    status: "skip"
+    note: "只有输入读取框架"
 ---
 ![ABC467提交记录](ABC467_submit.png)
 ![ABC467](ABC467.png)

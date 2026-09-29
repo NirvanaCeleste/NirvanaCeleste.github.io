@@ -5,6 +5,11 @@ aliases: ["/acm/9post/"]
 date: 2026-08-15
 draft: false
 comments: true
+upsolve:
+  - problem: "F"
+    url: "https://atcoder.jp/contests/abc471/tasks/abc471_f"
+    status: "wrong"
+    note: "赛时没过：没分类讨论长度，帖内保留的是当时的错误代码"
 ---
 
 ![ABC471提交记录](ABC471_submit.png)

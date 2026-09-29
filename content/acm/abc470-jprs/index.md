@@ -5,6 +5,11 @@ aliases: ["/acm/8post/"]
 date: 2026-08-08
 draft: false
 comments: true
+upsolve:
+  - problem: "C"
+    url: "https://atcoder.jp/contests/abc470/tasks/abc470_c"
+    status: "done"
+    note: "赛时卡太久没调出来，复盘帖里已补完整解法"
 ---
 ![ABC470提交记录](ABC470_submit.png)
 ![ABC470](ABC470.png)

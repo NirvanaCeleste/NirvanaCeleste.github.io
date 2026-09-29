@@ -5,6 +5,27 @@ aliases: ["/acm/18post/"]
 date: 2026-09-12
 draft: false
 comments: true
+upsolve:
+  - problem: "D"
+    name: "Culling Game"
+    url: "https://codeforces.com/contest/2262/problem/B"
+    status: "wrong"
+    note: "赛时提交最终 TLE，线段树合并没优化到位"
+  - problem: "C2"
+    name: "Floor of MEX (Hard Version)"
+    url: "https://codeforces.com/contest/2262/problem/A2"
+    status: "skip"
+    note: "赛时没想出来，只留下空模板"
+  - problem: "E"
+    name: "Paired Bracket Sequences"
+    url: "https://codeforces.com/contest/2262/problem/E"
+    status: "skip"
+    note: "空模板"
+  - problem: "F"
+    name: "Rank Removal"
+    url: "https://codeforces.com/contest/2262/problem/F"
+    status: "skip"
+    note: "空模板"
 ---
 
 ![CF1120Div2](CF1120Div2.png)

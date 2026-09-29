@@ -1,0 +1,73 @@
+{{ define "main" }}
+  {{ $posts := where site.RegularPages "Section" "acm" }}
+  {{ $posts = where $posts "Params.upsolve" "!=" nil }}
+  {{ $posts = sort $posts "Date" "desc" }}
+
+  {{ $wrong := 0 }}{{ $skip := 0 }}{{ $done := 0 }}
+  {{ range $posts }}
+    {{ range .Params.upsolve }}
+      {{ if eq .status "wrong" }}{{ $wrong = add $wrong 1 }}
+      {{ else if eq .status "skip" }}{{ $skip = add $skip 1 }}
+      {{ else if eq .status "done" }}{{ $done = add $done 1 }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  <article class="max-w-full">
+    <header class="mb-8">
+      <h1 class="text-4xl font-bold mt-2 mb-3">📋 {{ .Title }}</h1>
+      <p class="text-sm opacity-60">{{ .Date.Format "2006-01-02" }}</p>
+    </header>
+
+    <div class="upsolve-intro">
+      {{ .Content }}
+    </div>
+
+    <div class="upsolve-stats">
+      <span>共收录 <b>{{ len $posts }}</b> 场比赛</span>
+      <span class="upsolve-stat wrong">🔥 没写对 <b>{{ $wrong }}</b></span>
+      <span class="upsolve-stat skip">🧊 没尝试 <b>{{ $skip }}</b></span>
+      <span class="upsolve-stat done">✅ 已补 <b>{{ $done }}</b></span>
+    </div>
+
+    {{ $groups := slice
+      (dict "key" "wrong" "icon" "🔥" "label" "比赛时没写对" "hint" "交了没过 / 没调出来的，优先级最高" "count" $wrong)
+      (dict "key" "skip"  "icon" "🧊" "label" "根本没尝试"     "hint" "题面都没碰的，按难度挑着补"         "count" $skip)
+      (dict "key" "done"  "icon" "✅" "label" "赛后已补"       "hint" "复盘时补完的，留档"                 "count" $done)
+    }}
+
+    {{ range $g := $groups }}
+      <section class="upsolve-group upsolve-{{ $g.key }}">
+        <h2>{{ $g.icon }} {{ $g.label }} <span class="upsolve-badge">{{ $g.count }}</span></h2>
+        <p class="upsolve-hint">{{ $g.hint }}</p>
+        {{ if eq $g.count 0 }}
+          <p class="upsolve-empty">这一栏暂时是空的。</p>
+        {{ else }}
+          <div class="upsolve-list">
+            {{ range $post := $posts }}
+              {{ range .Params.upsolve }}
+                {{ if eq .status $g.key }}
+                  <div class="upsolve-item">
+                    <span class="upsolve-letter">{{ .problem }}</span>
+                    <div class="upsolve-info">
+                      <div class="upsolve-title">
+                        {{ with .name }}{{ . }}{{ else }}题目 {{ .problem }}{{ end }}
+                        {{ with .url }}<a href="{{ . }}" target="_blank" rel="noopener" class="upsolve-link">题面 ↗</a>{{ end }}
+                      </div>
+                      <div class="upsolve-meta">
+                        <a href="{{ $post.RelPermalink }}" class="upsolve-post">{{ $post.Title }}</a>
+                        <span class="upsolve-date">{{ $post.Date.Format "2006-01-02" }}</span>
+                        {{ with .note }}<span class="upsolve-note">{{ . }}</span>{{ end }}
+                      </div>
+                    </div>
+                    <a href="{{ $post.RelPermalink }}" class="upsolve-go">去复盘 →</a>
+                  </div>
+                {{ end }}
+              {{ end }}
+            {{ end }}
+          </div>
+        {{ end }}
+      </section>
+    {{ end }}
+  </article>
+{{ end }}
