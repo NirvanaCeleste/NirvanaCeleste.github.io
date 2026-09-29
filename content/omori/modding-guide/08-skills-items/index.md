@@ -1,6 +1,6 @@
 ---
 title: "08 · 技能与道具"
-date: 2026-09-28
+date: 2026-09-28T05:00:00+08:00
 weight: 8
 draft: false
 comments: true

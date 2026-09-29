@@ -1,6 +1,6 @@
 ---
 title: "12 · 致谢与开发者内容"
-date: 2026-09-28
+date: 2026-09-28T01:00:00+08:00
 weight: 12
 draft: false
 comments: true

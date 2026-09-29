@@ -1,6 +1,6 @@
 ---
 title: "02 · YAML 文件与对话"
-date: 2026-09-28
+date: 2026-09-28T11:00:00+08:00
 weight: 2
 draft: false
 comments: true
