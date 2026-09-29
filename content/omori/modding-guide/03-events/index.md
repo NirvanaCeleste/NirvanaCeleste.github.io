@@ -5,6 +5,8 @@ weight: 3
 draft: false
 comments: true
 showTableOfContents: true
+series: ["omori-modding-guide-zh"]
+series_order: 3
 description: "OMORI 模组制作指南中文翻译 · 事件 — 事件页、插件命令、脚本与实例"
 ---
 
@@ -521,7 +523,7 @@ AriesWeatherweather power duration
 
 对于更复杂的动画,你可以使用这个脚本:
 
-```text
+```js
 script: this.setCustomFrameXY(x,y) 
 ```
 
@@ -565,7 +567,7 @@ script: this.setCustomFrameXY(x,y)
 
 首先,我们需要向游戏说明每一帧之间的分隔是怎样的,所以要用这个脚本:
 
-```text
+```js
 this.setupPictureCustomFrames(id, width, height, hframes, vframes); 
 ```
 
@@ -581,7 +583,7 @@ this.setupPictureCustomFrames(id, width, height, hframes, vframes);
 
 如果你只是想设置图像的单独一帧,比如一张光照叠加层,就用这个;
 
-```text
+```js
 this.setPictureFrameIndex(id, frameId); 
 ```
 
@@ -589,7 +591,7 @@ this.setPictureFrameIndex(id, frameId);
 
 但如果你要设置的是一段动画,就改用这个;
 
-```text
+```js
 this.setPictureAnimation(id, frames, delay, loops, wait); 
 ```
 
@@ -617,7 +619,7 @@ this.setPictureAnimation(id, frames, delay, loops, wait);
 
 从技术角度看,雾效其实就是一张平铺的(“平铺”指边缘无缝衔接,不是指 <span class="og-g">Tiled</span> 那个软件)图像在整个地图上循环滚动。这意味着除了做雾,你其实还能用它实现很多酷炫的效果——至于怎么玩出创意,就留给你自己去琢磨了。我只负责拆解这个脚本。
 
-```text
+```js
 let fog = this.generateMapFog() 
 fog.move.x = x_scroll 
 fog.move.y = y_scroll 

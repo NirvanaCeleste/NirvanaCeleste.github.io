@@ -1,5 +1,6 @@
 ---
 title: "牛客练习赛157"
+tags: [nowcoder, 题解]
 aliases: ["/acm/19post/"]
 date: 2026-09-18
 draft: false

@@ -231,3 +231,23 @@
   {{ end }}
   {{ partial "math.html" . }}
 </head>
+
+<!-- 图片点击放大灯箱(全站生效) -->
+<style>
+.lb-overlay{position:fixed;inset:0;background:rgba(10,10,10,.92);z-index:99999;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.lb-overlay img{max-width:96vw;max-height:96vh;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+</style>
+<script defer>
+document.addEventListener("DOMContentLoaded",function(){
+  var ov=document.createElement("div");ov.className="lb-overlay";
+  var im=document.createElement("img");ov.appendChild(im);document.body.appendChild(ov);
+  function close(){ov.style.display="none";document.body.classList.remove("lb-open")}
+  ov.addEventListener("click",close);
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")close()});
+  document.querySelectorAll("article img").forEach(function(img){
+    if(img.closest("a"))return;
+    img.style.cursor="zoom-in";
+    img.addEventListener("click",function(e){e.preventDefault();im.src=img.currentSrc||img.src;ov.style.display="flex";document.body.classList.add("lb-open")});
+  });
+});
+</script>

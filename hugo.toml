@@ -8,6 +8,11 @@ title = "NirvanaCeleste's Blog"
   enableSearch = true
   math = true
 
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"
+
   [params.comments]
     enabled = true
     provider = "giscus" # 指定使用 giscus
@@ -38,6 +43,10 @@ title = "NirvanaCeleste's Blog"
     name = '🎮 OMORI 模组'
     url = '/omori/'
     weight = 3
+  [[menu.main]]
+    name = '🗂️ 归档'
+    url = '/archives/'
+    weight = 4
 
 [markup]
   [markup.goldmark]

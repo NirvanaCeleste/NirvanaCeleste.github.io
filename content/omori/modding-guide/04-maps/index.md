@@ -5,6 +5,8 @@ weight: 4
 draft: false
 comments: true
 showTableOfContents: true
+series: ["omori-modding-guide-zh"]
+series_order: 4
 description: "OMORI 模组制作指南中文翻译 · 地图 — Tiled 制图全流程与图块集"
 ---
 

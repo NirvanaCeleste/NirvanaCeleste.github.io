@@ -5,6 +5,8 @@ weight: 8
 draft: false
 comments: true
 showTableOfContents: true
+series: ["omori-modding-guide-zh"]
+series_order: 8
 description: "OMORI 模组制作指南中文翻译 · 技能与道具 — 伤害公式、备注标签与追击"
 ---
 
@@ -222,7 +224,7 @@ Hands.
 
 #### 文字备注标签 “`eval:`”这个 `notetag`可以添加到技能上执行 <span class="og-g">JavaScript</span>,但在 <span class="og-g">OMORI</span>里它主要用来显示文字。像这样:
 
-```text
+```js
 eval: BattleManager._logWindow.push("addText", `${user.name()} hypes up 
 ${target.name()}!`) 
 ```

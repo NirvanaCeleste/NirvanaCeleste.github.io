@@ -1,5 +1,6 @@
 ---
 title: "Codeforces Round 1117 (Div. 2)"
+tags: [codeforces, div-2, 题解]
 aliases: ["/acm/10post/"]
 date: 2026-08-17
 draft: false

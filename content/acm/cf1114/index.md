@@ -1,5 +1,6 @@
 ---
 title: "Codeforces Round 1114 (Div. 3)"
+tags: [codeforces, div-3, 题解]
 aliases: ["/acm/6post/"]
 date: 2026-08-04
 draft: false

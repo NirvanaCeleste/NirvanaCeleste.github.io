@@ -5,6 +5,8 @@ weight: 10
 draft: false
 comments: true
 showTableOfContents: true
+series: ["omori-modding-guide-zh"]
+series_order: 10
 description: "OMORI 模组制作指南中文翻译 · 插件与 OneMaker MV — 社区资源与编辑器增强"
 ---
 
@@ -40,7 +42,7 @@ description: "OMORI 模组制作指南中文翻译 · 插件与 OneMaker MV — 
 
 要使用 <span class="og-g">BundleTool</span>,把它像普通 Mod 一样放进你的 <span class="og-g">OMORI</span> Mod 文件夹(建议这一步别同时放其他 Mod)。打开游戏后,会提示你选择试玩测试文件夹。接下来照着说明操作即可。
 
-#### [Better $atlasData Errors](https://mods.one/mod/betteratlaserror):作者 DraughtNyan 和 Rph
+#### [Better \$atlasData Errors](https://mods.one/mod/betteratlaserror):作者 DraughtNyan 和 Rph
 
 这个插件会让报错信息变得详细得多,能像模像样地解释清楚是什么问题导致了崩溃。添加这个插件时,记得点住并拖动它,把它移到 “`GTP_OmoriFixes`” 的上方。
 
@@ -194,7 +196,7 @@ Control Self Variable(控制独立变量)、Switch Statement(Switch 语句)和 S
 
 ![](img_0000_5a50cad13f.webp)
 
-*注:条件只在 $gameMap.refresh() 函数处才会被检查。实际效果是,只有当开关/变量被更改、角色/物品被更改,或地图被加载时,脚本条件才会被检查。*
+*注:条件只在 \$gameMap.refresh() 函数处才会被检查。实际效果是,只有当开关/变量被更改、角色/物品被更改,或地图被加载时,脚本条件才会被检查。*
 
 *(来源:TomatoRadio)*
 

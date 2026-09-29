@@ -5,6 +5,8 @@ weight: 2
 draft: false
 comments: true
 showTableOfContents: true
+series: ["omori-modding-guide-zh"]
+series_order: 2
 description: "OMORI 模组制作指南中文翻译 · YAML 文件与对话 — 对话文本系统、格式代码与脸图"
 ---
 

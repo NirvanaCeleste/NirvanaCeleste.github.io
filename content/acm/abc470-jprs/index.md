@@ -1,5 +1,6 @@
 ---
 title: "JPRS Programming Contest 2026#2 (AtCoder Beginner Contest 470)"
+tags: [atcoder, 题解]
 aliases: ["/acm/8post/"]
 date: 2026-08-08
 draft: false

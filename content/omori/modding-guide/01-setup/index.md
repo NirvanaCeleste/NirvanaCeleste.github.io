@@ -5,6 +5,8 @@ weight: 1
 draft: false
 comments: true
 showTableOfContents: true
+series: ["omori-modding-guide-zh"]
+series_order: 1
 description: "OMORI 模组制作指南中文翻译 · 准备工作与 GitHub — 环境搭建、工具选择与团队协作"
 ---
 
@@ -34,7 +36,7 @@ description: "OMORI 模组制作指南中文翻译 · 准备工作与 GitHub —
     - 我(TomatoRadio)画图用 [Photopea](http://photopea.com)、[Piskel](https://www.piskelapp.com/) 和 [Aseprite](https://www.aseprite.org),文字用 [Visual Studio Code](https://code.visualstudio.com),音频用 [Audacity](https://www.audacityteam.org/)。另外,我的 <span class="og-g">RPG Maker MV</span> 开的是深色模式,所以我的截图和用浅色模式的 FruitDragon 长得不一样。真是个怪人……
     - 哈哈,这波打脸了吧,我现在也用深色模式了 - fd
     - 不过,**你**该用什么,答案是:喜欢啥用啥。浅色模式和深色模式同理(笑)。
-- `Editing Skills`(编辑技能)、`States`(状态)、`Events`(事件)、`etc.`(等等):你需要 [RPG Maker MV](https://store.steampowered.com/app/363890/RPG_Maker_MV/)。它通常售价 $79.99,但在任何季节性 <span class="og-g">Steam Sale</span> 期间都经常打折到大约 $7.99-$12.99。(说出来你可能不信,我写这句的时候它正在打折。)
+- `Editing Skills`(编辑技能)、`States`(状态)、`Events`(事件)、`etc.`(等等):你需要 [RPG Maker MV](https://store.steampowered.com/app/363890/RPG_Maker_MV/)。它通常售价 \$79.99,但在任何季节性 <span class="og-g">Steam Sale</span> 期间都经常打折到大约 \$7.99-\$12.99。(说出来你可能不信,我写这句的时候它正在打折。)
 - `Mapping`(地图制作):你需要 <span class="og-g">RPG Maker MV</span> 和 [Tiled](https://github.com/mapeditor/tiled/releases/tag/v1.0.3),而且必须是 v1.0.3 版(不打补丁的话,其他任何版本都用不了)。更多内容会在讲地图制作的那一章里细说。
     - 其实有一个插件能让你使用更新版本的 Tiled;凭借更好的用户功能和稳定性,它值得推荐;不过,它的安装流程可比直接下载 v1.0.3 深入繁琐得多。
 - `Plugins`(插件):你得会 <span class="og-g">JavaScript</span>,或者至少能看懂它。就算你不了解 <span class="og-g">JavaScript</span>这门语言,有其他编程语言的基础也会很有帮助。编写插件时用什么 IDE 都行,不过很多模组作者的个人偏好是 [Visual Studio Code](https://code.visualstudio.com)。其他选择还有 [Notepad++](https://notepad-plus-plus.org/)、[Xcode](https://developer.apple.com/xcode/)(用于

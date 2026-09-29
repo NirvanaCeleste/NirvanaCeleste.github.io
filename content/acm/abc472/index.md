@@ -1,5 +1,6 @@
 ---
 title: "AtCoder Beginner Contest 472"
+tags: [atcoder, 题解]
 aliases: ["/acm/11post/"]
 date: 2026-08-22
 draft: false

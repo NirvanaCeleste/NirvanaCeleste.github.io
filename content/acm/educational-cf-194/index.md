@@ -1,5 +1,6 @@
 ---
 title: "Educational Codeforces Round 194 (Rated for Div. 2)"
+tags: [codeforces, div-2, 题解]
 aliases: ["/acm/17post/"]
 date: 2026-09-08
 draft: false

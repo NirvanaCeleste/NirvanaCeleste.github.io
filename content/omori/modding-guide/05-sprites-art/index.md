@@ -5,6 +5,8 @@ weight: 5
 draft: false
 comments: true
 showTableOfContents: true
+series: ["omori-modding-guide-zh"]
+series_order: 5
 description: "OMORI 模组制作指南中文翻译 · 精灵图与美术 — 全部图像资源规格"
 ---
 
@@ -44,15 +46,15 @@ description: "OMORI 模组制作指南中文翻译 · 精灵图与美术 — 全
 
 好了。这其实只是这类图集 5 种设置方式中的一种。而格式靠什么区分?靠文件名。<span class="og-g">RPG Maker MV</span>(或插件)会检查所有已加载精灵图的文件名,来决定如何切分它们。我现在就给你看看它们长什么样。
 
-如果在文件名开头加上 <var>$</var>,它就会变成一张专为单个`character/section`设计的 3×4 图集。这最适合带动画的角色,或尺寸特殊的物体。
+如果在文件名开头加上 <var>\$</var>,它就会变成一张专为单个`character/section`设计的 3×4 图集。这最适合带动画的角色,或尺寸特殊的物体。
 
 ![](img_0000_7944acf698.webp)
 
 ![](img_0000_293d9e6bd4.webp)
 
-*(来源:$glassomori.png,原版游戏)*
+*(来源:\$glassomori.png,原版游戏)*
 
-*(来源:$BS\_Raft.png,原版游戏)*
+*(来源:\$BS\_Raft.png,原版游戏)*
 
 如果在文件名开头加上 <var>[SF]</var>,它就会变成一张专为单个 `character/section`设计的单帧图像。这最适合不带动画的角色,或尺寸特殊的物体。
 
@@ -66,7 +68,7 @@ description: "OMORI 模组制作指南中文翻译 · 精灵图与美术 — 全
 
 *(来源:\[SF\]FA\_basil\_TV.png,原版游戏)*
 
-如果在文件名末尾加上 `%(`<var>x</var>`)`,行走精灵的数量就会增加 <var>x</var> 所代表的数字。大地图的“某物”和跑步精灵用的就是这个。另外,由于 OMORI 用于此功能的插件比 <span class="og-g">OMORI</span>所用的 <span class="og-g">RPG Maker</span> <span class="og-g">MV</span> 版本更旧,这个插件有点小 bug,只对 <var>$</var> 图像有效。如果你需要/想要用更大的图集,可以用[这个 Galv 插件](https://galvs-scripts.com/2015/12/12/mv-character-frames/),效果几乎一样。**(这是 OMORI 专属功能。如果你在** **原版 RPGMaker MV 里尝试这个功能,它是不会生效的。)**
+如果在文件名末尾加上 `%(`<var>x</var>`)`,行走精灵的数量就会增加 <var>x</var> 所代表的数字。大地图的“某物”和跑步精灵用的就是这个。另外,由于 OMORI 用于此功能的插件比 <span class="og-g">OMORI</span>所用的 <span class="og-g">RPG Maker</span> <span class="og-g">MV</span> 版本更旧,这个插件有点小 bug,只对 <var>\$</var> 图像有效。如果你需要/想要用更大的图集,可以用[这个 Galv 插件](https://galvs-scripts.com/2015/12/12/mv-character-frames/),效果几乎一样。**(这是 OMORI 专属功能。如果你在** **原版 RPGMaker MV 里尝试这个功能,它是不会生效的。)**
 
 *注意:在事件编辑器中,它会被显示成按 12×8 或 3×4 切分。别担心,游戏里它会正确显示。*
 
@@ -74,9 +76,9 @@ description: "OMORI 模组制作指南中文翻译 · 精灵图与美术 — 全
 
 ![](img_0000_df437f52e8.webp)
 
-*(来源:$DW\_BASIL\_RUN%(8).png,原版游戏)*
+*(来源:\$DW\_BASIL\_RUN%(8).png,原版游戏)*
 
-*(来源:$bs\_en\_nanci%(7).png,原版游戏)*
+*(来源:\$bs\_en\_nanci%(7).png,原版游戏)*
 
 在 <span class="og-g">RPG Maker MV</span> 中,角色会自动相对于地图向上偏移 6 像素,以营造纵深感。不过,如果你想对某些精灵(比如门)关闭这个效果,可以在文件名开头加上 <var>!</var>。
 

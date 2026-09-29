@@ -5,6 +5,8 @@ weight: 6
 draft: false
 comments: true
 showTableOfContents: true
+series: ["omori-modding-guide-zh"]
+series_order: 6
 description: "OMORI 模组制作指南中文翻译 · 状态与情绪 — 特性、参数与情绪系统"
 ---
 
@@ -358,7 +360,7 @@ from x.
 
 下一步是 `Notes`区的代码。这部分对 `emotions` 来说其实非常容易。
 
-```text
+```js
 <TransformEmotion: happy> 
 //GRAPHICS 
 <StateFaceIndex: 2> 
@@ -391,7 +393,7 @@ user.result().removedStates = user.result().removedStates.filter(s =>
 
 修改 <span class="og-g">JavaScript</span>文件时,更好的做法是新建 <span class="og-g">JavaScript</span>文件来覆写代码,而不是直接打补丁,这是为了 Mod 兼容性。这里要做的正是这种。所以,新建一个 <span class="og-g">JavaScript</span>文件——复制粘贴任意一个“头文件(Header files)”,比如`------------------.js`,就能轻松办到——然后把这两段代码加进你的文件。它们是现有代码的修改版,游戏加载时会覆写原文件。
 
-```text
+```js
 //==============================================================
 ===============
 // REFRESH ENEMY EMOTIONS from Omori BASE.js

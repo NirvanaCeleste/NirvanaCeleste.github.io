@@ -5,6 +5,8 @@ weight: 9
 draft: false
 comments: true
 showTableOfContents: true
+series: ["omori-modding-guide-zh"]
+series_order: 9
 description: "OMORI 模组制作指南中文翻译 · 队伍成员与敌人 — 角色、AI 与多阶情绪 Boss"
 ---
 
@@ -72,7 +74,7 @@ States section.
 
 `Comments`(代码注释)里了,所以你只需要在主脚本下面再加一段脚本,就能加入你的队伍成员。格式长这样。
 
-```text
+```js
 var bwalk = { name: 'DW_BASIL', index: 0 } 
 var brun = '$DW_BASIL_RUN%(8)' 
 $gameActors.actor(5).setMovementGraphics(bwalk, bwalk, brun); 

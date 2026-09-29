@@ -1,6 +1,18 @@
 {{ define "main" }}
   {{ .Content }}
   
+  
+  <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 mb-10">
+    <a href="/omori/modding-guide/" class="block p-6 border-2 rounded-xl shadow-sm hover:shadow-lg transition bg-white/80 dark:bg-neutral-800/80 border-neutral-200 dark:border-neutral-700">
+      <div class="text-xl font-bold mb-1">🎮 OMORI 模组制作指南</div>
+      <p class="text-sm opacity-70">12 章完整中文翻译教程 · 环境搭建到插件开发 · 模组《未竟之事》开发日志</p>
+    </a>
+    <a href="/acm/" class="block p-6 border-2 rounded-xl shadow-sm hover:shadow-lg transition bg-white/80 dark:bg-neutral-800/80 border-neutral-200 dark:border-neutral-700">
+      <div class="text-xl font-bold mb-1">💻 算法竞赛复盘</div>
+      <p class="text-sm opacity-70">ABC / Codeforces / 牛客 题解 · 按平台与难度标签检索 · 持续更新</p>
+    </a>
+  </div>
+
   <h2 class="mt-8 mb-4">最近发布</h2>
   <div class="grid gap-4">
     {{ range where .Site.RegularPages "Section" "in" .Site.Params.mainSections }}

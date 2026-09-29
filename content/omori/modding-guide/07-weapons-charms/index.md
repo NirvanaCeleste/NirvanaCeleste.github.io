@@ -5,6 +5,8 @@ weight: 7
 draft: false
 comments: true
 showTableOfContents: true
+series: ["omori-modding-guide-zh"]
+series_order: 7
 description: "OMORI 模组制作指南中文翻译 · 武器与饰品 — 最简单的装备系统"
 ---
 

@@ -1,0 +1,19 @@
+{{ define "main" }}
+  <header class="mt-4">
+    <h1 class="text-4xl font-extrabold">{{ .Title }}</h1>
+  </header>
+  {{ $pages := where .Site.RegularPages "Section" "in" .Site.Params.mainSections }}
+  <p class="opacity-60 mt-2 mb-6">{{ len $pages }} 篇文章</p>
+  {{ range $pages.ByDate.Reverse.GroupByDate "2006 年" }}
+    <h2 class="mt-10 mb-4 text-2xl font-bold border-b pb-2">{{ .Key }}</h2>
+    <ul class="space-y-2">
+      {{ range .Pages }}
+        <li class="flex items-baseline gap-3">
+          <span class="text-sm opacity-60 shrink-0">{{ .Date.Format "01-02" }}</span>
+          <span class="text-xs px-2 py-0.5 rounded bg-neutral-200 dark:bg-neutral-700 shrink-0">{{ .Section | upper }}</span>
+          <a href="{{ .RelPermalink }}" class="font-medium hover:underline">{{ .Title }}</a>
+        </li>
+      {{ end }}
+    </ul>
+  {{ end }}
+{{ end }}

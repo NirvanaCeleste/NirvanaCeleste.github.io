@@ -1,5 +1,6 @@
 ---
 title: "AtCoder Beginner Contest 463 (VP) E题"
+tags: [atcoder, 题解]
 aliases: ["/acm/2post/"]
 date: 2026-07-12
 draft: false

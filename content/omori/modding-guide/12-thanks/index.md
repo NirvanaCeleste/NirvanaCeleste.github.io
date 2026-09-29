@@ -5,6 +5,8 @@ weight: 12
 draft: false
 comments: true
 showTableOfContents: true
+series: ["omori-modding-guide-zh"]
+series_order: 12
 description: "OMORI 模组制作指南中文翻译 · 致谢与开发者内容 — 社区资源索引"
 ---
 
