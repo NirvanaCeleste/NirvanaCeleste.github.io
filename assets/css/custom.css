@@ -268,7 +268,7 @@ html.dark .probnav { background:rgba(24,24,30,.92); border-color:rgba(154,111,24
   box-shadow:0 0 0 2px rgba(154,111,240,.4); }
 .probnav-btn:hover { transform:translateY(-1px); }
 @media (min-width:1380px) {
-  .probnav { position:fixed; left:14px; top:50%; transform:translateY(-50%);
+  .probnav { position:fixed; left:14px; top:54%; transform:translateY(-50%);
     flex-direction:column; margin:0; padding:.55em .4em; border-radius:14px; }
   .probnav-title { display:none; }
   .probnav-btn.active { transform:scale(1.14); }

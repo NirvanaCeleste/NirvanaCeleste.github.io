@@ -25,7 +25,7 @@
     if (!idNode || !idNode.id) return;
     items.push({ label: m[1].toUpperCase(), id: idNode.id });
   });
-  if (items.length < 2) return;
+  if (items.length < 1) return;
 
   var bar = document.createElement("nav");
   bar.className = "probnav";
@@ -56,10 +56,13 @@
   if (header && header.parentNode === art) art.insertBefore(bar, header.nextSibling);
   else art.insertBefore(bar, art.firstChild);
 
-  /* 顶部横条模式的吸附偏移：站点导航栏吸顶时贴它下方，否则贴近视口顶部 */
-  var hdr = document.getElementById("site-header") || document.querySelector("body > header");
-  var hp = hdr ? getComputedStyle(hdr).position : "";
-  var top = (hdr && (hp === "sticky" || hp === "fixed")) ? hdr.offsetHeight + 8 : 10;
+  /* 顶部横条模式的吸附偏移：贴在站点顶部导航栏（.main-menu 所在 header）下方 */
+  var menu = document.querySelector(".main-menu");
+  var hdr = document.getElementById("site-header")
+    || document.querySelector("body > header")
+    || (menu ? menu.closest("header") : null);
+  var top = (hdr ? hdr.offsetHeight : 72) + 8;
+  if (top > 140) top = 88; /* 兜底：别量到奇怪的大容器 */
   document.documentElement.style.setProperty("--probnav-top", top + "px");
 
   /* 滚动时高亮当前题目 */
