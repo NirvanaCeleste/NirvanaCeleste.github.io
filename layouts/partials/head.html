@@ -251,3 +251,22 @@ document.addEventListener("DOMContentLoaded",function(){
   });
 });
 </script>
+
+<!-- 阅读进度条 -->
+<style>
+#reading-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:99998;
+  background:linear-gradient(90deg,#9a6ff0,#5bd863);transition:width .1s ease-out;border-radius:0 2px 2px 0}
+</style>
+<div id="reading-progress"></div>
+<script defer>
+document.addEventListener("DOMContentLoaded",function(){
+  var bar=document.getElementById("reading-progress");
+  function upd(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    bar.style.width=(max>0?(h.scrollTop/max*100):0)+"%";
+  }
+  window.addEventListener("scroll",upd,{passive:true});
+  upd();
+});
+</script>

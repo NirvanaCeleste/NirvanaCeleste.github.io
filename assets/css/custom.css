@@ -76,3 +76,29 @@ article .og-note, article em {
   article var { color: #ff7a7a; background: rgba(255, 122, 122, 0.10); }
   article .og-g { color: #5bd863; }
 }
+
+
+/* ========== 阅读体验优化 ========== */
+/* 中文正文排版:行距与段距 */
+article .prose, article article, .article-content {
+  line-height: 1.9;
+  letter-spacing: 0.015em;
+}
+article p { margin-bottom: 1.05em; }
+
+/* 暗色模式下截图加边框圆角,避免白色截图刺眼 */
+@media (prefers-color-scheme: dark) {
+  article figure img, article img { border-radius: 6px; }
+}
+html.dark article figure img, html.dark article img {
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.14);
+}
+
+/* Pagefind 搜索框适配站点风格 */
+#pagefind-search .pagefind-ui__search-input{
+  border-radius: 10px; border: 2px solid #d0c8ea; padding: .6em .9em; font-size: 1.05em;
+}
+html.dark #pagefind-search .pagefind-ui__search-input{
+  background: #27272a; color: #e4e4e7; border-color: #52525b;
+}

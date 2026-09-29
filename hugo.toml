@@ -5,13 +5,16 @@ title = "NirvanaCeleste's Blog"
 [params]
   mainSections = ['acm', 'omori']
   enableSidebar = true
-  enableSearch = true
+  enableSearch = false
   math = true
 
 [taxonomies]
   tag = "tags"
   category = "categories"
   series = "series"
+
+[outputs]
+  home = ["html", "rss", "json"]
 
   [params.comments]
     enabled = true
@@ -47,6 +50,10 @@ title = "NirvanaCeleste's Blog"
     name = '🗂️ 归档'
     url = '/archives/'
     weight = 4
+  [[menu.main]]
+    name = '🔍 搜索'
+    url = '/search/'
+    weight = 5
 
 [markup]
   [markup.goldmark]
