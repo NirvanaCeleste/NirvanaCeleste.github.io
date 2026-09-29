@@ -1,0 +1,16 @@
+{{- $cfPath := "static/data/cf-rating.json" -}}
+{{- $acPath := "static/data/atcoder-rating.json" -}}
+<div class="ratings-grid">
+  {{- if fileExists $cfPath -}}
+    {{- $cf := readFile $cfPath | transform.Unmarshal -}}
+    {{- if gt (len $cf) 0 -}}
+      {{ partial "rating-card.html" (dict "data" $cf "title" "📈 Codeforces" "link" "https://codeforces.com/profile/NirvanaCeleste" "platform" "cf") }}
+    {{- end -}}
+  {{- end -}}
+  {{- if fileExists $acPath -}}
+    {{- $ac := readFile $acPath | transform.Unmarshal -}}
+    {{- if gt (len $ac) 0 -}}
+      {{ partial "rating-card.html" (dict "data" $ac "title" "📈 AtCoder" "link" "https://atcoder.jp/users/NirvanaCeleste" "platform" "ac") }}
+    {{- end -}}
+  {{- end -}}
+</div>

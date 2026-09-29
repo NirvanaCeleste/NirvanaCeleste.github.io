@@ -270,3 +270,9 @@ document.addEventListener("DOMContentLoaded",function(){
   upd();
 });
 </script>
+
+{{/* ACM 复盘帖：注入 upsolve 数据 + 跳题按钮脚本 */}}
+{{ if and (eq .Section "acm") .IsPage }}
+<script id="__acm-upsolve" type="application/json">{{ with .Params.upsolve }}{{ . | jsonify | safeJS }}{{ else }}[]{{ end }}</script>
+<script defer src="/js/probnav.js"></script>
+{{ end }}

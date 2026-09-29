@@ -207,6 +207,9 @@ html.dark .upsolve-done  .upsolve-item { border-color:rgba(91,216,99,.4);  borde
   border-color:rgba(154,111,240,.55) !important; font-weight:700; }
 
 /* ---------- /acm/ 首页 rating 走势卡 ---------- */
+.ratings-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
+  gap:1em; margin:1.4em 0 1.8em; }
+.ratings-grid .cfrating-card { margin:0; }
 .cfrating-card { margin:1.4em 0 1.8em; padding:1em 1.2em;
   border:2px solid rgba(154,111,240,.35); border-radius:16px;
   background:linear-gradient(135deg, rgba(154,111,240,.08), rgba(96,165,250,.06)); }
@@ -236,3 +239,28 @@ html.dark .cfrating-area { fill:rgba(154,111,240,.18); }
 .upsolve-progress-fill { height:100%; min-width:2px; border-radius:999px;
   background:linear-gradient(90deg, #9a6ff0, #5bd863);
   transition:width .4s ease; }
+
+/* ---------- 帖子跳题按钮 ---------- */
+.probnav { position:sticky; z-index:40; display:flex; flex-wrap:wrap; gap:.45em;
+  align-items:center; margin:0 0 1.4em; padding:.55em .75em;
+  border-radius:12px; border:1px solid rgba(154,111,240,.28);
+  background:rgba(255,255,255,.92); backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px); }
+html.dark .probnav { background:rgba(24,24,30,.92); border-color:rgba(154,111,240,.4); }
+.probnav-title { font-size:.8em; font-weight:800; opacity:.5; margin-right:.25em; }
+.probnav-btn { display:inline-block; min-width:2.2em; text-align:center;
+  padding:.22em .55em; border-radius:8px; font-weight:700; font-size:.88em;
+  border:1.5px solid rgba(120,120,140,.35); color:inherit;
+  text-decoration:none !important; transition:transform .12s, box-shadow .12s; }
+.probnav-btn.ok { color:#2f9e50; border-color:rgba(47,158,80,.55);
+  background:rgba(47,158,80,.08); }
+.probnav-btn.wrong { color:#e05252; border-color:rgba(224,82,82,.6);
+  background:rgba(224,82,82,.09); }
+.probnav-btn.skip { color:#4f89d0; border-color:rgba(96,165,250,.5);
+  background:rgba(96,165,250,.08); }
+.probnav-btn.none { color:inherit; border-color:rgba(154,111,240,.4);
+  background:rgba(154,111,240,.06); }
+.probnav-btn.active { transform:scale(1.1);
+  box-shadow:0 0 0 2px rgba(154,111,240,.4); }
+.probnav-btn:hover { transform:translateY(-1px); }
+article h2 { scroll-margin-top:96px; }

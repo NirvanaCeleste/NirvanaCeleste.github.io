@@ -14,14 +14,17 @@ content/
 layouts/
   index.html               首页（双入口卡片 + 最近发布）
   acm/upsolve.html         补题清单聚合模板
-  shortcodes/cf-rating.html rating 走势卡（读 static/data/cf-rating.json，构建期渲染 SVG）
-  partials/head.html       head 覆盖：KaTeX（仅 acm 分区）+ 灯箱 + 阅读进度条
-assets/css/custom.css      全部自定义样式（chips / 补题清单 / rating 卡 / 暗色适配）
+  shortcodes/ratings.html  CF + AtCoder 双 rating 走势卡（构建期渲染 SVG）
+  partials/head.html       head 覆盖：KaTeX（仅 acm 分区）+ 灯箱 + 阅读进度条 + 跳题按钮数据
+  partials/rating-card.html 单平台走势卡（被 ratings.html 调用）
+assets/css/custom.css      全部自定义样式（chips / 补题清单 / rating 卡 / 跳题按钮 / 暗色适配）
 static/
-  data/cf-rating.json      rating 快照（脚本生成，见下）
+  data/cf-rating.json      Codeforces rating 快照（脚本生成，见下）
+  data/atcoder-rating.json AtCoder rating 快照（同上）
+  js/probnav.js            帖子跳题按钮（读 front matter upsolve 状态着色）
   lib/katex/               自托管 KaTeX
 scripts/
-  update_cf_rating.py      拉取 CF API 刷新 rating 快照
+  update_ratings.py        拉取 CF + AtCoder 刷新两份 rating 快照
   check_links.py           构建后检查站内死链（CI 会跑）
 ```
 
@@ -38,7 +41,8 @@ hugo server -D                   # 本地预览 http://localhost:1313
 - front matter 里的 `upsolve:` 列表是补题清单的数据源：
   `status: wrong`（赛时交了没过/没调出来）、`skip`（根本没尝试）、`done`（赛后已补）。
   补完一道题把对应条目改成 `done`，[/acm/upsolve/](/acm/upsolve/) 会自动更新。
-- 打完 rated 比赛刷新 rating 走势：`python scripts/update_cf_rating.py`，然后一起 commit。
+- 打完 rated 比赛刷新 rating 走势：`python scripts/update_ratings.py`（CF + AtCoder 都会更新；牛客没有公开 API 暂不支持），然后一起 commit。
+- 复盘帖正文顶部会自动出现「跳题」按钮栏：A/B/C/D… 一键跳到对应题目，颜色按 upsolve 状态标（绿=过了、红=没写对、蓝=没尝试；没有 upsolve 字段的帖子是中性紫色）。
 
 提交推送即部署（GitHub Actions：`hugo --minify` → pagefind 建索引 → 内链检查 → 发布）。
 

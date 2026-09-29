@@ -1,7 +1,5 @@
-{{- $path := "static/data/cf-rating.json" -}}
-{{- if fileExists $path -}}
-{{- $data := readFile $path | transform.Unmarshal -}}
-{{- if gt (len $data) 0 -}}
+{{- /* 通用 rating 走势卡：context = dict data title link platform */ -}}
+{{- $data := .data -}}
 {{- $n := len $data -}}
 {{- $last := index $data (sub $n 1) -}}
 {{- $minv := (index $data 0).new -}}
@@ -21,10 +19,31 @@
 {{- $y := sub (sub $h $pad) (mul (div (sub (float $e.new) (float $minv)) (float $span)) (sub $h (mul 2.0 $pad))) -}}
 {{- $pts = printf "%s%.1f,%.1f " $pts $x $y -}}
 {{- end -}}
+{{- /* 当前分数按平台色带着色 */ -}}
+{{- $v := $last.new -}}
+{{- $color := "#9a6ff0" -}}
+{{- if eq .platform "cf" -}}
+{{- if lt $v 1200 }}{{ $color = "#808080" }}
+{{- else if lt $v 1400 }}{{ $color = "#008000" }}
+{{- else if lt $v 1600 }}{{ $color = "#03a89e" }}
+{{- else if lt $v 1900 }}{{ $color = "#0000ff" }}
+{{- else if lt $v 2100 }}{{ $color = "#aa00aa" }}
+{{- else if lt $v 2400 }}{{ $color = "#ff8c00" }}
+{{- else }}{{ $color = "#ff0000" }}{{ end -}}
+{{- else if eq .platform "ac" -}}
+{{- if lt $v 400 }}{{ $color = "#808080" }}
+{{- else if lt $v 800 }}{{ $color = "#804000" }}
+{{- else if lt $v 1200 }}{{ $color = "#008000" }}
+{{- else if lt $v 1600 }}{{ $color = "#00c0c0" }}
+{{- else if lt $v 2000 }}{{ $color = "#0000ff" }}
+{{- else if lt $v 2400 }}{{ $color = "#c0c000" }}
+{{- else if lt $v 2800 }}{{ $color = "#ff8000" }}
+{{- else }}{{ $color = "#ff0000" }}{{ end -}}
+{{- end -}}
 <div class="cfrating-card">
   <div class="cfrating-head">
-    <span class="cfrating-title">📈 Codeforces rating 走势</span>
-    <span class="cfrating-now">{{ $last.new }}</span>
+    <span class="cfrating-title">{{ .title }}</span>
+    <span class="cfrating-now" style="color: {{ $color }}">{{ $last.new }}</span>
     {{- if gt $delta 0 }}<span class="cfrating-delta up">+{{ $delta }}</span>
     {{- else if lt $delta 0 }}<span class="cfrating-delta down">{{ $delta }}</span>
     {{- else }}<span class="cfrating-delta flat">±0</span>{{- end }}
@@ -36,8 +55,6 @@
   </svg>
   <div class="cfrating-foot">
     <span>最近：{{ $last.contest }}（rank {{ $last.rank }}）</span>
-    <a href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">个人主页 ↗</a>
+    <a href="{{ .link }}" target="_blank" rel="noopener">个人主页 ↗</a>
   </div>
 </div>
-{{- end -}}
-{{- end -}}
