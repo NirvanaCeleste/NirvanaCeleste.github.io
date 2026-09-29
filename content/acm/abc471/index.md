@@ -10,6 +10,10 @@ upsolve:
     url: "https://atcoder.jp/contests/abc471/tasks/abc471_f"
     status: "wrong"
     note: "赛时没过：没分类讨论长度，帖内保留的是当时的错误代码"
+  - problem: "G"
+    url: "https://atcoder.jp/contests/abc471/tasks/abc471_g"
+    status: "skip"
+    note: "空模板"
 ---
 
 ![ABC471提交记录](ABC471_submit.png)

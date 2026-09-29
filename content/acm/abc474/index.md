@@ -5,6 +5,19 @@ aliases: ["/acm/16post/"]
 date: 2026-09-06
 draft: false
 comments: true
+upsolve:
+  - problem: "E"
+    url: "https://atcoder.jp/contests/abc474/tasks/abc474_e"
+    status: "done"
+    note: "赛时没写出来，帖内已补"
+  - problem: "F"
+    url: "https://atcoder.jp/contests/abc474/tasks/abc474_f"
+    status: "skip"
+    note: "空模板"
+  - problem: "G"
+    url: "https://atcoder.jp/contests/abc474/tasks/abc474_g"
+    status: "skip"
+    note: "空模板"
 ---
 
 ![ABC474提交记录](ABC474_submit.png)

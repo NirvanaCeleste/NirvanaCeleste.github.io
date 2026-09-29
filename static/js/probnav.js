@@ -56,8 +56,11 @@
   if (header && header.parentNode === art) art.insertBefore(bar, header.nextSibling);
   else art.insertBefore(bar, art.firstChild);
 
+  /* 顶部横条模式的吸附偏移：站点导航栏吸顶时贴它下方，否则贴近视口顶部 */
   var hdr = document.getElementById("site-header") || document.querySelector("body > header");
-  bar.style.top = ((hdr ? hdr.offsetHeight : 64) + 8) + "px";
+  var hp = hdr ? getComputedStyle(hdr).position : "";
+  var top = (hdr && (hp === "sticky" || hp === "fixed")) ? hdr.offsetHeight + 8 : 10;
+  document.documentElement.style.setProperty("--probnav-top", top + "px");
 
   /* 滚动时高亮当前题目 */
   var spy = new IntersectionObserver(function (entries) {

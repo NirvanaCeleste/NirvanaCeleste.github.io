@@ -5,6 +5,11 @@ aliases: ["/acm/6post/"]
 date: 2026-08-04
 draft: false
 comments: true
+upsolve:
+  - problem: "F"
+    url: "https://codeforces.com/contest/2254/problem/F"
+    status: "skip"
+    note: "空模板"
 ---
 ![CF1114Div3](CF1114Div3.png)
 ![CF1114Div3_submit](CF1114Div3_submit.png)

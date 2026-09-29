@@ -5,6 +5,19 @@ aliases: ["/acm/19post/"]
 date: 2026-09-18
 draft: false
 comments: true
+upsolve:
+  - problem: "D"
+    url: "https://ac.nowcoder.com/acm/contest/140236/D"
+    status: "skip"
+    note: "帖内只有官方题解与证明，还没自己实现"
+  - problem: "E"
+    url: "https://ac.nowcoder.com/acm/contest/140236/E"
+    status: "skip"
+    note: "帖内只有官方题解与证明，还没自己实现"
+  - problem: "F"
+    url: "https://ac.nowcoder.com/acm/contest/140236/F"
+    status: "skip"
+    note: "帖内只有官方题解与证明，还没自己实现"
 ---
 
 ![牛客练习赛157](niuke157.png)

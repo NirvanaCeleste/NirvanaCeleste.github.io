@@ -5,6 +5,19 @@ aliases: ["/acm/13post/"]
 date: 2026-08-29
 draft: false
 comments: true
+upsolve:
+  - problem: "D"
+    url: "https://atcoder.jp/contests/abc473/tasks/abc473_d"
+    status: "done"
+    note: "赛时没做出，帖内三个版本迭代补完"
+  - problem: "F"
+    url: "https://atcoder.jp/contests/abc473/tasks/abc473_f"
+    status: "skip"
+    note: "空模板，思路已写在注释里（线段树维护前缀和最小值）"
+  - problem: "G"
+    url: "https://atcoder.jp/contests/abc473/tasks/abc473_g"
+    status: "skip"
+    note: "卷积多项式，从来没写出来过"
 ---
 ![ABC473](ABC473.png)
 ![ABC473提交记录](ABC473_submit.png)

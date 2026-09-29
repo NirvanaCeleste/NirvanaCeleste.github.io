@@ -5,6 +5,15 @@ aliases: ["/acm/7post/"]
 date: 2026-07-25
 draft: false
 comments: true
+upsolve:
+  - problem: "F"
+    url: "https://atcoder.jp/contests/abc468/tasks/abc468_f"
+    status: "skip"
+    note: "空模板"
+  - problem: "G"
+    url: "https://atcoder.jp/contests/abc468/tasks/abc468_g"
+    status: "skip"
+    note: "空模板"
 ---
 ![ABC468提交记录](ABC468_submit.png)
 ![ABC468](ABC468.png)

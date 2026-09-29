@@ -4,7 +4,6 @@ tags: [codeforces, div-2, 题解]
 date: 2026-09-25T22:35:00+08:00
 draft: false
 comments: true
-showTableOfContents: true
 upsolve:
   - problem: "D"
     name: "Backrooms Hill"

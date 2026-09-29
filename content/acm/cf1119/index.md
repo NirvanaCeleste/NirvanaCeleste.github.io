@@ -5,6 +5,15 @@ aliases: ["/acm/15post/"]
 date: 2026-09-05
 draft: false
 comments: true
+upsolve:
+  - problem: "F"
+    url: "https://codeforces.com/contest/2259/problem/F"
+    status: "skip"
+    note: "空模板，只有读入框架"
+  - problem: "G"
+    url: "https://codeforces.com/contest/2259/problem/G"
+    status: "skip"
+    note: "空模板，只有读入框架"
 ---
 
 ![CF1119_div3](CF1119Div3.png)

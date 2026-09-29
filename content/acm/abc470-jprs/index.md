@@ -10,6 +10,18 @@ upsolve:
     url: "https://atcoder.jp/contests/abc470/tasks/abc470_c"
     status: "done"
     note: "赛时卡太久没调出来，复盘帖里已补完整解法"
+  - problem: "E"
+    url: "https://atcoder.jp/contests/abc470/tasks/abc470_e"
+    status: "skip"
+    note: "空模板"
+  - problem: "F"
+    url: "https://atcoder.jp/contests/abc470/tasks/abc470_f"
+    status: "skip"
+    note: "空模板"
+  - problem: "G"
+    url: "https://atcoder.jp/contests/abc470/tasks/abc470_g"
+    status: "skip"
+    note: "空模板"
 ---
 ![ABC470提交记录](ABC470_submit.png)
 ![ABC470](ABC470.png)

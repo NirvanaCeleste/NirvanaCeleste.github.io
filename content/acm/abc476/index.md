@@ -5,6 +5,15 @@ aliases: ["/acm/20post/"]
 date: 2026-09-19
 draft: false
 comments: true
+upsolve:
+  - problem: "F"
+    url: "https://atcoder.jp/contests/abc476/tasks/abc476_f"
+    status: "skip"
+    note: "空模板"
+  - problem: "G"
+    url: "https://atcoder.jp/contests/abc476/tasks/abc476_g"
+    status: "skip"
+    note: "空模板"
 ---
 
 ![ABC476](ABC476.png)

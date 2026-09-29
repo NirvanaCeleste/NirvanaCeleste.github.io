@@ -5,6 +5,19 @@ aliases: ["/acm/10post/"]
 date: 2026-08-17
 draft: false
 comments: true
+upsolve:
+  - problem: "E"
+    url: "https://codeforces.com/contest/2257/problem/E"
+    status: "skip"
+    note: "空模板"
+  - problem: "F1"
+    url: "https://codeforces.com/contest/2257/problem/F1"
+    status: "skip"
+    note: "空模板"
+  - problem: "F2"
+    url: "https://codeforces.com/contest/2257/problem/F2"
+    status: "skip"
+    note: "空模板"
 ---
 
 ![CF1117Div2](CF1117Div2.png)

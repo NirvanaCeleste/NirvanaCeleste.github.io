@@ -5,6 +5,19 @@ aliases: ["/acm/11post/"]
 date: 2026-08-22
 draft: false
 comments: true
+upsolve:
+  - problem: "E"
+    url: "https://atcoder.jp/contests/abc472/tasks/abc472_e"
+    status: "skip"
+    note: "空模板"
+  - problem: "F"
+    url: "https://atcoder.jp/contests/abc472/tasks/abc472_f"
+    status: "skip"
+    note: "空模板"
+  - problem: "G"
+    url: "https://atcoder.jp/contests/abc472/tasks/abc472_g"
+    status: "skip"
+    note: "空模板"
 ---
 ![ABC472](ABC472.png)
 ![ABC472提交记录](ABC472_submit.png)

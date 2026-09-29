@@ -5,6 +5,19 @@ aliases: ["/acm/12post/"]
 date: 2026-08-28
 draft: false
 comments: true
+upsolve:
+  - problem: "D"
+    url: "https://ac.nowcoder.com/acm/contest/139209/D"
+    status: "skip"
+    note: "「DEF 都太过于难了」，直接没做"
+  - problem: "E"
+    url: "https://ac.nowcoder.com/acm/contest/139209/E"
+    status: "skip"
+    note: "「DEF 都太过于难了」，直接没做"
+  - problem: "F"
+    url: "https://ac.nowcoder.com/acm/contest/139209/F"
+    status: "skip"
+    note: "「DEF 都太过于难了」，直接没做"
 ---
 
 ![niuke156](niuke156.png)

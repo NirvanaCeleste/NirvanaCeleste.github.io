@@ -5,6 +5,19 @@ aliases: ["/acm/17post/"]
 date: 2026-09-08
 draft: false
 comments: true
+upsolve:
+  - problem: "E"
+    url: "https://codeforces.com/contest/2260/problem/E"
+    status: "skip"
+    note: "空模板"
+  - problem: "F"
+    url: "https://codeforces.com/contest/2260/problem/F"
+    status: "skip"
+    note: "空模板"
+  - problem: "G"
+    url: "https://codeforces.com/contest/2260/problem/G"
+    status: "skip"
+    note: "空模板"
 ---
 
 ![EducationalCodeforcesRound194(RatedforDiv.2)](EducationalCodeforcesRound194(RatedforDiv.2).png)
