@@ -143,3 +143,15 @@ html.dark .chip { color: #b99af5; background: rgba(154,111,240,.15); border-colo
 }
 #pagefind-search .pagefind-ui__button:hover { background: #6a3fd0; }
 html.dark #pagefind-search .pagefind-ui__result { background: rgba(154,111,240,.08); border-color: rgba(255,255,255,.10); }
+
+
+/* ========== 关于页 ========== */
+.about-hero { display:flex; align-items:center; gap:1.6em; flex-wrap:wrap;
+  padding:1.6em 1.8em; margin:1.2em 0 1.6em;
+  border:2px solid rgba(154,111,240,.35); border-radius:18px;
+  background:linear-gradient(135deg, rgba(154,111,240,.10), rgba(91,216,99,.07)); }
+.about-avatar { width:120px; height:120px; border-radius:50%; object-fit:cover;
+  border:3px solid #9a6ff0; box-shadow:0 6px 24px rgba(154,111,240,.35); }
+.about-name { font-size:1.9em; font-weight:800; }
+.about-sub { opacity:.72; margin-top:.2em; }
+html.dark .about-hero { border-color:rgba(154,111,240,.45); }
