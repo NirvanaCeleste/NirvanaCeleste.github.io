@@ -267,12 +267,11 @@ html.dark .probnav { background:rgba(24,24,30,.92); border-color:rgba(154,111,24
 .probnav-btn.active { transform:scale(1.1);
   box-shadow:0 0 0 2px rgba(154,111,240,.4); }
 .probnav-btn:hover { transform:translateY(-1px); }
-@media (min-width:1380px) {
-  .probnav { position:fixed; left:14px; top:54%; transform:translateY(-50%);
-    flex-direction:column; margin:0; padding:.55em .4em; border-radius:14px; }
-  .probnav-title { display:none; }
-  .probnav-btn.active { transform:scale(1.14); }
-}
+/* rail 模式：由 probnav.js 按正文实际几何挂载（left/top 内联） */
+.probnav--rail { position:fixed; transform:none;
+  flex-direction:column; margin:0; padding:.55em .4em; border-radius:14px; }
+.probnav--rail .probnav-title { display:none; }
+.probnav--rail .probnav-btn.active { transform:scale(1.14); }
 article h2 { scroll-margin-top:96px; }
 
 /* ---------- 手机端适配 ---------- */

@@ -65,6 +65,30 @@
   if (top > 140) top = 88; /* 兜底：别量到奇怪的大容器 */
   document.documentElement.style.setProperty("--probnav-top", top + "px");
 
+  /* 宽屏且左侧有真实空隙时：rail 模式，贴正文左缘、顶部与正文开头对齐 */
+  function placeRail() {
+    var content = art.querySelector("header") || art;
+    var rect = content.getBoundingClientRect();
+    var btn = bar.querySelector(".probnav-btn");
+    var railW = (btn ? btn.offsetWidth : 44) + 20; /* 竖排宽度≈按钮宽+内边距 */
+    var free = rect.left - 24;
+    if (window.innerWidth >= 1100 && free >= railW) {
+      bar.classList.add("probnav--rail");
+      bar.style.left = Math.max(12, rect.left - bar.offsetWidth - 16) + "px";
+      var vh = window.innerHeight;
+      var docTop = rect.top + (window.pageYOffset || 0);
+      var t = Math.max(90, Math.min(docTop, vh - bar.offsetHeight - 40));
+      bar.style.top = t + "px";
+    } else {
+      bar.classList.remove("probnav--rail");
+      bar.style.left = "";
+      bar.style.top = "";
+    }
+  }
+  placeRail();
+  var rt;
+  window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(placeRail, 120); });
+
   /* 滚动时高亮当前题目 */
   var spy = new IntersectionObserver(function (entries) {
     entries.forEach(function (en) {
