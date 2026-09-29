@@ -6,7 +6,7 @@ description: "NirvanaCeleste · 算法竞赛选手 · OMORI 模组开发者"
 sitemap: true
 ---
 <div class="not-prose about-hero">
-  <img src="avatar.jpg" alt="NirvanaCeleste 的头像" class="about-avatar">
+  <img src="/img/avatar.jpg" alt="NirvanaCeleste 的头像" class="about-avatar">
   <div>
     <div class="about-name">NirvanaCeleste</div>
     <div class="about-sub">算法竞赛选手 · OMORI 模组开发者</div>
