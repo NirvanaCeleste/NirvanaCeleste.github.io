@@ -519,6 +519,19 @@ int main(){
 ## E. KiaKio and Energy Intervals
 https://codeforces.com/contest/2269/problem/E
 
+> Kia 和 Kio 在古数码王国遗迹的水晶终端里发现了一个发光的数组 $a_1, \dots, a_n$。终端这样运作：Kia 选一个区间（任意 $l < r$，区间至少两个元素），Kio 找出该区间的最大值 $m = \max(a_l, \dots, a_r)$，终端把区间内每个元素与 $m$ 按位与，再把结果全部异或起来：$(a_l \,\&\, m) \oplus (a_{l+1} \,\&\, m) \oplus \cdots \oplus (a_r \,\&\, m)$，这个数就是释放的能量。在所有合法区间 $(l, r)$ 中，求能释放的最大能量。
+
+**输入**
+
+第一行包含整数 $t$（$1 \le t \le 10^4$）— 测试用例数。
+每个测试用例第一行包含整数 $n$（$2 \le n \le 2 \times 10^5$）。
+第二行包含 $n$ 个整数 $a_1, \dots, a_n$（$0 \le a_i < 2^{18}$）。
+保证所有测试用例的 $n$ 之和不超过 $2 \times 10^5$。
+
+**输出**
+
+对于每个测试用例，输出一个整数 — 所有合法 $(l, r)$ 中能量的最大值。
+
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
@@ -531,11 +544,11 @@ int n,t;
 int main(){
 	ios::sync_with_stdio(false);
 	cin.tie(0);
-	
 	cin>>t;
 	while(t--){
 		cin>>n;
 		
+		cout<<ans<<'\n';
 	}
 	return 0;	
 }
@@ -544,4 +557,37 @@ int main(){
 ## F. AghaBalaSar and Hamed
 https://codeforces.com/contest/2269/problem/F
 
-题面没开，空模板原样躺着。
+> 给定长度为 $n$ 的排列 $p$。从下标 $i$ 出发，一步可以移动到：任意 $j < i$；或右边**第一个**满足 $p_j > p_i$ 的下标 $j$（如果存在）。换句话说：往左随便走，往右只能一步跳到最近的、值严格更大的位置。令 $f(i, j)$ 为从 $i$ 到 $j$ 的最少步数（若无法到达则 $f(i, j) = 0$）。求 $\sum_{1 \le i, j \le n} f(i, j)$。
+
+**输入**
+
+第一行包含整数 $t$（$1 \le t \le 10^4$）— 测试用例数。
+每个测试用例第一行包含整数 $n$（$1 \le n \le 10^6$）。
+第二行包含 $n$ 个不同的整数 $p_1, \dots, p_n$（$1 \le p_i \le n$）。
+保证所有测试用例的 $n$ 之和不超过 $10^6$。
+
+**输出**
+
+对于每个测试用例，输出 $\sum_{1 \le i, j \le n} f(i, j)$。
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int maxn = 1e5+1;
+int n,t;
+
+//总时间 2h 30 min 剩余时间 2h  min
+
+int main(){
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cin>>t;
+	while(t--){
+		cin>>n;
+		
+		cout<<ans<<'\n';
+	}
+	return 0;	
+}
+```

@@ -37,7 +37,7 @@ upsolve:
 
 比赛时间：2026-09-25 22:35 ~ 00:50（UTC+8，共 2h15min）｜排名 5631｜rating 1303 → 1279（−24）
 
-熬大夜连打系列。C 花了四十多分钟，D 方向全对但是贪心写挂，剩一分钟压哨交了一发 WA on pretest 1，小掉 24 分。E 之后连题面都没开。
+熬大夜连打系列。C 花了四十多分钟，D 方向全对但是贪心写挂，剩一分钟压哨交了一发 WA on pretest 1，小掉 24 分。E 之后赛时连题面都没开（下面 E~G 的题面是复盘整理时补档的）。
 
 ## A. Turn Into a Palindrome
 https://codeforces.com/contest/2267/problem/A
@@ -488,6 +488,19 @@ int main(){
 ## E. Clean Substrings
 https://codeforces.com/contest/2267/problem/E
 
+> 称长度为 $m$ 的二进制串 $t$ 是**干净的（clean）**，若 $t_i = t_{i+1}$ 对所有 $1 \le i < m$ 成立（即整串字符相同）。机器人花一枚硬币可以执行一次操作：选 $t$ 的任意一个**干净子串**，把其中所有字符取反（$0 \leftrightarrow 1$）。定义 $t$ 的**美丽值**为把它变成干净串所需的最少硬币数；定义 $t$ 的**能量**为它**所有子串**的美丽值之和。给定长度为 $n$ 的二进制串 $s$ 和 $q$ 次修改，每次把某个 $s_i$ 取反。求修改前和每次修改后的 $s$ 的能量。
+
+**输入**
+
+第一行包含整数 $t$（$1 \le t \le 10^4$）— 测试用例数。
+每个测试用例第一行包含整数 $n$ 和 $q$（$1 \le n, q \le 2 \times 10^5$）。
+第二行是二进制串 $s$。
+接下来 $q$ 行每行一个整数 $i$（$1 \le i \le n$）。所有测试用例的 $n$、$q$ 之和均不超过 $2 \times 10^5$。
+
+**输出**
+
+对于每个测试用例，输出 $q + 1$ 个数 — 修改前和每次修改后的能量。
+
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
@@ -513,14 +526,111 @@ int main(){
 ## F1. XOR Transformations (Easy Version)
 https://codeforces.com/contest/2267/problem/F1
 
-题面没开，空模板原样躺着。
+> 定义数组 $b$（$m$ 个数）的一次**变换**：写出所有 $b_i \oplus b_j$（$1 \le i < j \le m$，$\oplus$ 为按位异或），取其中最小的 $m$ 个替换原数组。例如 $[6, 7, 8, 9, 15]$ 的两两异或是 $1,1,6,7,8,9,14,14,15,15$，取最小的 $5$ 个后变成 $[1,1,6,7,8]$。给定 $n$ 个非负整数组成的数组 $a$，$q$ 次询问，每次给一个 $x$：求数组做 $x$ 次变换后的 $\max(a) - \min(a)$。询问相互独立（每次询问前数组恢复原状）。
+
+**输入**
+
+第一行包含整数 $t$（$1 \le t \le 100$）— 测试用例数。
+每个测试用例第一行包含整数 $n$ 和 $q$（$5 \le n \le 2000$，$1 \le q \le 2000$）。
+第二行包含 $n$ 个非负整数 $a_1, \dots, a_n$。
+
+**输出**
+
+对于每次询问，输出对应的 $\max(a) - \min(a)$。
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int maxn = 1e5+1;
+int n,t;
+
+//总时间 2h 15 min 剩余时间 2h 15 min
+
+int main(){
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	
+	cin>>t;
+	while(t--){
+		cin>>n;
+		
+	}
+	return 0;	
+}
+```
 
 ## F2. XOR Transformations (Hard Version)
 https://codeforces.com/contest/2267/problem/F2
 
-题面没开，空模板原样躺着。
+> 题意与 F1 完全相同，只是 $n$、$q$ 的范围更大。
+
+**输入**
+
+第一行包含整数 $t$（$1 \le t \le 10^4$）— 测试用例数。
+每个测试用例第一行包含整数 $n$ 和 $q$（$5 \le n \le 10^5$，$1 \le q \le 10^5$）。
+第二行包含 $n$ 个非负整数 $a_1, \dots, a_n$。
+
+**输出**
+
+对于每次询问，输出对应的 $\max(a) - \min(a)$。
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int maxn = 1e5+1;
+int n,t;
+
+//总时间 2h 15 min 剩余时间 2h 15 min
+
+int main(){
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	
+	cin>>t;
+	while(t--){
+		cin>>n;
+		
+	}
+	return 0;	
+}
+```
 
 ## G. New LRT
 https://codeforces.com/contest/2267/problem/G
 
-题面没开，空模板原样躺着。
+> 城市新开了一条轻轨，沿一条直线运行。给定 $n$、$m$ 和一个由 $m$ 个整数组成的数组 $c$。你从位置 $0$ 出发，要去位置 $n$：在位置 $i$ 时，可以选任意满足 $m \,\&\, x = x$ 的正整数 $x$（$\&$ 为按位与），移动到 $i + x$，支付 $c_x$ 枚硬币。一次**旅行**指从 $0$ 到 $n$ 的完整移动过程，移动顺序或移动本身不同即为不同的旅行。求所有可能旅行的总代价之和，对 $10^9 + 7$ 取模。
+
+**输入**
+
+第一行包含整数 $t$（$1 \le t \le 10^4$）— 测试用例数。
+每个测试用例第一行包含整数 $n$ 和 $m$（$1 \le n, m < 2^{20}$）。
+第二行包含 $m$ 个整数 $c_1, \dots, c_m$（$1 \le c_i \le 10^9$）。
+保证所有测试用例的 $n$ 之和与 $m$ 之和均不超过 $2^{20}$。
+
+**输出**
+
+对于每个测试用例，输出答案对 $10^9 + 7$ 取模。
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int maxn = 1e5+1;
+int n,t;
+
+//总时间 2h 15 min 剩余时间 2h 15 min
+
+int main(){
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	
+	cin>>t;
+	while(t--){
+		cin>>n;
+		
+	}
+	return 0;	
+}
+```
