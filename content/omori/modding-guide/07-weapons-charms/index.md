@@ -1,6 +1,6 @@
 ---
 title: "07 · 武器与饰品"
-date: 2026-09-28T06:00:00+08:00
+date: 2026-09-28
 weight: 7
 draft: false
 comments: true

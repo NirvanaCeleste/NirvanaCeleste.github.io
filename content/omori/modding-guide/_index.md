@@ -19,11 +19,37 @@ description: "OMORI Modding Guide 中文翻译版——从零开始制作 OMORI 
 5. **[精灵图与美术](/omori/modding-guide/05-sprites-art/)** — 全部图像资源规格
 6. **[状态与情绪](/omori/modding-guide/06-states/)** — 特性、参数与情绪系统
 7. **[武器与饰品](/omori/modding-guide/07-weapons-charms/)** — 最简单的装备系统
-8. **[技能与道具](/omori/modding-guide/08-skills-items/)** — 伤害公式、备注标签与追击
+8. **[技能与物品](/omori/modding-guide/08-skills-items/)** — 伤害公式、备注标签与追击
 9. **[队伍成员与敌人](/omori/modding-guide/09-party-enemies/)** — 角色、AI 与多阶情绪 Boss
 10. **[插件与 OneMaker MV](/omori/modding-guide/10-plugins/)** — 社区资源与编辑器增强
 11. **[常见错误与技巧](/omori/modding-guide/11-errors/)** — 报错排查速查
 12. **[致谢与开发者内容](/omori/modding-guide/12-thanks/)** — 社区资源索引
+
+
+## 术语表
+
+本翻译的译名与 **RPG Maker MV 官方简体中文版**保持一致；少数有意差异在备注列说明。
+
+| 英文 | 本翻译 | RPG MV 官方 | 备注 |
+|---|---|---|---|
+| Event | 事件 | 事件 | |
+| Map | 地图 | 地图 | |
+| Switch | 开关 | 开关 | |
+| Variable | 变量 | 变量 | |
+| Actor | 角色 | 角色 | |
+| Item | 物品 | 物品 | 全文统一（初版曾混用"道具"） |
+| Skill / Weapon / Armor | 技能 / 武器 / 防具 | 同左 | |
+| Enemy / Troop | 敌人 / 敌群 | 同左 | |
+| State | 状态 | 状态 | |
+| Tileset / Tile | 图块集 / 图块 | 图块 | |
+| Plugin / Plugin Command | 插件 / 插件命令 | 插件 | |
+| Common Event | 公共事件 | 公共事件 | |
+| Notetag | 备注标签 | （编辑器内为"备注"字段） | |
+| Sprite | 精灵 / 精灵图 | — | |
+| Playtest | 测试 | 测试运行 | 测试文件夹亦称"测试文件夹"(playtest folder) |
+| Parallax | 视差背景 | 远景 | |
+| Collision / Region / Layer | 碰撞 / 区域 / 图层 | 同左 | |
+| GitHub: repository / commit / branch | 仓库 / 提交 / 分支 | — | |
 
 ## 欢迎
 
@@ -33,7 +59,7 @@ description: "OMORI Modding Guide 中文翻译版——从零开始制作 OMORI 
 
 *如果你是来提反馈的,请留下你的名字,因为凡是提供了反馈、且该反馈最终被我们收录的人,我们都想为其献上特别鸣谢。*
 
-最近我一直在制作 <span class="og-g">OMORI</span> 模组。但我注意到一件事——市面上缺乏那种教你 <span class="og-g">RPG Maker MV</span>、并且是从 <span class="og-g">OMORI</span>模组制作视角出发的教程。
+最近我一直在制作 <span class="og-g">OMORI</span> 模组（mod）。但我注意到一件事——市面上缺乏那种教你 <span class="og-g">RPG Maker MV</span>、并且是从 <span class="og-g">OMORI</span>模组制作视角出发的教程。
 
 于是,我们俩——[FruitDragon](https://mods.one/author/fruitdragon) 和 [TomatoRadio](https://mods.one/author/tomatoradio)——联手编写了这份指南,几乎涵盖了制作 <span class="og-g">OMORI</span>模组的方方面面!
 

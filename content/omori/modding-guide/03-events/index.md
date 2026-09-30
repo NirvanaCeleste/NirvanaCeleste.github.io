@@ -1,6 +1,6 @@
 ---
 title: "03 · 事件"
-date: 2026-09-28T10:00:00+08:00
+date: 2026-09-28
 weight: 3
 draft: false
 comments: true
@@ -103,7 +103,7 @@ Copy Event(复制事件):它的作用是把一个地图上的整个事件原封�
 - `Switches`(开关)是可用于触发事件的真/假语句。你可能也知道它们叫旗标(flag)或布尔值(boolean)。
 - `Variables`(变量)就是字面意思——变量。
 - `Self Switches`(独立开关)是专属于你当前正在编写的这个事件的真/假语句。它们本来不是给多个事件用的,不过借助 `Scripting`(脚本)也能做到,稍后细说。
-- `Item`(道具):表示玩家背包里必须持有该道具。不能用来检查装备。
+- `Item`(物品):表示玩家背包里必须持有该物品。不能用来检查装备。
 - `Actor`(角色):表示只有当该特定角色(Actor)在玩家队伍中时,事件才会运行。要检查带标签的角色,请放置一个
 
 *检查以下脚本的 `Conditional Branch`(条件分支)*
@@ -134,7 +134,7 @@ Copy Event(复制事件):它的作用是把一个地图上的整个事件原封�
 
 *(来源:FruitDragon)*
 
-这组 `Conditions`(条件)意味着:当 OMORI 在队伍中、且你正拿着道具时,该事件页才会运行。(这个特定条件在原版游戏里是不可能成立的——因为 <var>Holding Item</var> 这个 `Switch`(开关)是桑尼家中整理家务这项任务专用的。)
+这组 `Conditions`(条件)意味着:当 OMORI 在队伍中、且你正拿着物品时,该事件页才会运行。(这个特定条件在原版游戏里是不可能成立的——因为 <var>Holding Item</var> 这个 `Switch`(开关)是桑尼家中整理家务这项任务专用的。)
 
 ![](img_0000_bf89e7f72a.webp)
 
@@ -547,7 +547,7 @@ script: this.setCustomFrameXY(x,y)
 
 现在,在 `Buying`(购买)部分,我们要使用一条 `Script Command`(脚本命令),即“`this.setupShop('`<var>name</var>`',`<var>0</var>`)`”。它的作用是告诉游戏该显示哪套对话,这是通过 `‘`<var>name</var>`’` 来实现的——它应该是你在 `System.yaml` 文件里给店主起的名字。然后那个 <var>0</var> 告诉游戏这是在购买。接下来,只需使用 `Shop Processing`
 
-`Command`(命令),用它添加你的所有道具并设定价格。切记不要勾选“`Purchase Only`”(仅购买)那个框,它在 <span class="og-g">OMORI</span> 里根本不管用。
+`Command`(命令),用它添加你的所有物品并设定价格。切记不要勾选“`Purchase Only`”(仅购买)那个框,它在 <span class="og-g">OMORI</span> 里根本不管用。
 
 然后是 `Selling`(出售),我们要把上面那套原样再做一遍,只改一个地方:把 <var>0</var> 换成 <var>1</var>,告诉游戏我们这次是在卖东西而不是买东西。顺便一提,`Shop Processing`(商店处理)你还是得留着——哪怕它在出售时什么都不做——因为正是它让游戏真正调出商店菜单。
 

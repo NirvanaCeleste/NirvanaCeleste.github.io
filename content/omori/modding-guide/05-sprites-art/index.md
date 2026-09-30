@@ -1,6 +1,6 @@
 ---
 title: "05 · 精灵图与美术"
-date: 2026-09-28T08:00:00+08:00
+date: 2026-09-28
 weight: 5
 draft: false
 comments: true
@@ -258,9 +258,9 @@ battlebacks.
 
 另外还有个很少有人提的功能:借助插件命令,你可以在一场战斗中同时使用多张战斗背景图像,还包括可滚动的战斗背景。OMORI 之战就是这么实现的,[Autumn Break](https://mods.one/mod/autumnbreak)的最终战也一样。所以放心大胆地去做些好看的景色吧!
 
-### 图块集 `Tilesets`收录了 <span class="og-g">OMORI's</span>地图用到的所有图块和道具。它们是以图集形式存放在“`tilesets`”文件夹里的。
+### 图块集 `Tilesets`收录了 <span class="og-g">OMORI's</span>地图用到的所有图块和物品。它们是以图集形式存放在“`tilesets`”文件夹里的。
 
-<span class="og-g">OMORI's</span>大多数 `tilesets`都是 1024×1024,这是可用的最大尺寸。每个单独图块为 32×32,一些较大的道具(如树木和建筑)会占用多个图块。图块可以通过图集上其他图块的循环动画动起来,详见
+<span class="og-g">OMORI's</span>大多数 `tilesets`都是 1024×1024,这是可用的最大尺寸。每个单独图块为 32×32,一些较大的物品(如树木和建筑)会占用多个图块。图块可以通过图集上其他图块的循环动画动起来,详见
 
 *[地图制作章节](/omori/modding-guide/04-maps/)。*
 

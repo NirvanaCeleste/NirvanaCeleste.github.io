@@ -1,13 +1,13 @@
 ---
-title: "08 · 技能与道具"
-date: 2026-09-28T05:00:00+08:00
+title: "08 · 技能与物品"
+date: 2026-09-28
 weight: 8
 draft: false
 comments: true
 showTableOfContents: true
 series: ["omori-modding-guide-zh"]
 series_order: 8
-description: "OMORI 模组制作指南中文翻译 · 技能与道具 — 伤害公式、备注标签与追击"
+description: "OMORI 模组制作指南中文翻译 · 技能与物品 — 伤害公式、备注标签与追击"
 ---
 
 ![](img_0000_37870f1b05.webp)
@@ -287,17 +287,17 @@ label : stop
 
 `<HideInMenu>` 虽然不是追击专属的标签,但请务必确保它们不会显示在技能菜单里。
 
-### 道具
+### 物品
 
-对我们来说幸运的是,道具大体上就是一次性使用的技能,所以技能那套代码大部分都能原样搬过来,因此我只讲差异点。
+对我们来说幸运的是,物品大体上就是一次性使用的技能,所以技能那套代码大部分都能原样搬过来,因此我只讲差异点。
 
-#### 通用设置 `Item Type`:零食和玩具选 <var>Regular Item</var>。重要物品,以及任何在菜单中隐藏的道具(比如 Hangman 钥匙,内部称为 Blackletters),选 <var>Key Item</var>。
+#### 通用设置 `Item Type`:零食和玩具选 <var>Regular Item</var>。重要物品,以及任何在菜单中隐藏的物品(比如 Hangman 钥匙,内部称为 Blackletters),选 <var>Key Item</var>。
 
 `Price`:并不是商店里的售价,而是卖出价的两倍。是的,很怪,但 <span class="og-g">OMORI</span>就是这样。
 
 `Consumable`:零食和玩具选 <var>Yes</var>。重要物品选 <var>No</var>。
 
-`Element`:回复心的零食选 <var>HEART ITEMS</var>。回复果汁的零食选 <var>JUICE ITEMS</var>。两种都回复的道具选 <var>HEART ITEMS</var>。造成伤害的玩具选 <var>Physical</var>。
+`Element`:回复心的零食选 <var>HEART ITEMS</var>。回复果汁的零食选 <var>JUICE ITEMS</var>。两种都回复的物品选 <var>HEART ITEMS</var>。造成伤害的玩具选 <var>Physical</var>。
 
 `Variance & Crits`:**不。没有。不适用。空值。**
 
@@ -307,6 +307,6 @@ label : stop
 img/system/itemConsumables.png or img/system/itemImportant.png 
 ```
 
-取决于它是普通道具还是重要物品。
+取决于它是普通物品还是重要物品。
 
 `<IsToy>` 如果它是玩具,就在备注里加上这个。

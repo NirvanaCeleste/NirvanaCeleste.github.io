@@ -1,6 +1,6 @@
 ---
 title: "01 · 准备工作与 GitHub"
-date: 2026-09-28T12:00:00+08:00
+date: 2026-09-28
 weight: 1
 draft: false
 comments: true

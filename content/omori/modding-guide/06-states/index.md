@@ -1,6 +1,6 @@
 ---
 title: "06 · 状态与情绪"
-date: 2026-09-28T07:00:00+08:00
+date: 2026-09-28
 weight: 6
 draft: false
 comments: true
@@ -58,17 +58,17 @@ OMORI.
 
 `Element Rate:`(元素倍率)针对所列 <var>element</var>所受伤害的百分比乘算倍率。主要用于 `Emotions`。
 
-`*Debuff Rate:`(减益倍率)改变技能或道具使所列数值陷入减益的概率。
+`*Debuff Rate:`(减益倍率)改变技能或物品使所列数值陷入减益的概率。
 
 ![](img_0000_c52039a968.webp)
 
-`*State Rate:`(状态施加率)改变技能或道具施加所列
+`*State Rate:`(状态施加率)改变技能或物品施加所列
 
 ```text
 state.
 ```
 
-*(注:这些只影响技能和道具里的“`Add State`”效果,而不影响 <span class="og-g">OMORI</span>大部分地方所用的备注标签。)*
+*(注:这些只影响技能和物品里的“`Add State`”效果,而不影响 <span class="og-g">OMORI</span>大部分地方所用的备注标签。)*
 
 `State Resist:`(状态抗性)对所列 `state` 免疫。
 
@@ -90,7 +90,7 @@ Emotions.
 
 `*Attack State:`(攻击附加状态)为攻击附加一个按百分比计算的、施加所列 `state` 的几率。
 
-*(注:这些只影响技能和道具里的“`Add State`”效果,而不影响 <span class="og-g">OMORI</span>大部分地方所用的备注标签。)*
+*(注:这些只影响技能和物品里的“`Add State`”效果,而不影响 <span class="og-g">OMORI</span>大部分地方所用的备注标签。)*
 
 `*Attack Speed:`(攻击速度)为使用的任何技能附加速度加成。
 
@@ -240,7 +240,7 @@ OMORI.
 
 **Pharmacology(药理):pha**
 
-按修正后的百分比,增减道具公式的效力。
+按修正后的百分比,增减物品公式的效力。
 
 **MP Cost Rate(MP 消耗率):mcr**
 

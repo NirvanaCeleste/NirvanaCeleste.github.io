@@ -1,6 +1,6 @@
 ---
 title: "09 · 队伍成员与敌人"
-date: 2026-09-28T04:00:00+08:00
+date: 2026-09-28
 weight: 9
 draft: false
 comments: true
@@ -99,7 +99,7 @@ $gameActors.actor(5).setMovementGraphics(bwalk, bwalk, brun);
 你的技能库已经相当丰富了。不过现在,我要给你介绍一个比前面那些还要更可怕的东西。
 
 ```text
-Making enemies.
+制作敌人。
 ```
 
 *(来源:图片由 u/Whisp\_Is\_My\_Waifu 提供,和上次一样)*
