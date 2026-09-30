@@ -10,6 +10,11 @@ description: "OMORI Modding Guide 中文翻译版——从零开始制作 OMORI 
 > 本文档由社区指南《OMORI Modding Guide - WIP》(作者:**FruitDragon & TomatoRadio**)翻译为简体中文,共 12 章,覆盖从环境搭建到插件开发的 OMORI 模组制作全流程。
 > 原文配色约定:**紫色 = 代码/路径/命令**、<var>红色 = 需替换的变量</var>、<span class="og-g">绿色 = 程序名</span>、蓝色 = 超链接。
 
+<div style="margin:14px 0 6px;">
+<a class="pdf-dl-btn" href="/omori-guide/OMORI-Modding-Guide-CN.pdf" download style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;font-weight:700;padding:12px 26px;border-radius:8px;font-size:1.05em;box-shadow:0 2px 6px rgba(0,0,0,.18);">⬇ 下载 PDF 全本（68 MB · 259 页）</a>
+<span style="color:#666;font-size:.85em;margin-left:10px;">2026-10-01 v3 修订版：术语统一/漏译修复/术语表</span>
+</div>
+
 ## 章节目录
 
 1. **[准备工作与 GitHub](/omori/modding-guide/01-setup/)** — 环境搭建、工具选择与团队协作
