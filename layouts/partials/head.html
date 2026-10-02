@@ -271,8 +271,9 @@ document.addEventListener("DOMContentLoaded",function(){
 });
 </script>
 
-{{/* ACM 复盘帖：注入 upsolve 数据 + 跳题按钮脚本 */}}
+{{/* ACM 复盘帖：注入 upsolve 数据 + 跳题按钮脚本（fingerprint 指纹化，改内容即换 URL，绕开 CDN/浏览器缓存） */}}
 {{ if and (eq .Section "acm") .IsPage }}
 <script id="__acm-upsolve" type="application/json">{{ with .Params.upsolve }}{{ . | jsonify | safeJS }}{{ else }}[]{{ end }}</script>
-<script defer src="/js/probnav.js"></script>
+{{ $probnav := resources.Get "js/probnav.js" | minify | fingerprint }}
+<script defer src="{{ $probnav.RelPermalink }}" integrity="{{ $probnav.Data.Integrity }}"></script>
 {{ end }}
