@@ -96,11 +96,20 @@ html.dark article figure img, html.dark article img {
 }
 
 /* Pagefind 搜索框适配站点风格 */
-#pagefind-search .pagefind-ui__search-input{
-  border-radius: 10px; border: 2px solid #d0c8ea; padding: .6em .9em; font-size: 1.05em;
+/* 搜索框：全部走 Pagefind 官方 CSS 变量定制。
+   注意不要覆盖 .pagefind-ui__search-input 的 padding——它右侧的 70px 是给
+   绝对定位的“清除”按钮留的，覆盖了输入文字会和按钮重叠。 */
+#pagefind-search {
+  --pagefind-ui-primary: #9a6ff0;
+  --pagefind-ui-border: #d0c8ea;
+  --pagefind-ui-border-radius: 10px;
 }
-html.dark #pagefind-search .pagefind-ui__search-input{
-  background: #27272a; color: #e4e4e7; border-color: #52525b;
+html.dark #pagefind-search {
+  --pagefind-ui-text: #e4e4e7;
+  --pagefind-ui-background: #27272a;
+  --pagefind-ui-border: #52525b;
+  --pagefind-ui-primary: #b394f5;
+  --pagefind-ui-tag: #3f3f46;
 }
 
 
