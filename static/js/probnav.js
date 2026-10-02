@@ -18,8 +18,14 @@
 
   var items = [];
   art.querySelectorAll("h2").forEach(function (h) {
-    var text = h.textContent.trim();
-    var m = text.match(/^([A-Za-z][0-9]?)[\.\s\u3000]/) || text.match(/^([A-Z][0-9]?)$/);
+    /* 只取 h2 的直接文本节点：主题的锚点 "#" 是嵌在子元素里的，
+       线上 --minify 后没有空白分隔，读 textContent 会得到 "A#" 导致匹配失败 */
+    var own = "";
+    h.childNodes.forEach(function (n) {
+      if (n.nodeType === 3) own += n.textContent;
+    });
+    own = own.trim();
+    var m = own.match(/^([A-Za-z][0-9]?)[\.\s\u3000]/) || own.match(/^([A-Z][0-9]?)$/);
     if (!m) return;
     var idNode = h.id ? h : h.querySelector("[id]");
     if (!idNode || !idNode.id) return;
