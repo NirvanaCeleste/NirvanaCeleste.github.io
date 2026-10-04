@@ -23,8 +23,8 @@
     var LETTER = {
       censor: [
         "亲爱的：",
-        "一切都处理好了。█████也不在了。没有人问起██████。",
-        "他们要是再查下去，我就把剩下的█████也处理掉。",
+        "一切都处理好了。█████████也不在了。没有人问起███████。",
+        "他们要是再查下去，我就把剩下的████也处理掉。",
         "在里面别多想。管好自己的嘴。等风吹过去，我来接你。",
         "——你的同桌"
       ],
@@ -46,7 +46,7 @@
           /* █ 涂黑块染成实心黑条 */
           el.innerHTML = p.replace(/█+/g, function (m) {
             return '<span class="lt-black" style="display:inline-block;min-width:' +
-              (m.length * 0.62) + 'em;height:1em;vertical-align:-0.12em"></span>';
+              m.length + 'em;height:1.08em;vertical-align:-0.14em"></span>';
           });
         } else {
           el.textContent = p;
