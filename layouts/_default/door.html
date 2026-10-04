@@ -1,0 +1,93 @@
+{{ define "main" }}
+  {{/* 剧本机制：黑暗中的门——「不是醒来，而是进入一个极简的意识空间」
+        把「死亡是虚无」变成一段可以选的互动体验 */}}
+  <article class="rm-page">
+    <div class="rm-stage vd-stage" id="vd-stage" aria-label="黑暗中的门">
+      <svg viewBox="0 0 600 420" class="vd-svg" role="img" preserveAspectRatio="xMidYMid meet">
+        <g class="vd-door" id="vd-door" role="button" tabindex="0" aria-label="门">
+          <rect x="240" y="110" width="120" height="240" rx="2" class="vd-outline" />
+          <circle cx="344" cy="235" r="4.5" class="vd-knob" />
+        </g>
+      </svg>
+
+      <div class="rm-out vd-out" id="vd-out" aria-live="polite"></div>
+      <div class="vd-choice" id="vd-choice">
+        <button class="vd-btn" id="vd-open">推开</button>
+        <button class="vd-btn" id="vd-back">转身</button>
+      </div>
+      <a class="rm-back" href="/">❮ ~/home</a>
+    </div>
+  </article>
+
+  <script>
+  (function () {
+    "use strict";
+    var out = document.getElementById("vd-out");
+    var stage = document.getElementById("vd-stage");
+    var choice = document.getElementById("vd-choice");
+    var door = document.getElementById("vd-door");
+    var typeTimer = null;
+    function type(lines, done) {
+      var li = 0;
+      function nextLine() {
+        if (li >= lines.length) { if (done) done(); return; }
+        var text = lines[li++];
+        var i = 0;
+        clearInterval(typeTimer);
+        typeTimer = setInterval(function () {
+          if (i >= text.length) { clearInterval(typeTimer); setTimeout(nextLine, 350); return; }
+          out.textContent += text[i++];
+        }, 42);
+        out.textContent = "";
+      }
+      nextLine();
+    }
+
+    var greeted = false, choosing = false;
+    door.addEventListener("click", function () {
+      if (!greeted) {
+        greeted = true;
+        type([
+          "没有地板。没有天花板。没有墙壁。",
+          "只有一扇门。",
+          "它没有任何特征——不是白色的，不是黑色的，就是一扇门。"
+        ], function () { choosing = true; choice.classList.add("on"); });
+        return;
+      }
+      if (choosing) { choice.classList.add("on"); }
+    });
+
+    document.getElementById("vd-open").addEventListener("click", function () {
+      choosing = false;
+      choice.classList.remove("on");
+      door.classList.add("opened");
+      type([
+        "门后面……",
+        "什么都没有。",
+        "（不是「醒来」。是虚无本身。）"
+      ], function () {
+        stage.classList.add("void");
+        setTimeout(function () {
+          out.textContent = "";
+          type(["……你还在这里。"], function () {
+            stage.classList.remove("void");
+            door.classList.remove("opened");
+            choosing = true;
+            choice.classList.add("on");
+          });
+        }, 2600);
+      });
+    });
+
+    document.getElementById("vd-back").addEventListener("click", function () {
+      choosing = false;
+      choice.classList.remove("on");
+      type([
+        "你转过身。",
+        "门留在原地。",
+        "（它不会追上来。它只是在那里。）"
+      ]);
+    });
+  })();
+  </script>
+{{ end }}

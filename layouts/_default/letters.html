@@ -1,0 +1,78 @@
+{{ define "main" }}
+  {{/* 剧本素材：Sunny 妈妈的信——IPSU 审查版与原件对照 */}}
+  <article class="rm-page">
+    <div class="rm-stage lt-stage" aria-label="被涂黑的信">
+      <div class="lt-head">
+        <span class="lt-title">Basil 收 · 寄信人栏被水洇过</span>
+        <span class="lt-tabs">
+          <button class="lt-btn active" data-v="censor">审查版</button>
+          <button class="lt-btn" data-v="origin">原件</button>
+        </span>
+      </div>
+
+      <div class="lt-letter" id="lt-letter" aria-live="polite"></div>
+
+      <div class="rm-out" id="lt-out"></div>
+      <a class="rm-back" href="/">❮ ~/home</a>
+    </div>
+  </article>
+
+  <script>
+  (function () {
+    "use strict";
+    /* 剧本原文节选；█ = 审查涂黑 */
+    var LETTER = {
+      censor: [
+        "亲爱的Basil：",
+        "这封信可能不会顺利到你手上，但我还是想写。上周Sunny又把自己关在房间里两天，嘴里反复说着「都怪我，Basil才在受苦」。他把那些██████放进了一个旧鞋盒，说等他状态好一点再打开。我劝他出来吃饭，他只摇头。",
+        "那天晚上我在下班路上看到新闻，████████████长期抑郁██████。我吓得立刻跑去Sunny的房间——门锁着，怎么敲都没回应。",
+        "██████████████████ ██████████████████",
+        "上周██████████████████——在沙盘里把两个人偶面对面放着，然后用沙子慢慢盖住它们。██████████████████他盯着空白的沙面看了很久，他说他对不起你。",
+        "Basil，我……我算个称职的母亲吗？██████，你也是个██████████████████，不要████████",
+        "——Sunny的妈妈"
+      ],
+      origin: [
+        "亲爱的Basil：",
+        "这封信可能不会顺利到你手上，但我还是想写。上周Sunny又把自己关在房间里两天，嘴里反复说着「都怪我，Basil才在受苦」。他把那些他和Mari的合照装进了一个旧鞋盒，说等他状态好一点再打开。我劝他出来吃饭，他只摇头。",
+        "那天晚上我在下班路上看到新闻，说我们小区有一个男孩因为长期抑郁在家里上吊了。我吓得立刻跑去Sunny的房间——门锁着，怎么敲都没回应。",
+        "我差点撞门，然后听见他轻轻说了一声「妈，我在和莉莉通话」。他戴着耳机，根本没听见敲门声。莉莉是他的心理咨询师。",
+        "上周他在洛杉矶的医院做治疗，虽然还是会自责，但没有伤害自己的打算。莉莉对他用了沙盘疗法——在沙盘里把两个人偶面对面放着，然后用沙子慢慢盖住它们。莉莉问那个人偶是谁？他盯着空白的沙面看了很久，他说他对不起你。",
+        "Basil，我……我算个称职的母亲吗？我还有很多关于Sunny的问题要问你，他最近经常提到你。你也是个好孩子，不要有心理负担。你们都需要时间。",
+        "——Sunny的妈妈"
+      ]
+    };
+    var letter = document.getElementById("lt-letter");
+    var out = document.getElementById("lt-out");
+
+    function render(v) {
+      letter.innerHTML = "";
+      LETTER[v].forEach(function (p) {
+        var el = document.createElement("p");
+        if (v === "censor") {
+          /* █ 涂黑块染成实心黑条 */
+          el.innerHTML = p.replace(/█+/g, function (m) {
+            return '<span class="lt-black" style="display:inline-block;min-width:' +
+              (m.length * 0.62) + 'em;height:1em;vertical-align:-0.12em"></span>';
+          });
+        } else {
+          el.textContent = p;
+        }
+        letter.appendChild(el);
+      });
+    }
+
+    document.querySelectorAll(".lt-btn").forEach(function (b) {
+      b.addEventListener("click", function () {
+        document.querySelectorAll(".lt-btn").forEach(function (x) { x.classList.remove("active"); });
+        b.classList.add("active");
+        render(b.dataset.v);
+        out.textContent = b.dataset.v === "origin"
+          ? "（罗恩带给 Basil 的那封——没经过审查。）"
+          : "（IPSU 审查后，Basil 实际读到的样子。）";
+      });
+    });
+    render("censor");
+    out.textContent = "（IPSU 审查后，Basil 实际读到的样子。）";
+  })();
+  </script>
+{{ end }}

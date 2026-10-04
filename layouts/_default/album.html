@@ -1,0 +1,93 @@
+{{ define "main" }}
+  {{/* 剧本机制：Night 3 的梦——和 Sunny 一起翻相册，越翻越快 */}}
+  <article class="rm-page">
+    <div class="rm-stage al-stage" id="al-stage" aria-label="相册">
+      <div class="al-note">（梦里的相册。点它。）</div>
+
+      <div class="al-frame" id="al-frame" role="button" tabindex="0" aria-label="翻页">
+        <div class="al-photo" id="al-photo"></div>
+        <div class="al-caption" id="al-caption"></div>
+      </div>
+
+      <div class="rm-out" id="al-out" aria-live="polite"></div>
+      <button class="al-again" id="al-again">再翻一次</button>
+      <a class="rm-back" href="/">❮ ~/home</a>
+    </div>
+  </article>
+
+  <script>
+  (function () {
+    "use strict";
+    var PAGES = [
+      "花圃", "湖", "生日那天", "大家一起", "新家", "奶奶",
+      "白色", "房间", "探视日", "Kel 的信", "围墙", "……",
+      "藏起来的东西", "越来越多", "停不下来", "停不下来", "停不下来"
+    ];
+    var FINAL = "（水声。）";
+    var frame = document.getElementById("al-frame");
+    var photo = document.getElementById("al-photo");
+    var caption = document.getElementById("al-caption");
+    var out = document.getElementById("al-out");
+    var stage = document.getElementById("al-stage");
+    var again = document.getElementById("al-again");
+    var idx = 0, auto = null, running = false, done = false;
+    var typeTimer = null;
+
+    function typeOut(text) {
+      clearInterval(typeTimer);
+      out.textContent = "";
+      var i = 0;
+      typeTimer = setInterval(function () {
+        if (i >= text.length) { clearInterval(typeTimer); return; }
+        out.textContent += text[i++];
+      }, 34);
+    }
+
+    function flip() {
+      if (idx >= PAGES.length) { finish(); return; }
+      caption.textContent = PAGES[idx];
+      photo.classList.remove("flash");
+      void photo.offsetWidth;
+      photo.classList.add("flash");
+      /* 越往后越快：间隔从 900ms 压到 80ms */
+      var wait = Math.max(80, 900 - idx * 55);
+      idx++;
+      if (running) auto = setTimeout(flip, wait);
+    }
+
+    function start() {
+      if (running) return;
+      running = true;
+      idx = 0;
+      stage.classList.add("run");
+      typeOut("Sunny 就在旁边。你们在翻相册。");
+      flip();
+    }
+
+    function finish() {
+      running = false;
+      done = true;
+      clearTimeout(auto);
+      stage.classList.add("dark");
+      typeOut(FINAL);
+      setTimeout(function () { again.classList.add("on"); }, 1800);
+    }
+
+    frame.addEventListener("click", function () {
+      if (done) return;
+      if (!running) { start(); return; }
+      clearTimeout(auto);
+      flip();
+    });
+    frame.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); frame.click(); }
+    });
+    again.addEventListener("click", function () {
+      done = false;
+      stage.classList.remove("dark", "run");
+      idx = 0; caption.textContent = ""; out.textContent = "";
+      again.classList.remove("on");
+    });
+  })();
+  </script>
+{{ end }}

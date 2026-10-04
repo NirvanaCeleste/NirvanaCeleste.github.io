@@ -465,77 +465,80 @@ html.ws-mode .home-term { background:#0a0a0a; }
   .home-term { min-height:300px; max-height:400px; }
 }
 
-/* ---------- /space/ 空房间（本站终端语言：深底 + 绿描线 + 紫悬停） ---------- */
-.bs-page { width:100%; max-width:1400px; margin:0 auto; }
-.bs-room { position:relative; border-radius:16px; overflow:hidden; min-height:560px;
+/* ---------- 房间共享（剧本场景页：终端语言） ---------- */
+.rm-page { width:100%; max-width:1000px; margin:0 auto; }
+.rm-stage { position:relative; display:flex; flex-direction:column; align-items:center;
+  min-height:560px; padding:4em 1.2em 3em; border-radius:16px;
   background:#0d0d12; border:1px solid rgba(154,111,240,.22);
-  font-family:Consolas,"Cascadia Mono","Courier New",monospace; }
-.bs-room::after { content:attr(data-hover); position:absolute; left:16px; top:12px;
-  color:rgba(126,231,135,.45); font-size:.8em; letter-spacing:.12em; }
-.bs-svg { width:100%; height:560px; display:block; }
-.bs-stroke { fill:none; stroke:rgba(126,231,135,.7); stroke-width:3; stroke-linecap:round; }
-.bs-fill { fill:rgba(126,231,135,.8); }
-.bs-floor { stroke:rgba(255,255,255,.09); stroke-width:2; }
-.bs-item { cursor:pointer; transition:opacity .3s, transform .18s, filter .18s;
-  transform-box:fill-box; transform-origin:center; }
-.bs-item:hover { transform:scale(1.05);
-  filter:drop-shadow(0 0 10px rgba(154,111,240,.8)); }
-.bs-door rect:first-child { fill:#0d0d12; }
-.bs-door:hover rect:first-child { fill:rgba(126,231,135,.06); }
-.bs-bulb2 { fill:#0d0d12; stroke:rgba(126,231,135,.65); stroke-width:2; transition:.4s; }
-.bs-room.lit .bs-bulb2 { fill:#c9f2b0; stroke:#9fe87a;
-  filter:drop-shadow(0 0 20px rgba(159,232,122,.7)); }
-.bs-room.lit { background:#101016; }
-.bs-knife { opacity:.35; }
-.bs-knife:hover { opacity:.95; }
-.bs-shadow .bs-ghost2 { fill:#08080b; stroke:rgba(255,255,255,.06); stroke-width:1.5; }
-.bs-shadow { opacity:.5; }
-.bs-shadow:hover { opacity:1; }
-.bs-shadow .bs-eyebg { fill:#08080b; stroke:rgba(126,231,135,.2); stroke-width:1; }
-.bs-back { position:absolute; left:16px; bottom:14px; color:rgba(255,255,255,.4);
+  font-family:Consolas,"Cascadia Mono","Courier New",monospace;
+  transition:background 1.2s ease; }
+.rm-out { margin-top:2em; color:#d6d6e2; font-size:.95em; line-height:1.9;
+  min-height:2em; text-align:center; max-width:600px; }
+.rm-out:not(:empty)::before { content:"» "; color:#7ee787; font-weight:700; }
+.rm-back { position:absolute; left:16px; bottom:14px; color:rgba(255,255,255,.4);
   font-family:Consolas,monospace; font-size:.8em; text-decoration:none; }
-.bs-back:hover { color:rgba(126,231,135,.9); }
-/* 控制台输出条（打字机） */
-.bs-dlg { position:absolute; left:50%; bottom:26px; transform:translate(-50%, 10px);
-  width:min(640px, 90%); background:rgba(13,13,18,.96);
-  border:1px solid rgba(154,111,240,.35); border-radius:10px;
-  padding:.85em 1.1em .7em; opacity:0; pointer-events:none;
-  transition:opacity .25s, transform .25s;
-  font-family:Consolas,"Cascadia Mono","Courier New",monospace; }
-.bs-dlg.on { opacity:1; transform:translate(-50%, 0); pointer-events:auto; cursor:pointer; }
-.bs-dlg-text { color:#d6d6e2; font-size:.95em; line-height:1.7; min-height:1.7em; }
-.bs-dlg-text::before { content:"» "; color:#7ee787; font-weight:700; }
-.bs-dlg-next { position:absolute; right:12px; bottom:6px; color:#7ee787; font-size:.8em;
-  animation:bsNext 1s steps(2) infinite; }
-@keyframes bsNext { 0%{opacity:1} 50%{opacity:.15} 100%{opacity:1} }
-@media (max-width:640px) { .bs-svg { height:440px; } .bs-room { min-height:440px; } }
+.rm-back:hover { color:rgba(126,231,135,.9); }
 
-/* ---------- /save/ 检查点（本站终端语言：提示符 + 方块光标） ---------- */
-.cp-page { width:100%; max-width:900px; margin:0 auto; }
-.cp-stage { position:relative; display:flex; flex-direction:column; align-items:center;
-  min-height:560px; padding:4.5em 1.2em 3em; border-radius:16px;
-  background:#0d0d12; border:1px solid rgba(154,111,240,.22);
-  font-family:Consolas,"Cascadia Mono","Courier New",monospace; }
-.cp-prompt { display:flex; align-items:center; gap:.18em; background:transparent;
-  border:none; cursor:pointer; padding:.2em .4em; }
-.cp-gt { color:#7ee787; font-size:3em; font-weight:700; }
-.cp-block { display:inline-block; width:.55em; height:2.4em;
-  background:#7ee787; animation:cpBlink 1.1s steps(2) infinite; }
-@keyframes cpBlink { 0%{opacity:1} 50%{opacity:0} 100%{opacity:1} }
-.cp-prompt.saved .cp-gt { color:#f2cc60; }
-.cp-prompt.saved .cp-block { background:#f2cc60; animation:cpPop .5s ease; }
-@keyframes cpPop { 0%{transform:scale(1)} 40%{transform:scale(1.35)} 100%{transform:scale(1)} }
-.cp-menu { display:flex; gap:1.8em; margin-top:2.4em; flex-wrap:wrap; justify-content:center; }
-.cp-btn { background:transparent; border:none; color:rgba(255,255,255,.45);
-  font-family:inherit; font-size:1.05em; cursor:pointer; padding:.25em .3em; }
-.cp-btn::before { content:"["; color:rgba(154,111,240,.5); }
-.cp-btn::after { content:"]"; color:rgba(154,111,240,.5); }
-.cp-btn:hover, .cp-btn.sel { color:#f2cc60; }
-.cp-text { margin-top:2em; color:#d6d6e2; font-size:.98em; line-height:1.8;
-  min-height:2em; text-align:center; max-width:560px; }
-.cp-panel { margin-top:1em; width:100%; display:flex; justify-content:center; }
-.cp-pre { color:rgba(214,214,226,.85); font-family:inherit; font-size:.95em;
-  line-height:1.9; white-space:pre; text-align:left; }
-.cp-back { position:absolute; left:16px; bottom:14px; color:rgba(255,255,255,.4);
-  font-family:Consolas,monospace; font-size:.8em; text-decoration:none; }
-.cp-back:hover { color:rgba(126,231,135,.9); }
+/* ---------- /album/ 相册（Night 3 · 越翻越快） ---------- */
+.al-note { color:rgba(214,214,226,.35); font-size:.85em; margin-bottom:2.2em; }
+.al-frame { display:flex; flex-direction:column; align-items:center; gap:1em;
+  padding:1.4em 1.6em 1.1em; border:1.5px solid rgba(154,111,240,.35); border-radius:6px;
+  background:rgba(13,13,18,.6); cursor:pointer; outline:none;
+  transition:transform .15s, box-shadow .15s, opacity .6s; }
+.al-frame:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(154,111,240,.2); }
+.al-photo { width:230px; height:270px; border-radius:3px;
+  background:linear-gradient(150deg, #1b1b24 0%, #23232e 48%, #17171f 100%);
+  border:1px solid rgba(255,255,255,.07); position:relative; overflow:hidden; }
+.al-photo::after { content:""; position:absolute; inset:0;
+  background:linear-gradient(115deg, transparent 30%, rgba(255,255,255,.045) 48%, transparent 62%); }
+.al-photo.flash { animation:alFlash .28s steps(3); }
+@keyframes alFlash { 0%{filter:brightness(1.9)} 60%{filter:brightness(.5)} 100%{filter:brightness(1)} }
+.al-caption { color:rgba(214,214,226,.85); font-size:.92em; min-height:1.4em; text-align:center; }
+.al-stage.run .al-frame { animation:alShake .5s linear infinite; }
+@keyframes alShake { 0%{transform:translate(0,0)} 25%{transform:translate(.6px,-.4px)}
+  50%{transform:translate(-.5px,.5px)} 75%{transform:translate(.4px,.4px)} 100%{transform:translate(-.6px,-.6px)} }
+.al-stage.dark { background:#050506; }
+.al-stage.dark .al-frame { opacity:.06; }
+.al-stage.dark .al-note { opacity:.2; }
+.al-again { margin-top:1.4em; background:transparent; cursor:pointer;
+  border:1px solid rgba(154,111,240,.4); color:rgba(214,214,226,.7);
+  font-family:inherit; font-size:.85em; padding:.35em 1em; border-radius:8px;
+  opacity:0; pointer-events:none; transition:opacity .5s; }
+.al-again.on { opacity:1; pointer-events:auto; }
+.al-again:hover { color:#f2cc60; border-color:rgba(242,204,96,.5); }
+
+/* ---------- /door/ 门（黑暗中的门） ---------- */
+.vd-svg { width:min(600px,100%); height:auto; display:block; }
+.vd-outline { fill:#0d0d12; stroke:rgba(126,231,135,.55); stroke-width:3; }
+.vd-knob { fill:rgba(126,231,135,.7); }
+.vd-door { cursor:pointer; transition:filter .2s, opacity .8s; }
+.vd-door:hover { filter:drop-shadow(0 0 14px rgba(154,111,240,.75)); }
+.vd-door:focus { outline:none; }
+.vd-door.opened .vd-outline { stroke:rgba(154,111,240,.7); }
+.vd-choice { display:flex; gap:1.6em; margin-top:.6em; opacity:0; pointer-events:none;
+  transition:opacity .4s; }
+.vd-choice.on { opacity:1; pointer-events:auto; }
+.vd-btn { background:transparent; border:none; color:rgba(255,255,255,.5);
+  font-family:inherit; font-size:1em; cursor:pointer; padding:.25em .3em; }
+.vd-btn::before { content:"["; color:rgba(154,111,240,.5); }
+.vd-btn::after { content:"]"; color:rgba(154,111,240,.5); }
+.vd-btn:hover { color:#f2cc60; }
+.vd-stage.void { background:#000; }
+.vd-stage.void .vd-svg { opacity:0; }
+
+/* ---------- /letters/ 信（审查版/原件） ---------- */
+.lt-head { display:flex; align-items:center; justify-content:space-between;
+  gap:1em; flex-wrap:wrap; width:100%; max-width:640px; margin-bottom:1em; }
+.lt-title { color:rgba(214,214,226,.45); font-size:.82em; }
+.lt-tabs { display:flex; gap:.8em; }
+.lt-btn { background:transparent; border:none; color:rgba(255,255,255,.45);
+  font-family:inherit; font-size:.92em; cursor:pointer; padding:.2em .3em; }
+.lt-btn::before { content:"["; color:rgba(154,111,240,.5); }
+.lt-btn::after { content:"]"; color:rgba(154,111,240,.5); }
+.lt-btn:hover, .lt-btn.active { color:#f2cc60; }
+.lt-letter { width:100%; max-width:640px; background:#f4f0e6; color:#2c2a26;
+  border-radius:4px; padding:1.6em 1.8em; box-shadow:0 10px 30px rgba(0,0,0,.45);
+  font-family:Georgia,"Times New Roman",serif; font-size:.95em; line-height:2; }
+.lt-letter p { margin:0 0 1em; }
+.lt-letter p:last-child { text-align:right; margin-bottom:0; }
+.lt-black { background:#191919; border-radius:1px; }
