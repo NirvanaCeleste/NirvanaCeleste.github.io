@@ -215,45 +215,9 @@ html.dark .upsolve-done  .upsolve-item { border-color:rgba(91,216,99,.4);  borde
 .chip-accent { background:linear-gradient(135deg, rgba(154,111,240,.18), rgba(91,216,99,.12)) !important;
   border-color:rgba(154,111,240,.55) !important; font-weight:700; }
 
-/* ---------- 首页：WHITE SPACE 场景 + 统计卡 ---------- */
-.home-hero { display:grid; grid-template-columns:minmax(0,1.7fr) minmax(220px,1fr);
-  gap:1em; margin:.6em 0 1.4em; align-items:stretch; }
-.ws-scene { position:relative; border-radius:16px; overflow:hidden;
-  background:radial-gradient(ellipse at 50% 20%, #17171c 0%, #0b0b0e 70%);
-  border:1px solid rgba(154,111,240,.25); min-height:340px; }
-.ws-scene .light-overlay { position:absolute; inset:0; pointer-events:none; opacity:0;
-  background:radial-gradient(circle at 50% 12%, rgba(255,246,200,.20), transparent 62%);
-  transition:opacity .8s ease; }
-.ws-scene.lit .light-overlay { opacity:1; }
-.ws-svg { width:100%; height:100%; display:block; }
-.ws-title { fill:rgba(255,255,255,.85); font-size:26px; font-weight:800; letter-spacing:.35em; }
-.ws-sub { fill:rgba(255,255,255,.34); font-size:12px; letter-spacing:.12em; }
-.ws-fill { fill:rgba(255,255,255,.88); }
-.ws-screen { fill:#0b0b0e; stroke:rgba(255,255,255,.5); stroke-width:1.5; }
-.ws-stroke { stroke:rgba(255,255,255,.8); stroke-width:3; fill:none; stroke-linecap:round; }
-.ws-sketch { stroke:rgba(11,11,14,.75); stroke-width:2.5; fill:none; stroke-linecap:round; }
-.ws-dot { fill:#0b0b0e; }
-.ws-bulb { fill:#0b0b0e; stroke:rgba(255,255,255,.85); stroke-width:3; transition:.6s; }
-.ws-scene.lit .ws-bulb { fill:#fff3b0; stroke:#ffe066; filter:drop-shadow(0 0 18px rgba(255,224,102,.8)); }
-.ws-tail { stroke-dasharray:80; animation:tailWag 3.2s ease-in-out infinite; transform-origin:612px 288px; }
-@keyframes tailWag { 0%,100%{transform:rotate(0)} 50%{transform:rotate(10deg)} }
-.ws-item { cursor:pointer; transform-box:fill-box; transform-origin:center;
-  transition:transform .18s ease, opacity .4s ease; }
-.ws-item:hover { transform:scale(1.07); filter:drop-shadow(0 0 10px rgba(154,111,240,.75)); }
-.ws-hidden { opacity:.16; }
-.ws-hidden:hover { opacity:.85; }
-.ws-something { opacity:0; }
-.ws-something:hover { opacity:.7; }
-.ws-ghost { fill:#050507; stroke:rgba(255,255,255,.14); stroke-width:1.5; }
-.ws-tip { position:absolute; left:14px; bottom:12px; color:rgba(255,255,255,.55);
-  font-size:.8em; font-family:Consolas,monospace; pointer-events:none; }
-.ws-toast { position:absolute; left:50%; bottom:20px; transform:translate(-50%,8px);
-  background:rgba(20,20,26,.92); color:#eee; border:1px solid rgba(255,255,255,.2);
-  padding:.5em 1.1em; border-radius:10px; font-size:.88em; opacity:0;
-  pointer-events:none; transition:.3s ease; max-width:86%; text-align:center; }
-.ws-toast.show { opacity:1; transform:translate(-50%,0); }
-.ws-toast.dark { border-color:rgba(255,80,80,.4); color:#ffb4b4; }
-.home-stats { display:grid; grid-template-columns:1fr 1fr; gap:.8em; align-content:stretch; }
+/* ---------- 首页：统计卡 ---------- */
+.home-stats { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:.8em; align-content:stretch; margin:.6em 0 1.4em; }
+@media (max-width:640px) { .home-stats { grid-template-columns:1fr 1fr; } }
 .stat-card { display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
   padding:1em 1.1em; border-radius:14px; text-decoration:none !important;
   border:1.5px solid rgba(154,111,240,.30);
@@ -342,8 +306,6 @@ html.ws-mode { filter:grayscale(1) contrast(1.06); transition:filter .8s ease; }
   color:#f0f0f8; font-family:inherit; font-size:.95em; caret-color:#7ee787; }
 
 @media (max-width:900px) {
-  .home-hero { grid-template-columns:1fr; }
-  .ws-scene { min-height:280px; }
   .viz-row { grid-template-columns:1fr; }
 }
 

@@ -67,78 +67,7 @@
 
   <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast "hist" $cfHist) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast "hist" $acHist) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done "posts" $indexPosts "board" $board "days" $days | jsonify | safeJS }}</script>
 
-  {{/* ===== WHITE SPACE 互动场景 + 统计卡 ===== */}}
-  <section class="home-hero">
-    <div class="ws-scene" id="ws-scene" aria-label="WHITE SPACE 互动场景">
-      <div class="light-overlay"></div>
-      <svg viewBox="0 0 800 450" class="ws-svg" role="img">
-        <text x="30" y="46" class="ws-title">WHITE SPACE</text>
-        <text x="30" y="70" class="ws-sub">这里的东西都可以点。</text>
-
-        {{/* 灯泡 */}}
-        <g class="ws-item" id="it-bulb" data-hint="灯泡">
-          <line x1="400" y1="0" x2="400" y2="52" class="ws-stroke" />
-          <circle cx="400" cy="78" r="26" class="ws-bulb" />
-          <path d="M392 104 l16 0 M394 112 l12 0" class="ws-stroke" />
-        </g>
-
-        {{/* 笔记本电脑 → 模组指南 */}}
-        <g class="ws-item" id="it-laptop" data-hint="笔记本电脑 → OMORI 模组指南">
-          <rect x="150" y="170" width="120" height="80" rx="4" class="ws-fill" />
-          <rect x="158" y="178" width="104" height="62" class="ws-screen" />
-          <rect x="140" y="252" width="140" height="10" rx="3" class="ws-fill" />
-        </g>
-
-        {{/* 画本 → ACM 复盘 */}}
-        <g class="ws-item" id="it-book" data-hint="画本 → 算法竞赛复盘">
-          <rect x="330" y="230" width="90" height="70" rx="6" class="ws-fill" transform="rotate(-8 375 265)" />
-          <line x1="344" y1="248" x2="404" y2="242" class="ws-sketch" />
-          <line x1="342" y1="266" x2="400" y2="262" class="ws-sketch" />
-          <line x1="346" y1="284" x2="388" y2="280" class="ws-sketch" />
-        </g>
-
-        {{/* Mewo 猫 */}}
-        <g class="ws-item" id="it-cat" data-hint="Mewo">
-          <ellipse cx="560" cy="280" rx="52" ry="38" class="ws-fill" />
-          <polygon points="522,254 530,222 548,248" class="ws-fill" />
-          <polygon points="598,254 590,222 572,248" class="ws-fill" />
-          <circle cx="544" cy="274" r="3.5" class="ws-dot" />
-          <circle cx="576" cy="274" r="3.5" class="ws-dot" />
-          <path d="M554 286 q6 5 12 0" class="ws-stroke" />
-          <path d="M612 288 q26 -6 20 -34" class="ws-stroke ws-tail" />
-        </g>
-
-        {{/* 毯子 */}}
-        <g class="ws-item" id="it-blanket" data-hint="毯子">
-          <rect x="110" y="350" width="130" height="46" rx="12" class="ws-fill" />
-          <line x1="122" y1="362" x2="228" y2="362" class="ws-sketch" />
-          <line x1="122" y1="376" x2="228" y2="376" class="ws-sketch" />
-        </g>
-
-        {{/* 纸巾盒 */}}
-        <g class="ws-item" id="it-tissue" data-hint="纸巾盒">
-          <rect x="300" y="360" width="70" height="44" rx="4" class="ws-fill" />
-          <line x1="322" y1="360" x2="330" y2="340" class="ws-stroke" />
-          <line x1="330" y1="340" x2="348" y2="352" class="ws-stroke" />
-        </g>
-
-        {{/* 小刀（半隐藏） */}}
-        <g class="ws-item ws-hidden" id="it-knife" data-hint="小刀">
-          <rect x="452" y="330" width="6" height="44" rx="2" class="ws-fill" transform="rotate(24 455 352)" />
-          <rect x="446" y="368" width="18" height="10" rx="3" class="ws-fill" transform="rotate(24 455 373)" />
-        </g>
-
-        {{/* SOMETHING（hover 才显形） */}}
-        <g class="ws-item ws-something" id="it-something" data-hint="……？">
-          <ellipse cx="716" cy="392" rx="52" ry="36" class="ws-ghost" />
-          <circle cx="700" cy="386" r="4" class="ws-dot" />
-          <circle cx="732" cy="386" r="4" class="ws-dot" />
-        </g>
-      </svg>
-      <div class="ws-tip" id="ws-tip"></div>
-      <div class="ws-toast" id="ws-toast"></div>
-    </div>
-
+  {{/* ===== 统计卡 ===== */}}
     <div class="home-stats">
       <a class="stat-card" href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">
         <div class="stat-num" data-val="{{ $cfNow }}">0</div>
@@ -168,7 +97,7 @@
         <span class="term-dot" style="background:#febc2e"></span>
         <span class="term-dot" style="background:#28c840"></span>
         <span class="term-title">nirvana@blog: ~/home</span>
-        <span class="term-hint">输入 help · 试试 ls 和 cd</span>
+        <span class="term-hint">输入 help</span>
       </div>
       <div class="term-body" id="ht-body" aria-live="polite"></div>
       <div class="term-input-line">
@@ -224,13 +153,10 @@
 
     var CMDS = {
       help: function () {
-        line("可用：<span class='t-cmd'>ls cd open pwd whoami clear</span>");
-        line("<span class='t-dim'>房间都在 ls 里。cd 空格 + 名字，就能进去。</span>");
-      },
-      ls: function () {
+        line("可用：<span class='t-cmd'>cd open pwd whoami clear</span>");
         var out = [];
-        Object.keys(ROOMS).forEach(function (k) { out.push("<span class='t-ok'>" + k + "/</span>"); });
-        line(out.join("  ") + "  <span class='t-dim'>blog.md</span>");
+        Object.keys(ROOMS).forEach(function (k) { out.push("<span class='t-cmd'>" + k + "</span>"); });
+        line("房间：" + out.join("  ") + "  <span class='t-dim'>· cd 空格 + 房间名，进去。</span>");
       },
       cd: function (rest) {
         var name = (rest || "").trim().replace(/\/$/, "");
@@ -277,7 +203,7 @@
     var lines = [
       ["Nirvana Celeste Space", "t-sys"],
       ["You have been living here for as long as you can remember.", "t-dim"],
-      ["输入 help 查看命令 · ls 看看有哪些房间", "t-ok"]
+      ["输入 help 查看命令", "t-ok"]
     ];
     var k = 0;
     (function next() {
@@ -365,41 +291,6 @@
     "use strict";
     var D = {};
     try { D = JSON.parse(document.getElementById("__home_data").textContent) || {}; } catch (e) {}
-    var scene = document.getElementById("ws-scene");
-    var tip = document.getElementById("ws-tip");
-    var toast = document.getElementById("ws-toast");
-
-    /* ============ 场景交互 ============ */
-    var mewo = 0;
-    var MEWO = ["Mewo 喵了一声。", "Mewo 盯着你。", "Mewo 翻了个身。", "Mewo：喵。", "Mewo 似乎想被摸摸。", "Mewo 打了个哈欠。"];
-    var ACTS = {
-      bulb: function () {
-        var on = scene.classList.toggle("lit");
-        showToast(on ? "啪。灯亮了。" : "啪。灯灭了。黑暗也没那么糟。");
-      },
-      laptop: function () { location.href = "/omori/modding-guide/"; },
-      book: function () { location.href = "/acm/"; },
-      cat: function () { showToast(MEWO[mewo++ % MEWO.length]); },
-      blanket: function () { showToast("你把自己裹了起来。很舒服。不想出来了。"); },
-      tissue: function () { showToast("你抽了一张纸巾。不知道为什么，眼泪掉了下来。"); },
-      knife: function () { showToast("……不要。", true); },
-      something: function () { openTerm(); }
-    };
-    document.querySelectorAll(".ws-item").forEach(function (el) {
-      el.addEventListener("mouseenter", function () { tip.textContent = el.dataset.hint || ""; });
-      el.addEventListener("mouseleave", function () { tip.textContent = ""; });
-      el.addEventListener("click", function () {
-        var id = el.id.replace("it-", "");
-        if (ACTS[id]) ACTS[id]();
-      });
-    });
-    var toastTimer;
-    function showToast(txt, dark) {
-      toast.textContent = txt;
-      toast.className = "ws-toast show" + (dark ? " dark" : "");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(function () { toast.className = "ws-toast"; }, 2600);
-    }
 
     /* ============ 迷你终端（伏笔） ============ */
     var mt = document.getElementById("mini-term");
