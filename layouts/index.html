@@ -1,14 +1,16 @@
 {{ define "main" }}
   {{ .Content }}
 
-  {{/* ===== 汇聚首页数据 ===== */}}
+  {{/* ===== 数据汇聚 ===== */}}
   {{ $cfNow := 0 }}{{ $cfDelta := 0 }}{{ $cfN := 0 }}{{ $cfLast := "" }}
   {{ $acNow := 0 }}{{ $acDelta := 0 }}{{ $acN := 0 }}{{ $acLast := "" }}
+  {{ $cfHist := slice }}{{ $acHist := slice }}
   {{ if fileExists "static/data/cf-rating.json" }}
     {{ $d := readFile "static/data/cf-rating.json" | transform.Unmarshal }}
     {{ if gt (len $d) 0 }}
       {{ $l := index $d (sub (len $d) 1) }}
       {{ $cfNow = $l.new }}{{ $cfDelta = sub $l.new $l.old }}{{ $cfN = len $d }}{{ $cfLast = $l.contest }}
+      {{ $cfHist = $d }}
     {{ end }}
   {{ end }}
   {{ if fileExists "static/data/atcoder-rating.json" }}
@@ -16,17 +18,26 @@
     {{ if gt (len $d) 0 }}
       {{ $l := index $d (sub (len $d) 1) }}
       {{ $acNow = $l.new }}{{ $acDelta = sub $l.new $l.old }}{{ $acN = len $d }}{{ $acLast = $l.contest }}
+      {{ $acHist = $d }}
     {{ end }}
   {{ end }}
   {{ $posts := where site.RegularPages "Section" "acm" }}
   {{ $ups := where $posts "Params.upsolve" "!=" nil }}
   {{ $wrong := 0 }}{{ $skip := 0 }}{{ $done := 0 }}
+  {{ $board := dict }}
   {{ range $ups }}
     {{ range .Params.upsolve }}
       {{ if eq .status "wrong" }}{{ $wrong = add $wrong 1 }}
       {{ else if eq .status "skip" }}{{ $skip = add $skip 1 }}
       {{ else if eq .status "done" }}{{ $done = add $done 1 }}
       {{ end }}
+      {{ $k := .problem }}
+      {{ $cur := index $board $k | default (dict "w" 0 "s" 0 "d" 0) }}
+      {{ if eq .status "wrong" }}{{ $cur = merge $cur (dict "w" (add (index $cur "w") 1)) }}
+      {{ else if eq .status "skip" }}{{ $cur = merge $cur (dict "s" (add (index $cur "s") 1)) }}
+      {{ else if eq .status "done" }}{{ $cur = merge $cur (dict "d" (add (index $cur "d") 1)) }}
+      {{ end }}
+      {{ $board = merge $board (dict $k $cur) }}
     {{ end }}
   {{ end }}
   {{ $indexPosts := slice }}
@@ -34,22 +45,78 @@
     {{ $indexPosts = $indexPosts | append (dict "t" .Title "u" .RelPermalink "g" (delimit (.Params.tags | default slice) ",") ) }}
   {{ end }}
 
-  <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done "posts" $indexPosts | jsonify | safeJS }}</script>
+  <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast "hist" $cfHist) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast "hist" $acHist) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done "posts" $indexPosts "board" $board | jsonify | safeJS }}</script>
 
+  {{/* ===== WHITE SPACE 互动场景 + 统计卡 ===== */}}
   <section class="home-hero">
-    <div class="term-window" id="term-window">
-      <div class="term-bar">
-        <span class="term-dot" style="background:#ff5f57"></span>
-        <span class="term-dot" style="background:#febc2e"></span>
-        <span class="term-dot" style="background:#28c840"></span>
-        <span class="term-title">nirvana@blog: ~/home</span>
-        <span class="term-hint">输入 help · 试试 snake</span>
-      </div>
-      <div class="term-body" id="term-body" aria-live="polite"></div>
-      <div class="term-input-line">
-        <span class="term-prompt" id="term-prompt">❯</span>
-        <input id="term-input" autocomplete="off" spellcheck="false" enterkeyhint="send" aria-label="终端输入">
-      </div>
+    <div class="ws-scene" id="ws-scene" aria-label="WHITE SPACE 互动场景">
+      <div class="light-overlay"></div>
+      <svg viewBox="0 0 800 450" class="ws-svg" role="img">
+        <text x="30" y="46" class="ws-title">WHITE SPACE</text>
+        <text x="30" y="70" class="ws-sub">这里的东西都可以点。</text>
+
+        {{/* 灯泡 */}}
+        <g class="ws-item" id="it-bulb" data-hint="灯泡">
+          <line x1="400" y1="0" x2="400" y2="52" class="ws-stroke" />
+          <circle cx="400" cy="78" r="26" class="ws-bulb" />
+          <path d="M392 104 l16 0 M394 112 l12 0" class="ws-stroke" />
+        </g>
+
+        {{/* 笔记本电脑 → 模组指南 */}}
+        <g class="ws-item" id="it-laptop" data-hint="笔记本电脑 → OMORI 模组指南">
+          <rect x="150" y="170" width="120" height="80" rx="4" class="ws-fill" />
+          <rect x="158" y="178" width="104" height="62" class="ws-screen" />
+          <rect x="140" y="252" width="140" height="10" rx="3" class="ws-fill" />
+        </g>
+
+        {{/* 画本 → ACM 复盘 */}}
+        <g class="ws-item" id="it-book" data-hint="画本 → 算法竞赛复盘">
+          <rect x="330" y="230" width="90" height="70" rx="6" class="ws-fill" transform="rotate(-8 375 265)" />
+          <line x1="344" y1="248" x2="404" y2="242" class="ws-sketch" />
+          <line x1="342" y1="266" x2="400" y2="262" class="ws-sketch" />
+          <line x1="346" y1="284" x2="388" y2="280" class="ws-sketch" />
+        </g>
+
+        {{/* Mewo 猫 */}}
+        <g class="ws-item" id="it-cat" data-hint="Mewo">
+          <ellipse cx="560" cy="280" rx="52" ry="38" class="ws-fill" />
+          <polygon points="522,254 530,222 548,248" class="ws-fill" />
+          <polygon points="598,254 590,222 572,248" class="ws-fill" />
+          <circle cx="544" cy="274" r="3.5" class="ws-dot" />
+          <circle cx="576" cy="274" r="3.5" class="ws-dot" />
+          <path d="M554 286 q6 5 12 0" class="ws-stroke" />
+          <path d="M612 288 q26 -6 20 -34" class="ws-stroke ws-tail" />
+        </g>
+
+        {{/* 毯子 */}}
+        <g class="ws-item" id="it-blanket" data-hint="毯子">
+          <rect x="110" y="350" width="130" height="46" rx="12" class="ws-fill" />
+          <line x1="122" y1="362" x2="228" y2="362" class="ws-sketch" />
+          <line x1="122" y1="376" x2="228" y2="376" class="ws-sketch" />
+        </g>
+
+        {{/* 纸巾盒 */}}
+        <g class="ws-item" id="it-tissue" data-hint="纸巾盒">
+          <rect x="300" y="360" width="70" height="44" rx="4" class="ws-fill" />
+          <line x1="322" y1="360" x2="330" y2="340" class="ws-stroke" />
+          <line x1="330" y1="340" x2="348" y2="352" class="ws-stroke" />
+        </g>
+
+        {{/* 小刀（半隐藏） */}}
+        <g class="ws-item ws-hidden" id="it-knife" data-hint="小刀">
+          <rect x="452" y="330" width="6" height="44" rx="2" class="ws-fill" transform="rotate(24 455 352)" />
+          <rect x="446" y="368" width="18" height="10" rx="3" class="ws-fill" transform="rotate(24 455 373)" />
+        </g>
+
+        {{/* SOMETHING（hover 才显形） */}}
+        <g class="ws-item ws-something" id="it-something" data-hint="……？">
+          <ellipse cx="716" cy="392" rx="52" ry="36" class="ws-ghost" />
+          <circle cx="700" cy="386" r="4" class="ws-dot" />
+          <circle cx="732" cy="386" r="4" class="ws-dot" />
+        </g>
+      </svg>
+      <div class="ws-tip" id="ws-tip"></div>
+      <div class="ws-toast" id="ws-toast"></div>
     </div>
 
     <div class="home-stats">
@@ -72,6 +139,36 @@
     </div>
   </section>
 
+  {{/* ===== 可视化：rating 图表 + 补题键盘 ===== */}}
+  <section class="viz-row">
+    <div class="chart-panel">
+      <div class="chart-head">
+        <span class="chart-title">📈 Rating 走势</span>
+        <span class="chart-tabs">
+          <button class="ctab active" data-tab="cf">Codeforces</button>
+          <button class="ctab" data-tab="ac">AtCoder</button>
+        </span>
+      </div>
+      <div class="chart-box" id="chart-box">
+        <svg id="chart-svg" viewBox="0 0 640 200" preserveAspectRatio="none"></svg>
+        <div class="chart-tip" id="chart-tip"></div>
+        <div class="chart-foot" id="chart-foot">悬停看点 · 能点进对应复盘</div>
+      </div>
+    </div>
+    <div class="kb-panel">
+      <div class="chart-title">⌨ 补题键盘</div>
+      <div class="kb-grid" id="kb-grid"></div>
+      <div class="kb-legend">
+        <span class="kb-dot ok"></span>全过/已补
+        <span class="kb-dot wrong"></span>没写对
+        <span class="kb-dot skip"></span>没尝试
+        <span class="kb-dim"></span>无记录
+      </div>
+      <div class="kb-foot">点击键盘直达 <a href="/acm/upsolve/">补题清单</a></div>
+    </div>
+  </section>
+
+  {{/* ===== 双入口 ===== */}}
   <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 mb-10">
     <a href="/omori/modding-guide/" class="block p-6 border-2 rounded-xl shadow-sm hover:shadow-lg transition bg-white/80 dark:bg-neutral-800/80 border-neutral-200 dark:border-neutral-700">
       <div class="text-xl font-bold mb-1">🎮 OMORI 模组制作指南</div>
@@ -83,21 +180,89 @@
     </a>
   </div>
 
+  {{/* ===== 迷你终端（伏笔层，~ 或 SOMETHING 唤出） ===== */}}
+  <div class="term-window mini-term hidden" id="mini-term" aria-hidden="true">
+    <div class="term-bar">
+      <span class="term-dot" style="background:#ff5f57"></span>
+      <span class="term-dot" style="background:#febc2e"></span>
+      <span class="term-dot" style="background:#28c840"></span>
+      <span class="term-title">??@nowhere: ~</span>
+      <span class="term-hint term-close" id="term-close" role="button">✕</span>
+    </div>
+    <div class="term-body" id="term-body"></div>
+    <div class="term-input-line">
+      <span class="term-prompt">❯</span>
+      <input id="term-input" autocomplete="off" spellcheck="false" aria-label="终端输入">
+    </div>
+  </div>
+
   {{ partial "splash.html" . }}
 
   <script>
   (function () {
     "use strict";
-    var body = document.getElementById("term-body");
-    var input = document.getElementById("term-input");
-    var win = document.getElementById("term-window");
-    var promptEl = document.getElementById("term-prompt");
     var D = {};
     try { D = JSON.parse(document.getElementById("__home_data").textContent) || {}; } catch (e) {}
+    var scene = document.getElementById("ws-scene");
+    var tip = document.getElementById("ws-tip");
+    var toast = document.getElementById("ws-toast");
 
-    var hist = [], hi = -1, mode = "shell";
-    var BTL = null, SNAKE = null, TTT = null, QUIZ = null;
+    /* ============ 场景交互 ============ */
+    var mewo = 0;
+    var MEWO = ["Mewo 喵了一声。", "Mewo 盯着你。", "Mewo 翻了个身。", "Mewo：喵。", "Mewo 似乎想被摸摸。", "Mewo 打了个哈欠。"];
+    var ACTS = {
+      bulb: function () {
+        var on = scene.classList.toggle("lit");
+        showToast(on ? "啪。灯亮了。" : "啪。灯灭了。黑暗也没那么糟。");
+      },
+      laptop: function () { location.href = "/omori/modding-guide/"; },
+      book: function () { location.href = "/acm/"; },
+      cat: function () { showToast(MEWO[mewo++ % MEWO.length]); },
+      blanket: function () { showToast("你把自己裹了起来。很舒服。不想出来了。"); },
+      tissue: function () { showToast("你抽了一张纸巾。不知道为什么，眼泪掉了下来。"); },
+      knife: function () { showToast("……不要。", true); },
+      something: function () { openTerm(); }
+    };
+    document.querySelectorAll(".ws-item").forEach(function (el) {
+      el.addEventListener("mouseenter", function () { tip.textContent = el.dataset.hint || ""; });
+      el.addEventListener("mouseleave", function () { tip.textContent = ""; });
+      el.addEventListener("click", function () {
+        var id = el.id.replace("it-", "");
+        if (ACTS[id]) ACTS[id]();
+      });
+    });
+    var toastTimer;
+    function showToast(txt, dark) {
+      toast.textContent = txt;
+      toast.className = "ws-toast show" + (dark ? " dark" : "");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { toast.className = "ws-toast"; }, 2600);
+    }
 
+    /* ============ 迷你终端（伏笔） ============ */
+    var mt = document.getElementById("mini-term");
+    var body = document.getElementById("term-body");
+    var input = document.getElementById("term-input");
+    function openTerm() {
+      mt.classList.remove("hidden");
+      mt.setAttribute("aria-hidden", "false");
+      setTimeout(function () { input.focus(); }, 60);
+      if (!body.childElementCount) {
+        line('<span class="t-dim">you shouldn\'t be here.</span>');
+        line('<span class="t-dim">（help 试试）</span>');
+      }
+    }
+    function closeTerm() {
+      mt.classList.add("hidden");
+      mt.setAttribute("aria-hidden", "true");
+    }
+    document.getElementById("term-close").addEventListener("click", closeTerm);
+    window.addEventListener("keydown", function (e) {
+      if (e.key === "`" || e.key === "~") {
+        e.preventDefault();
+        mt.classList.contains("hidden") ? openTerm() : closeTerm();
+      } else if (e.key === "Escape") { closeTerm(); }
+    });
     function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
     function line(html, cls) {
       var el = document.createElement("div");
@@ -105,459 +270,158 @@
       el.innerHTML = html;
       body.appendChild(el);
       body.scrollTop = body.scrollHeight;
-      return el;
     }
-    function typeLine(text, cls, done) {
-      var el = line("", cls);
-      var i = 0;
-      (function tick() {
-        if (i <= text.length) {
-          el.textContent = text.slice(0, i);
-          i += 1 + Math.floor(Math.random() * 2);
-          body.scrollTop = body.scrollHeight;
-          setTimeout(tick, 14);
-        } else { el.textContent = text; if (done) done(); }
-      })();
-    }
-    function bar(cur, max, n) {
-      n = n || 14;
-      var f = Math.max(0, Math.min(n, Math.round(cur / max * n)));
-      return "▓".repeat(f) + "░".repeat(n - f) + " " + Math.max(0, Math.round(cur)) + "/" + max;
-    }
-    function setMode(m, ch) { mode = m; promptEl.textContent = ch; }
-
-    /* ============ battle：技能版 ============ */
-    function battleStart() {
-      BTL = { php: 120, ehp: 100, ep: 0, guard: false, weak: 0 };
-      setMode("battle", "⚔");
-      line("<b>SOMETHING</b> 出现了。", "t-ws");
-      battleStatus();
-      line('指令：<span class="t-cmd">攻击</span> / <span class="t-cmd">防御</span> / <span class="t-cmd">技能</span> / <span class="t-cmd">逃走</span>');
-    }
-    function battleStatus() {
-      line("<pre class='t-pre'>你        " + bar(BTL.php, 120) + "  能量 " + bar(BTL.ep, 100, 8) +
-           "\nSOMETHING " + bar(BTL.ehp, 100) + "</pre>");
-    }
-    function battleTurn(cmd) {
-      cmd = cmd.trim();
-      if (cmd === "逃走") {
-        line("你逃走了。<span class='t-dim'>它从不追，它只是等着。</span>");
-        return battleEnd();
-      }
-      if (cmd === "防御") {
-        BTL.guard = true; BTL.ep = Math.min(100, BTL.ep + 25);
-        line("你摆出了防御姿态。（能量 +25）");
-      } else if (cmd === "技能" || cmd === "skill") {
-        if (BTL.ep < 60) { line("能量不足（需要 60）。<span class='t-dim'>普攻和防御可以攒能量。</span>", "t-err"); return; }
-        BTL.ep -= 60;
-        var sd = 45 + Math.floor(Math.random() * 26);
-        BTL.ehp -= sd;
-        line("🍭 <b>技能「题解贯通」发动！</b>贯通了 SOMETHING 的逻辑核心，造成 " + sd + " 点伤害！", "t-ok");
-        if (BTL.ehp <= 0) { line("SOMETHING 消散了。<span class='t-dim'>房间里安静下来。</span>", "t-ok"); return battleEnd(); }
-      } else if (cmd === "攻击" || cmd === "a" || cmd === "atk") {
-        var dmg = 15 + Math.floor(Math.random() * 16);
-        if (BTL.weak > 0) { dmg = Math.round(dmg * 0.5); BTL.weak--; }
-        var crit = Math.random() < 0.18;
-        if (crit) dmg = Math.round(dmg * 1.8);
-        BTL.ehp -= dmg;
-        BTL.ep = Math.min(100, BTL.ep + 20);
-        line((crit ? "<b>会心一击！</b>" : "") + "造成了 " + dmg + " 点伤害。（能量 +20）");
-        if (BTL.ehp <= 0) { line("SOMETHING 消散了。<span class='t-dim'>房间里安静下来。</span>", "t-ok"); return battleEnd(); }
-      } else { line("<span class='t-dim'>（攻击 / 防御 / 技能 / 逃走）</span>"); return; }
-      if (Math.random() < 0.22) {
-        BTL.weak = 2;
-        line("SOMETHING 低语着什么……你的下一击变弱了。", "t-ws");
-      } else {
-        var ed = 10 + Math.floor(Math.random() * 16);
-        if (BTL.guard) { ed = Math.round(ed / 2); BTL.guard = false; }
-        BTL.php -= ed;
-        line("SOMETHING 侵蚀了你 " + ed + " 点。");
-        if (BTL.php <= 0) { line("眼前一黑……<span class='t-ws'>你在 WHITE SPACE 醒来。</span>", "t-err"); return battleEnd(); }
-      }
-      battleStatus();
-    }
-    function battleEnd() { BTL = null; setMode("shell", "❯"); }
-
-    /* ============ snake 贪吃蛇 ============ */
-    function snakeStart() {
-      var W = 20, H = 12;
-      SNAKE = { W: W, H: H, s: [{x:10,y:6},{x:9,y:6},{x:8,y:6}], dir: {x:1,y:0}, nd: {x:1,y:0},
-                food: null, score: 0, timer: null, pre: null };
-      placeFood();
-      setMode("snake", "🐍");
-      line("🐍 贪吃蛇开始！方向键 / WASD 移动，<b>q</b> 退出。吃 ★ 得分。");
-      var pre = document.createElement("pre");
-      pre.className = "t-pre snake-pre";
-      body.appendChild(pre);
-      SNAKE.pre = pre;
-      draw();
-      SNAKE.timer = setInterval(tick, 170);
-      function placeFood() {
-        do { SNAKE.food = { x: Math.floor(Math.random()*W), y: Math.floor(Math.random()*H) }; }
-        while (SNAKE.s.some(function (p) { return p.x === SNAKE.food.x && p.y === SNAKE.food.y; }));
-      }
-      function draw() {
-        var g = "";
-        for (var y = 0; y < H; y++) {
-          for (var x = 0; x < W; x++) {
-            if (SNAKE.food.x === x && SNAKE.food.y === y) g += "★";
-            else if (SNAKE.s[0].x === x && SNAKE.s[0].y === y) g += "█";
-            else if (SNAKE.s.some(function (p) { return p.x === x && p.y === y; })) g += "▓";
-            else g += "·";
-          }
-          g += "\n";
-        }
-        SNAKE.pre.innerHTML = '<span class="t-ok">' + esc(g).replace(/·/g, '<span class="t-dim">·</span>') + "</span>";
-        SNAKE.pre.innerHTML += '<span class="t-dim">得分 ' + SNAKE.score + ' · 最高 ' + (localStorage.getItem("snake_best") || 0) + "</span>";
-      }
-      function tick() {
-        var h = SNAKE.s[0];
-        var nx = h.x + SNAKE.dir.x, ny = h.y + SNAKE.dir.y;
-        if (nx < 0 || ny < 0 || nx >= W || ny >= H ||
-            SNAKE.s.some(function (p) { return p.x === nx && p.y === ny; })) {
-          clearInterval(SNAKE.timer);
-          var best = parseInt(localStorage.getItem("snake_best") || "0", 10);
-          if (SNAKE.score > best) { localStorage.setItem("snake_best", SNAKE.score); best = SNAKE.score; line("新纪录！", "t-ok"); }
-          line("撞墙了。得分 <b>" + SNAKE.score + "</b>（最高 " + best + "）", "t-err");
-          SNAKE = null; setMode("shell", "❯");
-          return;
-        }
-        SNAKE.s.unshift({x:nx, y:ny});
-        if (nx === SNAKE.food.x && ny === SNAKE.food.y) { SNAKE.score += 10; placeFood(); }
-        else SNAKE.s.pop();
-        draw();
-      }
-      SNAKE._placeFood = placeFood;
-      SNAKE._draw = draw;
-    }
-    function snakeKey(k) {
-      var m = { ArrowUp:{x:0,y:-1}, w:{x:0,y:-1}, ArrowDown:{x:0,y:1}, s:{x:0,y:1},
-                ArrowLeft:{x:-1,y:0}, a:{x:-1,y:0}, ArrowRight:{x:1,y:0}, d:{x:1,y:0} };
-      if (k === "q" || k === "Q" || k === "Escape") {
-        clearInterval(SNAKE.timer);
-        line("提前收手。得分 " + SNAKE.score);
-        SNAKE = null; setMode("shell", "❯"); return true;
-      }
-      var nd = m[k];
-      if (nd && !(nd.x === -SNAKE.dir.x && nd.y === -SNAKE.dir.y)) SNAKE.dir = nd;
-      return true;
-    }
-
-    /* ============ ttt 井字棋 ============ */
-    var WINS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-    function tttBoard(b) {
-      function cell(i) {
-        var v = b[i] === 1 ? "✕" : b[i] === 2 ? "◯" : String(i + 1);
-        var c = b[i] === 1 ? "t-err" : b[i] === 2 ? "t-ok" : "t-dim";
-        return "<span class='" + c + "'>" + v + "</span>";
-      }
-      return "<pre class='t-pre'> " + cell(0) + " │ " + cell(1) + " │ " + cell(2) +
-             "\n───┼───┼───\n " + cell(3) + " │ " + cell(4) + " │ " + cell(5) +
-             "\n───┼───┼───\n " + cell(6) + " │ " + cell(7) + " │ " + cell(8) + "</pre>";
-    }
-    function tttWinner(b) {
-      for (var i = 0; i < WINS.length; i++) {
-        var w = WINS[i];
-        if (b[w[0]] && b[w[0]] === b[w[1]] && b[w[1]] === b[w[2]]) return b[w[0]];
-      }
-      return b.every(function (v) { return v; }) ? 0 : -1;
-    }
-    function tttAI(b) {
-      function win(p) {
-        for (var i = 0; i < 9; i++) if (!b[i]) {
-          b[i] = p; var r = tttWinner(b) === p; b[i] = 0; if (r) return i;
-        }
-        return -1;
-      }
-      var m = win(2); if (m >= 0) return m;
-      m = win(1); if (m >= 0) return m;
-      if (!b[4]) return 4;
-      var corners = [0,2,6,8].filter(function (i) { return !b[i]; });
-      if (corners.length) return corners[Math.floor(Math.random() * corners.length)];
-      var rest = [1,3,5,7].filter(function (i) { return !b[i]; });
-      return rest[0];
-    }
-    function tttStart() {
-      TTT = { b: [0,0,0,0,0,0,0,0,0] };
-      setMode("ttt", "⭕");
-      line("井字棋 · 你是 ✕，输入数字 1-9 落子，q 认输。想赢我？祝你好运。");
-      line(tttBoard(TTT.b));
-    }
-    function tttMove(cmd) {
-      cmd = cmd.trim().toLowerCase();
-      if (cmd === "q") { line("认输也是一种实力。"); TTT = null; setMode("shell", "❯"); return; }
-      var i = parseInt(cmd, 10) - 1;
-      if (!(i >= 0 && i < 9) || TTT.b[i]) { line("<span class='t-dim'>输入 1-9 的空位数字。</span>"); return; }
-      TTT.b[i] = 1;
-      var r = tttWinner(TTT.b);
-      if (r >= 0) return tttEnd(r);
-      TTT.b[tttAI(TTT.b)] = 2;
-      r = tttWinner(TTT.b);
-      if (r >= 0) return tttEnd(r);
-      line(tttBoard(TTT.b));
-    }
-    function tttEnd(r) {
-      line(tttBoard(TTT.b));
-      line(r === 1 ? "你赢了？！这不该发生的。<span class='t-dim'>（棋盘闪烁了一下）</span>" :
-           r === 2 ? "终端获胜。意料之中。" : "平局。你已经很接近了。", r === 1 ? "t-ok" : "t-dim");
-      TTT = null; setMode("shell", "❯");
-    }
-
-    /* ============ quiz 快问快答 ============ */
-    var QBANK = [
-      { q: "std::sort 的平均时间复杂度是？", o: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"], a: 1, why: "内省排序：快排+堆排+插入排序的组合拳。" },
-      { q: "下面哪个不是字符串算法？", o: ["KMP", "AC 自动机", "Manacher", "Dijkstra"], a: 3, why: "Dijkstra 是最短路，剩下仨都是串王。" },
-      { q: "线段树单点修改的复杂度是？", o: ["O(1)", "O(log n)", "O(sqrt n)", "O(n)"], a: 1, why: "一层一层往下走，树高 log n。" },
-      { q: "快速幂求 a^b mod p 的复杂度是？", o: ["O(b)", "O(log b)", "O(p)", "O(1)"], a: 1, why: "每次平方，指数折半。" },
-      { q: "C++ priority_queue 的底层实现是？", o: ["红黑树", "跳表", "二叉堆", "哈希表"], a: 2, why: "二叉堆（默认 vector 上的大根堆）。" },
-      { q: "Dijkstra 不能处理负权边的原因是？", o: ["会死循环", "贪心的正确性被破坏", "数组会越界", "复杂度退化到 n³"], a: 1, why: "已经确定的最短路可能被负边推翻。" },
-      { q: "CF 上数组越界通常收到什么判决？", o: ["TLE", "MLE", "RE", "CE"], a: 2, why: "Runtime Error，段错误经典来源。" },
-      { q: "考试前最该做的事是？", o: ["再写一发线段树", "相信机翻题面", "熬夜打 CF", "读三遍题"], a: 3, why: "读三遍题。血的教训。" }
-    ];
-    function quizStart() {
-      QUIZ = { qs: QBANK.slice().sort(function () { return Math.random() - 0.5; }).slice(0, 5), i: 0, ok: 0 };
-      setMode("quiz", "❓");
-      line("❓ 算法快问快答 · 5 题，输入 A/B/C/D，q 放弃");
-      askQ();
-    }
-    function askQ() {
-      var q = QUIZ.qs[QUIZ.i];
-      var s = "Q" + (QUIZ.i + 1) + "/5  " + q.q + "\n";
-      q.o.forEach(function (o, k) { s += "   " + "ABCD"[k] + ". " + o + "\n"; });
-      line("<pre class='t-pre'>" + esc(s) + "</pre>");
-    }
-    function quizAns(cmd) {
-      cmd = cmd.trim().toUpperCase();
-      if (cmd === "Q") { line("放弃。答对 " + QUIZ.ok + "/" + QUIZ.i); QUIZ = null; setMode("shell", "❯"); return; }
-      var k = "ABCD".indexOf(cmd);
-      if (k < 0) { line("<span class='t-dim'>输入 A/B/C/D。</span>"); return; }
-      var q = QUIZ.qs[QUIZ.i];
-      if (k === q.a) { QUIZ.ok++; line("✓ 正确！" + q.why, "t-ok"); }
-      else { line("✗ 答案是 " + "ABCD"[q.a] + "。" + q.why, "t-err"); }
-      QUIZ.i++;
-      if (QUIZ.i < QUIZ.qs.length) askQ();
-      else {
-        var s = QUIZ.ok;
-        line("结束：" + s + "/5 —— " + (s === 5 ? "AK！这波是 tourist 级别的。" : s >= 3 ? "稳如老狗。" : "回去把板子抄十遍。"));
-        QUIZ = null; setMode("shell", "❯");
-      }
-    }
-
-    /* ============ luck 今日运势 ============ */
-    function luck() {
-      var d = new Date();
-      var seed = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
-      var r = seed % 2147483647;
-      function rnd() { r = (r * 48271) % 2147483647; return r / 2147483647; }
-      function pick(a) { return a[Math.floor(rnd() * a.length)]; }
-      var yi = ["刷 DP", "打 Div.3", "写线段树", "补 WA 掉的题", "复习板子", "打虚拟赛", "做构造题"];
-      var ji = ["交题前不读三遍题", "赛时中途换思路", "忘了 long long", "数组开小", "相信机翻题面", "熬夜打 CF", "不写暴力对拍"];
-      var alg = ["线段树", "树状数组", "DP", "数学", "贪心", "图论", "二分", "纯暴力"];
-      line("📐 " + d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0") + " 的算法运势");
-      line("  宜：<b>" + pick(yi) + "</b>　忌：<b>" + pick(ji) + "</b>");
-      line("  幸运算法：<b>" + pick(alg) + "</b>　幸运题分：<b>" + (1200 + Math.floor(rnd() * 600)) + "</b>");
-      line("  <span class='t-dim'>（同一个日期，每个人看到的都一样）</span>");
-    }
-
-    /* ============ matrix 数字雨 ============ */
-    function matrix() {
-      var ov = document.createElement("div");
-      ov.className = "matrix-rain";
-      var chars = "01アイウエオカキクケコサシスセソナニヌネノ$#@%&";
-      for (var c = 0; c < 26; c++) {
-        var col = document.createElement("div");
-        col.className = "matrix-col";
-        col.style.left = (c * 3.8) + "%";
-        col.style.animationDuration = (0.9 + Math.random() * 1.6).toFixed(2) + "s";
-        col.style.animationDelay = "-" + (Math.random() * 2).toFixed(2) + "s";
-        var s = "";
-        var n = 8 + Math.floor(Math.random() * 10);
-        for (var i = 0; i < n; i++) s += chars[Math.floor(Math.random() * chars.length)] + "\n";
-        col.textContent = s;
-        ov.appendChild(col);
-      }
-      win.appendChild(ov);
-      line("Wake up, NirvanaCeleste……", "t-ok");
-      setTimeout(function () {
-        ov.remove();
-        line("<span class='t-dim'>矩阵没有出口。但雨停了。</span>");
-      }, 4200);
-    }
-
-    /* ============ 命令表 ============ */
-    var CMDS = {
+    var TC = {
       help: function () {
-        line("可用命令：");
-        [["snake","🐍 贪吃蛇"],["battle","⚔ 和 SOMETHING 打一架"],["ttt","⭕ 井字棋（想赢终端？）"],
-         ["quiz","❓ 算法快问快答"],["luck","📐 今日算法运势"],["matrix","绿色数字雨"],
-         ["find 词","搜索全站文章"],["random","随机来一篇"],["whoami","我是谁"],
-         ["stats","站点数据"],["neofetch","系统信息"],["cf","Codeforces 分数"],["at","AtCoder 分数"],
-         ["upsolve","补题清单"],["acm","题解分区"],["omori","模组指南"],["date","现在时间"],
-         ["ls","看看有什么"],["clear","清屏"]].forEach(function (c) {
-          line('  <span class="t-cmd">' + esc(c[0]) + '</span><span class="t-dim"> — ' + esc(c[1]) + "</span>");
-        });
-        line('<span class="t-dim">……以及没有写在这里的东西。</span>');
+        line("可用：<span class='t-cmd'>whoami ls cat xxd omori find clear exit</span>");
+        line('<span class="t-dim">……以及没列出来的。</span>');
       },
-      whoami: function () {
-        line("<b>NirvanaCeleste</b>");
-        line('<span class="t-dim">算法竞赛选手 · OMORI 模组作者 · 有几个秘密藏在站里</span>');
-        line('→ <a href="/about/">关于页</a>');
+      whoami: function () { line("<b>NirvanaCeleste</b> · 有几个秘密藏在站里"); },
+      ls: function () { line('<span class="t-ok">acm/</span>  <span class="t-ok">omori/</span>  <span class="t-dim">search.md</span>'); },
+      "ls -a": function () { TC.ls(); line('<span class="t-ws">.secret   setting_theme_core.css</span>'); },
+      cat: function (r) {
+        if ((r || "").trim() === ".secret") {
+          line('<span class="t-dim">「位相偏移了。角落里有个说谎的文件——自称 css，却不是。」</span>');
+          line('<span class="t-dim">（xxd setting_theme_core.css）</span>');
+        } else if ((r || "").indexOf("setting_theme_core") >= 0) {
+          line("cat: 二进制文件 <span class='t-dim'>（css 会是二进制的吗？）</span>", "t-err");
+        } else line("cat: 没有那个文件", "t-err");
       },
-      stats: function () {
-        line("Codeforces  <b>" + D.cf.now + "</b> (" + (D.cf.delta >= 0 ? "+" : "") + D.cf.delta + " · " + D.cf.n + " 场 rated)");
-        line("AtCoder     <b>" + D.ac.now + "</b> (" + (D.ac.delta >= 0 ? "+" : "") + D.ac.delta + " · " + D.ac.n + " 场 rated)");
-        line("复盘场次    <b>" + D.contests + "</b>");
-        line("待补题目    <b>" + (D.wrong + D.skip) + "</b> (🔥" + D.wrong + " · 🧊" + D.skip + " · ✅" + D.done + ")");
+      xxd: function (r) {
+        if ((r || "").indexOf("setting_theme_core") >= 0) {
+          line("<pre class='t-pre'>00000000  89 50 4e 47 0d 0a 1a 0a  00 00 00 0d 49 48 44 52  |.PNG....</pre>");
+          line("魔数 <b>89 50 4E 47</b> —— 是一张 <b>PNG</b>。", "t-ok");
+          line('→ <a href="/setting_theme_core.css">/setting_theme_core.css</a> 剩下的谜题，在现实里。');
+        } else line("xxd: 没有那个文件", "t-err");
       },
-      neofetch: function () {
-        line("<pre class='t-pre'>      ▲\n     ▲ ▲       nirvana@blog\n    ▲   ▲      ────────────\n   ▲ ▲ ▲ ▲     OS:      Hugo + Blowfish\n     ▲ ▲       Shell:   home-term\n                CF/AC:   " + D.cf.now + " / " + D.ac.now + "\n                待补:    " + (D.wrong + D.skip) + " 题</pre>");
-      },
-      cf: function () {
-        line("Codeforces: <b>" + D.cf.now + "</b>（" + (D.cf.delta >= 0 ? "+" : "") + D.cf.delta + "）最近 " + esc(D.cf.last || "—") + "，共 " + D.cf.n + " 场 rated");
-        line('→ <a href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">codeforces.com/profile/NirvanaCeleste</a>');
-      },
-      at: function () {
-        line("AtCoder: <b>" + D.ac.now + "</b>（" + (D.ac.delta >= 0 ? "+" : "") + D.ac.delta + "）最近 " + esc(D.ac.last || "—") + "，共 " + D.ac.n + " 场 rated");
-        line('→ <a href="https://atcoder.jp/users/NirvanaCeleste" target="_blank" rel="noopener">atcoder.jp/users/NirvanaCeleste</a>');
-      },
-      atcoder: function () { CMDS.at(); },
-      upsolve: function () {
-        line("待补 <b>" + (D.wrong + D.skip) + "</b> 题 · 已补 " + D.done + " 题");
-        line('→ <a href="/acm/upsolve/">打开补题清单</a>');
-      },
-      acm: function () { line('→ <a href="/acm/">进入算法竞赛分区</a>'); },
-      guide: function () { line('→ <a href="/omori/modding-guide/">打开模组指南</a>'); },
       omori: function () {
         var on = document.documentElement.classList.toggle("ws-mode");
-        if (on) line('<span class="t-ws">[WHITE SPACE] …… 这里什么都没有。输入 omori 回到现实。</span>');
-        else line("欢迎回来。");
+        line(on ? '<span class="t-ws">……这里什么都没有。</span>' : "欢迎回来。");
       },
-      snake: function () { snakeStart(); },
-      battle: function () { battleStart(); },
-      ttt: function () { tttStart(); },
-      tictactoe: function () { tttStart(); },
-      quiz: function () { quizStart(); },
-      luck: function () { luck(); },
-      matrix: function () { matrix(); },
-      find: function (rest) {
-        var q = (rest || "").trim().toLowerCase();
-        if (!q) { line("用法：find 关键词 <span class='t-dim'>（标题或标签里搜）</span>"); return; }
-        var hits = (D.posts || []).filter(function (p) {
-          return (p.t + " " + (p.g || "")).toLowerCase().indexOf(q) >= 0;
-        });
-        if (!hits.length) { line("没找到「" + esc(rest) + "」相关的文章。", "t-err"); return; }
-        line("找到 " + hits.length + " 篇：");
-        hits.slice(0, 8).forEach(function (p) { line('  → <a href="' + p.u + '">' + esc(p.t) + "</a>"); });
-      },
-      random: function () {
-        var ps = D.posts || [];
-        if (!ps.length) return;
-        var p = ps[Math.floor(Math.random() * ps.length)];
-        line("命运指向了：→ <a href='" + p.u + "'>" + esc(p.t) + "</a>");
-      },
-      date: function () { line(new Date().toLocaleString("zh-CN")); },
-      ls: function () {
-        line('<span class="t-ok">acm/</span>  <span class="t-ok">omori/</span>  <span class="t-ok">about/</span>  <span class="t-dim">search.md</span>');
+      find: function (r) {
+        var q = (r || "").trim().toLowerCase();
+        if (!q) { line("用法：find 关键词"); return; }
+        var hits = (D.posts || []).filter(function (p) { return (p.t + " " + (p.g || "")).toLowerCase().indexOf(q) >= 0; });
+        if (!hits.length) { line("没找到。", "t-err"); return; }
+        hits.slice(0, 6).forEach(function (p) { line('→ <a href="' + p.u + '">' + esc(p.t) + "</a>"); });
       },
       clear: function () { body.innerHTML = ""; },
-      echo: function (rest) { line(esc(rest) || ""); },
-      /* 隐藏层 */
-      "ls -a": function () {
-        CMDS.ls();
-        line('<span class="t-ws">.secret   setting_theme_core.css</span>');
-      },
-      cat: function (rest) {
-        if ((rest || "").trim() === ".secret") {
-          line('<span class="t-dim">「位相偏移了。这个站的角落里躺着一个说谎的文件——它自称 css，却不是。」</span>');
-          line('<span class="t-dim">（试试 xxd setting_theme_core.css）</span>');
-        } else if ((rest || "").indexOf("setting_theme_core") >= 0) {
-          line("cat: setting_theme_core.css: 二进制文件 <span class='t-dim'>（咦，css 会是二进制的吗？）</span>", "t-err");
-        } else line("cat: " + esc(rest || "?") + ": 没有那个文件", "t-err");
-      },
-      xxd: function (rest) {
-        if ((rest || "").indexOf("setting_theme_core") >= 0) {
-          line("<pre class='t-pre'>00000000  89 50 4e 47 0d 0a 1a 0a  00 00 00 0d 49 48 44 52  |.PNG....</pre>");
-          line("魔数 <b>89 50 4E 47</b> —— 这不是 CSS，是一张 <b>PNG 图片</b>。", "t-ok");
-          line('→ 它就藏在 <a href="/setting_theme_core.css">/setting_theme_core.css</a>。剩下的谜题，在现实里。');
-        } else line("xxd: " + esc(rest || "?") + ": 没有那个文件", "t-err");
-      },
       sudo: function () { line('<span class="t-err">权限不足：这里的管理员本来就是你。</span>'); },
-      rm: function (rest) {
-        if ((rest || "").indexOf("-rf") >= 0 && (rest || "").indexOf("/") >= 0) {
-          win.classList.add("glitch");
-          line("<span class='t-err'>rm: 正在删除 /acm ... 完成</span>");
-          line("<span class='t-err'>rm: 正在删除 /omori ... 完成</span>");
-          line("<span class='t-err'>rm: 正在删除 手办/ 高考成绩/ 奖状/ ... </span>");
-          setTimeout(function () { line("<span class='t-err'>rm: 正在删除 你的博客 ...</span>"); }, 700);
-          setTimeout(function () {
-            win.classList.remove("glitch");
-            line("开个玩笑。你的数据一根毫毛都没少。", "t-ok");
-          }, 1600);
-        } else line("rm: 拒绝操作 <span class='t-dim'>（真想删的话你懂的）</span>", "t-err");
-      },
-      exit: function () { line('<span class="t-dim">出不去的。这里没有门。</span>'); },
-      reality: function () {
-        if (document.documentElement.classList.contains("ws-mode")) CMDS.omori();
-        else line('<span class="t-dim">你本来就在现实里。……是吗？</span>');
-      },
-      crt: function () {
-        var on = win.classList.toggle("crt");
-        line(on ? "扫描线已开启。" : "扫描线已关闭。");
-      }
+      exit: function () { closeTerm(); }
     };
-
-    function run(raw) {
-      var s = raw.trim();
-      if (!s) return;
-      var ch = mode === "shell" ? "❯" : mode === "battle" ? "⚔" : mode === "snake" ? "🐍" : mode === "ttt" ? "⭕" : "❓";
-      line('<span class="term-prompt">' + ch + "</span> " + esc(s), "t-in");
-      hist.push(s); hi = hist.length;
-      if (mode === "battle") { battleTurn(s); return; }
-      if (mode === "ttt") { tttMove(s); return; }
-      if (mode === "quiz") { quizAns(s); return; }
-      var sp = s.indexOf(" ");
-      var head = (sp < 0 ? s : s.slice(0, sp));
-      var rest = sp < 0 ? "" : s.slice(sp + 1);
-      if (CMDS[head.toLowerCase()]) CMDS[head.toLowerCase()](rest);
-      else if (head.toLowerCase() === "ls" && rest.trim() === "-a") CMDS["ls -a"]();
-      else line('command not found: ' + esc(head) + '  <span class="t-dim">（help 看看能干啥）</span>', "t-err");
-    }
-
     input.addEventListener("keydown", function (e) {
-      if (mode === "snake" && SNAKE) {
-        if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.key) >= 0) e.preventDefault();
-        snakeKey(e.key);
-        return;
-      }
-      if (e.key === "Enter") { run(input.value); input.value = ""; }
-      else if (e.key === "ArrowUp") { e.preventDefault(); if (hi > 0) { hi--; input.value = hist[hi] || ""; } }
-      else if (e.key === "ArrowDown") { e.preventDefault(); if (hi < hist.length) { hi++; input.value = hist[hi] || ""; } }
-      else if (e.key === "Tab") {
-        e.preventDefault();
-        var v = input.value.trim().toLowerCase();
-        if (v && mode === "shell") {
-          var names = Object.keys(CMDS).filter(function (c) { return c.indexOf(" ") < 0 && c.indexOf(v) === 0; });
-          if (names.length === 1) input.value = names[0] + " ";
-          else if (names.length > 1) line('<span class="t-dim">' + names.join("  ") + "</span>");
+      if (e.key !== "Enter") return;
+      var s = input.value.trim(); input.value = "";
+      if (!s) return;
+      line('<span class="term-prompt">❯</span> ' + esc(s), "t-in");
+      var sp = s.indexOf(" ");
+      var head = (sp < 0 ? s : s.slice(0, sp)).toLowerCase();
+      var rest = sp < 0 ? "" : s.slice(sp + 1);
+      if (head === "ls" && rest.trim() === "-a") TC["ls -a"]();
+      else if (TC[head]) TC[head](rest);
+      else line('command not found: ' + esc(head), "t-err");
+    });
+
+    /* ============ Rating 交互图表 ============ */
+    var chartSvg = document.getElementById("chart-svg");
+    var chartTip = document.getElementById("chart-tip");
+    var chartFoot = document.getElementById("chart-foot");
+    var box = document.getElementById("chart-box");
+    var NS = "http://www.w3.org/2000/svg";
+    var curTab = "cf";
+    function findPost(contest, isAC) {
+      var ps = D.posts || [];
+        for (var i = 0; i < ps.length; i++) {
+          var t = ps[i].t || "";
+          if (isAC) {
+            var m = contest.match(/ABC (\d+)/);
+            if (m && t.indexOf("Contest " + m[1]) >= 0) return ps[i];
+          } else if (t.indexOf(contest) === 0) return ps[i];
         }
-      }
+        return null;
+    }
+    function draw(tab) {
+      curTab = tab;
+      chartSvg.innerHTML = "";
+      var h = (tab === "cf" ? (D.cf.hist || []) : (D.ac.hist || []));
+      var isAC = tab === "ac";
+      if (!h.length) return;
+      var vals = h.map(function (x) { return x.new; });
+      var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
+      if (mx - mn < 40) { mn -= 20; mx += 20; }
+      var W = 640, H = 200, pad = 14;
+      function X(i) { return pad + (W - 2 * pad) * (h.length === 1 ? 0.5 : i / (h.length - 1)); }
+      function Y(v) { return H - pad - (H - 2 * pad) * (v - mn) / (mx - mn); }
+      var pts = h.map(function (x, i) { return X(i).toFixed(1) + "," + Y(x.new).toFixed(1); }).join(" ");
+      var area = document.createElementNS(NS, "polygon");
+      area.setAttribute("points", pts + " " + X(h.length - 1).toFixed(1) + "," + (H - pad) + " " + X(0).toFixed(1) + "," + (H - pad));
+      area.setAttribute("class", "chart-area");
+      chartSvg.appendChild(area);
+      var pl = document.createElementNS(NS, "polyline");
+      pl.setAttribute("points", pts);
+      pl.setAttribute("class", "chart-line");
+      chartSvg.appendChild(pl);
+      h.forEach(function (x, i) {
+        var c = document.createElementNS(NS, "circle");
+        c.setAttribute("cx", X(i)); c.setAttribute("cy", Y(x.new)); c.setAttribute("r", 5);
+        c.setAttribute("class", "chart-dot" + (x.new === mx ? " max" : ""));
+        c.style.cursor = "pointer";
+        var delta = x.new - x.old;
+        var post = findPost(x.contest || "", isAC);
+        c.addEventListener("mouseenter", function () {
+          chartTip.innerHTML = "<b>" + esc(x.contest) + "</b><br>" + x.new +
+            "（" + (delta >= 0 ? "+" : "") + delta + "）· rank " + x.rank +
+            (post ? "<br><span class='chart-go'>点击打开复盘 →</span>" : "");
+          chartTip.style.opacity = 1;
+        });
+        c.addEventListener("mousemove", function (e) {
+          var r = box.getBoundingClientRect();
+          chartTip.style.left = Math.min(r.width - 150, e.clientX - r.left + 12) + "px";
+          chartTip.style.top = (e.clientY - r.top - 10) + "px";
+        });
+        c.addEventListener("mouseleave", function () { chartTip.style.opacity = 0; });
+        c.addEventListener("click", function () { if (post) window.location.href = post.u; });
+        chartSvg.appendChild(c);
+      });
+    }
+    document.querySelectorAll(".ctab").forEach(function (b) {
+      b.addEventListener("click", function () {
+        document.querySelectorAll(".ctab").forEach(function (x) { x.classList.remove("active"); });
+        b.classList.add("active");
+        draw(b.dataset.tab);
+      });
     });
-    win.addEventListener("click", function () {
-      if (!window.getSelection().toString()) input.focus({ preventScroll: true });
+    draw("cf");
+
+    /* ============ 补题键盘 ============ */
+    var kb = document.getElementById("kb-grid");
+    var board = D.board || {};
+    var letters = [];
+    Object.keys(board).forEach(function (k) {
+      var m = k.match(/^([A-Z])(\d?)$/);
+      if (m) letters.push({ key: k, base: m[1], sub: m[2] || "", v: board[k] });
+    });
+    letters.sort(function (a, b) { return a.key < b.key ? -1 : 1; });
+    var ROW1 = "ABCDEF", rows = [];
+    var row1 = letters.filter(function (l) { return ROW1.indexOf(l.base) >= 0 && l.base !== "F"; });
+    var row2 = letters.filter(function (l) { return l.base === "F" || l.base === "G"; });
+    [row1, row2].forEach(function (row) {
+      if (!row.length) return;
+      var r = document.createElement("div");
+      r.className = "kb-row";
+      row.forEach(function (l) {
+        var cls = l.v.w ? "wrong" : l.v.s ? "skip" : "ok";
+        var k = document.createElement("a");
+        k.href = "/acm/upsolve/";
+        k.className = "kb-key " + cls;
+        k.innerHTML = l.base + (l.sub ? "<sub>" + l.sub + "</sub>" : "");
+        k.title = l.key + "：没写对 " + l.v.w + " · 没尝试 " + l.v.s + " · 已补 " + l.v.d;
+        r.appendChild(k);
+      });
+      kb.appendChild(r);
     });
 
-    /* Konami */
-    var KONAMI = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
-    var kidx = 0;
-    window.addEventListener("keydown", function (e) {
-      kidx = (e.key === KONAMI[kidx]) ? kidx + 1 : (e.key === KONAMI[0] ? 1 : 0);
-      if (kidx === KONAMI.length) {
-        kidx = 0;
-        line("🎮 <b>秘技发动</b> —— 三十条命已到账。", "t-ok");
-      }
-    });
-
-    /* 统计卡数字增长 */
+    /* ============ 统计卡数字增长 ============ */
     function countUp(el) {
       var target = parseInt(el.dataset.val || "0", 10);
       var t0 = performance.now(), dur = 900;
@@ -571,16 +435,6 @@
       es.forEach(function (en) { if (en.isIntersecting) { countUp(en.target); io.unobserve(en.target); } });
     }, { threshold: 0.4 });
     document.querySelectorAll(".stat-num").forEach(function (el) { io.observe(el); });
-
-    var lines = [
-      ["Nirvana Celeste Space", "t-sys"],
-      ["You have been living here for as long as you can remember.", "t-dim"],
-      ["输入 help 查看命令 · ↑↓ 翻历史 · Tab 补全", "t-ok"]
-    ];
-    var k = 0;
-    (function next() {
-      if (k < lines.length) { typeLine(lines[k][0], lines[k][1], function(){ k++; setTimeout(next, 120); }); }
-    })();
   })();
   </script>
 {{ end }}
