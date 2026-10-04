@@ -155,7 +155,6 @@
       ["help",   "显示本帮助"],
       ["ls",     "列出房间"],
       ["cd",     "进入房间（cd 空格 + 房间名）"],
-      ["open",   "进入房间"],
       ["pwd",    "当前位置"],
       ["whoami", "我是谁"],
       ["clear",  "清屏"]
@@ -178,7 +177,6 @@
         if (!name || name === "~" || name === "/") { line("回到了 ~/home。"); return; }
         go(name);
       },
-      open: function (rest) { go((rest || "").trim()); },
       pwd: function () { line("/home"); },
       whoami: function () { line("<b>NirvanaCeleste</b> · 房间在别处。"); },
       clear: function () { body.innerHTML = ""; },
