@@ -526,19 +526,55 @@ html.ws-mode .home-term { background:#0a0a0a; }
 .vd-stage.void { background:#000; }
 .vd-stage.void .vd-svg { opacity:0; }
 
-/* ---------- /letters/ 信（审查版/原件） ---------- */
-.lt-head { display:flex; align-items:center; justify-content:space-between;
-  gap:1em; flex-wrap:wrap; width:100%; max-width:640px; margin-bottom:1em; }
-.lt-title { color:rgba(214,214,226,.45); font-size:.82em; }
-.lt-tabs { display:flex; gap:.8em; }
-.lt-btn { background:transparent; border:none; color:rgba(255,255,255,.45);
-  font-family:inherit; font-size:.92em; cursor:pointer; padding:.2em .3em; }
-.lt-btn::before { content:"["; color:rgba(154,111,240,.5); }
-.lt-btn::after { content:"]"; color:rgba(154,111,240,.5); }
-.lt-btn:hover, .lt-btn.active { color:#f2cc60; }
+/* ---------- /letters/ 信（涂改规则玩法） ---------- */
+.lt-stage { justify-content:flex-start; }
+.lt-rules { width:100%; max-width:640px; margin-bottom:1.4em;
+  border:1px dashed rgba(154,111,240,.45); border-radius:10px;
+  padding:1em 1.3em .8em;
+  background:rgba(13,13,18,.7);
+  font-family:Consolas,"Cascadia Mono","Courier New",monospace; }
+.lt-rules-title { color:rgba(214,214,226,.75); font-weight:700; font-size:.9em;
+  letter-spacing:.15em; margin-bottom:.6em; }
+.lt-rule-list { margin:0; padding-left:1.4em; color:rgba(214,214,226,.62);
+  font-size:.85em; line-height:1.9; }
+.lt-rule-list li::marker { color:rgba(154,111,240,.7); }
+.lt-key { color:#f2cc60; }
+.lt-rules-foot { display:flex; align-items:center; justify-content:space-between;
+  margin-top:.7em; padding-top:.6em; border-top:1px dashed rgba(154,111,240,.25);
+  font-size:.8em; color:rgba(126,231,135,.8); }
+.lt-seal { background:transparent; border:1.5px solid rgba(126,231,135,.5);
+  color:rgba(126,231,135,.9); font-family:inherit; font-size:.9em;
+  padding:.25em 1.1em; border-radius:7px; cursor:pointer;
+  opacity:0; pointer-events:none; transition:opacity .4s; }
+.lt-seal.on { opacity:1; pointer-events:auto; }
+.lt-seal:hover { color:#f2cc60; border-color:rgba(242,204,96,.55); }
 .lt-letter { width:100%; max-width:640px; background:#f4f0e6; color:#2c2a26;
   border-radius:4px; padding:1.6em 1.8em; box-shadow:0 10px 30px rgba(0,0,0,.45);
-  font-family:Georgia,"Times New Roman",serif; font-size:.95em; line-height:2; }
+  font-family:Georgia,"Times New Roman",serif; font-size:.95em; line-height:2;
+  transition:filter .8s; }
 .lt-letter p { margin:0 0 1em; }
 .lt-letter p:last-child { text-align:right; margin-bottom:0; }
-.lt-black { background:#191919; border-radius:1px; }
+.lt-letter.sealed { filter:saturate(.82) brightness(.97); }
+.lt-word { cursor:pointer; border-radius:2px;
+  border-bottom:1.5px dotted rgba(90,80,60,.45); transition:background .25s, color .25s; }
+.lt-word:hover { background:rgba(154,111,240,.16); }
+.lt-word.blacked { color:transparent; background:#191919;
+  border-bottom-color:transparent; cursor:default;
+  text-shadow:none; user-select:none; }
+.lt-word.decoy { border-bottom-color:rgba(90,80,60,.22); }
+.lt-word.shake { animation:ltShake .3s linear; }
+@keyframes ltShake { 0%{transform:translateX(0)} 25%{transform:translateX(-2px)}
+  50%{transform:translateX(2px)} 75%{transform:translateX(-1px)} 100%{transform:translateX(0)} }
+.lt-stamp { position:absolute; right:56px; top:120px; transform:rotate(-14deg) scale(1.6);
+  color:#c0392b; border:3px double #c0392b; border-radius:6px;
+  padding:.15em .6em; font-family:inherit; font-weight:700; font-size:1.15em;
+  letter-spacing:.3em; opacity:0; pointer-events:none;
+  transition:opacity .5s, transform .5s cubic-bezier(.2,2.2,.4,1); }
+.lt-stamp.on { opacity:.85; transform:rotate(-14deg) scale(1); }
+.lt-again { margin-top:1.2em; background:transparent; cursor:pointer;
+  border:1px solid rgba(154,111,240,.4); color:rgba(214,214,226,.7);
+  font-family:Consolas,"Cascadia Mono","Courier New",monospace; font-size:.85em;
+  padding:.35em 1em; border-radius:8px;
+  opacity:0; pointer-events:none; transition:opacity .5s; }
+.lt-again.on { opacity:1; pointer-events:auto; }
+.lt-again:hover { color:#f2cc60; border-color:rgba(242,204,96,.5); }

@@ -1,17 +1,24 @@
 {{ define "main" }}
-  {{/* 机制保留：涂黑改变故事——审查版像共犯毁灭证据，原件是另一回事 */}}
+  {{/* 涂改规则：先读原信 → 按须知亲手涂黑 → 涂完自己再读 */}}
   <article class="rm-page">
-    <div class="rm-stage lt-stage" aria-label="被涂黑的信">
-      <div class="lt-head">
-        <span class="lt-title">病房来信 · 发件人栏被水洇过</span>
-        <span class="lt-tabs">
-          <button class="lt-btn active" data-v="censor">审查版</button>
-          <button class="lt-btn" data-v="origin">原件</button>
-        </span>
+    <div class="rm-stage lt-stage" aria-label="涂改">
+      <div class="lt-rules" id="lt-rules">
+        <div class="lt-rules-title">收发室审查须知</div>
+        <ol class="lt-rule-list">
+          <li>凡涉及<span class="lt-key">病情与住院原因</span>的表述，一律涂黑。</li>
+          <li>凡涉及<span class="lt-key">家庭住址、家中物品</span>等隐私细节，一律涂黑。</li>
+          <li>凡涉及<span class="lt-key">学业进度</span>的内容，一律涂黑（防止患者焦虑）。</li>
+        </ol>
+        <div class="lt-rules-foot">
+          <span id="lt-count">已涂 0 / 3</span>
+          <button class="lt-seal" id="lt-seal">封发</button>
+        </div>
       </div>
 
-      <div class="lt-letter" id="lt-letter" aria-live="polite"></div>
+      <div class="lt-letter" id="lt-letter"></div>
 
+      <div class="lt-stamp" id="lt-stamp">已审查</div>
+      <button class="lt-again" id="lt-again">重来</button>
       <a class="rm-back" href="/">❮ ~/home</a>
     </div>
   </article>
@@ -19,50 +26,72 @@
   <script>
   (function () {
     "use strict";
-    /* 剧本原文节选；█ = 审查涂黑 */
-    var LETTER = {
-      censor: [
-        "亲爱的：",
-        "一切都处理好了。█████████也不在了。没有人问起███████。",
-        "他们要是再查下去，我就把剩下的████也处理掉。",
-        "在里面别多想。管好自己的嘴。等风吹过去，我来接你。",
-        "——你的同桌"
-      ],
-      origin: [
-        "亲爱的：",
-        "一切都处理好了。你阳台那盆枯掉的花也不在了。没有人问起你请了多久病假。",
-        "他们要是再问下去，我就把剩下的寒假作业也帮你写掉。真的，我数学比上学期好了很多。",
-        "在里面别多想。管好自己的身体，按时吃饭。等风吹过去，我来接你。",
-        "——你的同桌"
-      ]
-    };
-    var letter = document.getElementById("lt-letter");
+    /* t=普通文本 d=诱饵（可点但不在规则内） c=必须涂黑的片段 */
+    function t(s) { return { k: "t", s: s }; }
+    function d(s) { return { k: "d", s: s }; }
+    function c(s) { return { k: "c", s: s }; }
+    var PARAS = [
+      [t("亲爱的：")],
+      [t("一切都处理好了。"), c("你阳台那盆枯掉的花"), t("也不在了。没有人问起"), c("你请了多久病假"), t("。")],
+      [t("他们要是再问下去，我就把剩下的"), c("寒假作业"), t("也帮你写掉。真的，我数学比上学期好了很多。")],
+      [d("在里面别多想。"), t("管好自己的"), d("身体，按时吃饭"), t("。等"), d("风吹过去"), t("，我来接你。")],
+      [t("——你的同桌")]
+    ];
 
-    function render(v) {
+    var letter = document.getElementById("lt-letter");
+    var countEl = document.getElementById("lt-count");
+    var seal = document.getElementById("lt-seal");
+    var stamp = document.getElementById("lt-stamp");
+    var again = document.getElementById("lt-again");
+    var found = 0, TOTAL = 3;
+
+    function render() {
+      found = 0;
+      countEl.textContent = "已涂 0 / " + TOTAL;
+      seal.classList.remove("on");
+      stamp.classList.remove("on");
+      again.classList.remove("on");
+      letter.classList.remove("sealed");
       letter.innerHTML = "";
-      LETTER[v].forEach(function (p) {
-        var el = document.createElement("p");
-        if (v === "censor") {
-          /* █ 涂黑块染成实心黑条 */
-          el.innerHTML = p.replace(/█+/g, function (m) {
-            return '<span class="lt-black" style="display:inline-block;min-width:' +
-              m.length + 'em;height:1.08em;vertical-align:-0.14em"></span>';
+      PARAS.forEach(function (segs) {
+        var p = document.createElement("p");
+        segs.forEach(function (g) {
+          if (g.k === "t") {
+            p.appendChild(document.createTextNode(g.s));
+            return;
+          }
+          var sp = document.createElement("span");
+          sp.className = "lt-word" + (g.k === "d" ? " decoy" : "");
+          sp.textContent = g.s;
+          sp.addEventListener("click", function () {
+            if (sp.classList.contains("blacked") || letter.classList.contains("sealed")) return;
+            if (g.k === "d") {
+              sp.classList.remove("shake");
+              void sp.offsetWidth;
+              sp.classList.add("shake");
+              return;
+            }
+            sp.classList.add("blacked");
+            found++;
+            countEl.textContent = "已涂 " + found + " / " + TOTAL;
+            if (found >= TOTAL) seal.classList.add("on");
           });
-        } else {
-          el.textContent = p;
-        }
-        letter.appendChild(el);
+          p.appendChild(sp);
+        });
+        letter.appendChild(p);
       });
     }
 
-    document.querySelectorAll(".lt-btn").forEach(function (b) {
-      b.addEventListener("click", function () {
-        document.querySelectorAll(".lt-btn").forEach(function (x) { x.classList.remove("active"); });
-        b.classList.add("active");
-        render(b.dataset.v);
-      });
+    seal.addEventListener("click", function () {
+      if (found < TOTAL) return;
+      letter.classList.add("sealed");
+      stamp.classList.add("on");
+      seal.classList.remove("on");
+      setTimeout(function () { again.classList.add("on"); }, 900);
     });
-    render("censor");
+    again.addEventListener("click", render);
+
+    render();
   })();
   </script>
 {{ end }}
