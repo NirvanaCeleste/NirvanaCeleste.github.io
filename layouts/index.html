@@ -140,8 +140,8 @@
 
     /* 可进入的页面（命令 = 门） */
     var ROOMS = {
-      space: { path: "/space/" },
-      save:  { path: "/save/" }
+      space: { path: "/space/", desc: "黑色空间" },
+      save:  { path: "/save/",  desc: "存档点" }
     };
 
     function go(name) {
@@ -151,14 +151,27 @@
       setTimeout(function () { window.location.href = r.path; }, 420);
     }
 
+    var HELP = [
+      ["help",   "显示本帮助"],
+      ["ls",     "列出房间"],
+      ["cd",     "进入房间（cd 空格 + 房间名）"],
+      ["open",   "进入房间"],
+      ["pwd",    "当前位置"],
+      ["whoami", "我是谁"],
+      ["clear",  "清屏"]
+    ];
+
     var CMDS = {
       help: function () {
-        line("可用：<span class='t-cmd'>ls cd open pwd whoami clear</span>");
+        HELP.forEach(function (h) {
+          line("<span class='t-cmd'>" + h[0].padEnd(8, " ") + "</span><span class='t-dim'>" + esc(h[1]) + "</span>");
+        });
       },
       ls: function () {
-        var out = [];
-        Object.keys(ROOMS).forEach(function (k) { out.push("<span class='t-ok'>" + k + "/</span>"); });
-        line(out.join("  ") + "  <span class='t-dim'>blog.md</span>");
+        Object.keys(ROOMS).forEach(function (k) {
+          line("<span class='t-ok'>" + (k + "/").padEnd(8, " ") + "</span>" + esc(ROOMS[k].desc));
+        });
+        line("<span class='t-dim'>blog.md</span>");
       },
       cd: function (rest) {
         var name = (rest || "").trim().replace(/\/$/, "");
