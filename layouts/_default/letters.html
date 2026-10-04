@@ -12,7 +12,6 @@
 
       <div class="lt-letter" id="lt-letter" aria-live="polite"></div>
 
-      <div class="rm-out" id="lt-out"></div>
       <a class="rm-back" href="/">❮ ~/home</a>
     </div>
   </article>
@@ -38,7 +37,6 @@
       ]
     };
     var letter = document.getElementById("lt-letter");
-    var out = document.getElementById("lt-out");
 
     function render(v) {
       letter.innerHTML = "";
@@ -62,13 +60,9 @@
         document.querySelectorAll(".lt-btn").forEach(function (x) { x.classList.remove("active"); });
         b.classList.add("active");
         render(b.dataset.v);
-        out.textContent = b.dataset.v === "origin"
-          ? "（涂黑拿掉之后，是另一个故事。）"
-          : "（例行审查之后，读到的样子。）";
       });
     });
     render("censor");
-    out.textContent = "（例行审查之后，读到的样子。）";
   })();
   </script>
 {{ end }}
