@@ -5,9 +5,9 @@
       <div class="lt-rules" id="lt-rules">
         <div class="lt-rules-title">收发室审查须知</div>
         <ol class="lt-rule-list">
-          <li>凡涉及<span class="lt-key">病情与住院原因</span>的表述，一律涂黑。</li>
-          <li>凡涉及<span class="lt-key">家庭住址、家中物品</span>等隐私细节，一律涂黑。</li>
-          <li>凡涉及<span class="lt-key">学业进度</span>的内容，一律涂黑（防止患者焦虑）。</li>
+          <li>信中出现<span class="lt-key">人物名字或特定称呼</span>，必须涂黑。</li>
+          <li>信中出现<span class="lt-key">具体地点</span>，必须涂黑。</li>
+          <li>涉及<span class="lt-key">创伤事件与伤病细节</span>的表述，必须涂黑。</li>
         </ol>
         <div class="lt-rules-foot">
           <span id="lt-count">已涂 0 / 3</span>
@@ -31,19 +31,22 @@
     function d(s) { return { k: "d", s: s }; }
     function c(s) { return { k: "c", s: s }; }
     var PARAS = [
-      [t("亲爱的：")],
-      [t("一切都处理好了。"), c("你阳台那盆枯掉的花"), t("也不在了。没有人问起"), c("你请了多久病假"), t("。")],
-      [t("他们要是再问下去，我就把剩下的"), c("寒假作业"), t("也帮你写掉。真的，我数学比上学期好了很多。")],
-      [d("在里面别多想。"), t("管好自己的"), d("身体，按时吃饭"), t("。等"), d("风吹过去"), t("，我来接你。")],
-      [t("——你的同桌")]
+      [t("亲爱的"), c("阿澈"), t("：")],
+      [t("妈让我告诉你，"), c("外婆"), t("已经出院了，"), d("医生"), t("说恢复得比预想好，下个月复诊一次就行。")],
+      [t("你别再惦记"), c("车站那晚的事"), t("了——"), d("雨那么大"), t("，"), c("刹车的人"), t("自己也吓坏了。谁也没怪你，"), c("外婆"), t("第一个说没有。")],
+      [t("家里的猫生了四只小猫，橘白相间，我都拍给"), c("外婆"), t("看了，她说等"), d("寒假"), t("让你挑两只带回"), c("青梧巷"), t("。")],
+      [t("住院部的大姐还记得你，说你走的时候把伞落下了，问你"), c("胳膊"), t("好些没有。")],
+      [t("——"), c("表姐")]
     ];
+    var TOTAL = 0;
+    PARAS.forEach(function (segs) { segs.forEach(function (g) { if (g.k === "c") TOTAL++; }); });
 
     var letter = document.getElementById("lt-letter");
     var countEl = document.getElementById("lt-count");
     var seal = document.getElementById("lt-seal");
     var stamp = document.getElementById("lt-stamp");
     var again = document.getElementById("lt-again");
-    var found = 0, TOTAL = 3;
+    var found = 0;
 
     function render() {
       found = 0;
