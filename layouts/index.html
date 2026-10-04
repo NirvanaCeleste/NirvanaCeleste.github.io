@@ -1,7 +1,7 @@
 {{ define "main" }}
   {{ .Content }}
 
-  {{/* ===== 汇聚首页数据：rating + 补题统计 ===== */}}
+  {{/* ===== 汇聚首页数据 ===== */}}
   {{ $cfNow := 0 }}{{ $cfDelta := 0 }}{{ $cfN := 0 }}{{ $cfLast := "" }}
   {{ $acNow := 0 }}{{ $acDelta := 0 }}{{ $acN := 0 }}{{ $acLast := "" }}
   {{ if fileExists "static/data/cf-rating.json" }}
@@ -29,8 +29,12 @@
       {{ end }}
     {{ end }}
   {{ end }}
+  {{ $indexPosts := slice }}
+  {{ range where site.RegularPages "Section" "in" (slice "acm" "omori") }}
+    {{ $indexPosts = $indexPosts | append (dict "t" .Title "u" .RelPermalink "g" (delimit (.Params.tags | default slice) ",") ) }}
+  {{ end }}
 
-  <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done | jsonify | safeJS }}</script>
+  <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done "posts" $indexPosts | jsonify | safeJS }}</script>
 
   {{/* ===== 主角：交互终端 ===== */}}
   <section class="home-hero">
@@ -40,11 +44,11 @@
         <span class="term-dot" style="background:#febc2e"></span>
         <span class="term-dot" style="background:#28c840"></span>
         <span class="term-title">nirvana@blog: ~/home</span>
-        <span class="term-hint">试试输入 help</span>
+        <span class="term-hint">输入 help · 有 7 个成就藏着</span>
       </div>
       <div class="term-body" id="term-body" aria-live="polite"></div>
       <div class="term-input-line">
-        <span class="term-prompt">❯</span>
+        <span class="term-prompt" id="term-prompt">❯</span>
         <input id="term-input" autocomplete="off" spellcheck="false" enterkeyhint="send" aria-label="终端输入">
       </div>
     </div>
@@ -52,7 +56,7 @@
     {{/* ===== 统计卡 ===== */}}
     <div class="home-stats">
       <a class="stat-card" href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">
-        <div class="stat-num" data-count="{{ $cfN }}" data-prefix="" data-val="{{ $cfNow }}">0</div>
+        <div class="stat-num" data-val="{{ $cfNow }}">0</div>
         <div class="stat-label">Codeforces <span class="stat-delta {{ if ge $cfDelta 0 }}up{{ else }}down{{ end }}">{{ if ge $cfDelta 0 }}+{{ end }}{{ $cfDelta }}</span></div>
       </a>
       <a class="stat-card" href="https://atcoder.jp/users/NirvanaCeleste" target="_blank" rel="noopener">
@@ -90,9 +94,34 @@
     var body = document.getElementById("term-body");
     var input = document.getElementById("term-input");
     var win = document.getElementById("term-window");
+    var promptEl = document.getElementById("term-prompt");
     var D = {};
     try { D = JSON.parse(document.getElementById("__home_data").textContent) || {}; } catch (e) {}
-    var hist = [], hi = -1;
+
+    /* ============ 成就系统 ============ */
+    var ACHS = {
+      first:   { name: "初次见面",   hint: "执行任意命令" },
+      white:   { name: "WHITE SPACE", hint: "进入那个地方" },
+      seethru: { name: "看穿伪装",   hint: "发现会说谎的文件" },
+      winner:  { name: "战胜 SOMETHING", hint: "在战斗中获胜" },
+      kodachi: { name: "上上下下左右左右BA", hint: "输入某个古老的秘技" },
+      world:   { name: "毁灭世界",   hint: "删除一切" },
+      librarian:{ name: "图书管理员", hint: "用 find 找到一篇文章" }
+    };
+    var ACHKEY = "home_ach_v1";
+    function achList() {
+      try { return JSON.parse(localStorage.getItem(ACHKEY) || "{}"); } catch (e) { return {}; }
+    }
+    function unlock(id) {
+      var a = achList();
+      if (a[id] || !ACHS[id]) return;
+      a[id] = Date.now();
+      localStorage.setItem(ACHKEY, JSON.stringify(a));
+      line("🏆 解锁成就 <b>「" + ACHS[id].name + "」</b> <span class='t-dim'>(" + Object.keys(achList()).length + "/" + Object.keys(ACHS).length + ")</span>", "t-ach");
+    }
+
+    var hist = [], hi = -1, mode = "shell";
+    var BTL = null;
 
     function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
     function line(html, cls) {
@@ -115,41 +144,83 @@
         } else { el.textContent = text; if (done) done(); }
       })();
     }
-    function boot() {
-      var lines = [
-        ["Nirvana Celeste Space  ·  home-terminal v1", "t-sys"],
-        ["You have been living here for as long as you can remember.", "t-dim"],
-        ["输入 help 查看可用命令 · ↑↓ 翻历史", "t-ok"]
-      ];
-      var k = 0;
-      (function next() {
-        if (k < lines.length) { typeLine(lines[k][0], lines[k][1], function(){ k++; setTimeout(next, 120); }); }
-      })();
+    function bar(cur, max) {
+      var n = 14, f = Math.max(0, Math.round(cur / max * n));
+      return "▓".repeat(f) + "░".repeat(n - f) + " " + cur + "/" + max;
     }
 
+    /* ============ 战斗小游戏 ============ */
+    function battleStart() {
+      BTL = { php: 120, ehp: 100, guard: false, turn: 1 };
+      mode = "battle";
+      promptEl.textContent = "⚔";
+      line("<b>SOMETHING</b> 出现了。它挡住了去路。", "t-ws");
+      battleStatus();
+      line('指令：<span class="t-cmd">攻击</span> / <span class="t-cmd">防御</span> / <span class="t-cmd">逃走</span>');
+    }
+    function battleStatus() {
+      line("<pre class='t-pre'>你        " + bar(Math.max(0,BTL.php), 120) + "\nSOMETHING " + bar(Math.max(0,BTL.ehp), 100) + "</pre>");
+    }
+    function battleTurn(cmd) {
+      if (cmd === "逃走") {
+        line("你逃走了。SOMETHING 没有追。<span class='t-dim'>它从不追，它只是等着。</span>");
+        return battleEnd(false);
+      }
+      if (cmd === "防御") {
+        BTL.guard = true;
+        line("你摆出了防御姿态。");
+      } else if (cmd === "攻击" || cmd === "a" || cmd === "atk") {
+        var dmg = 15 + Math.floor(Math.random() * 16);
+        var crit = Math.random() < 0.18;
+        if (crit) dmg = Math.round(dmg * 1.8);
+        BTL.ehp -= dmg;
+        line(crit ? "<b>会心一击！</b>造成了 " + dmg + " 点伤害！" : "造成了 " + dmg + " 点伤害。");
+        if (BTL.ehp <= 0) {
+          line("SOMETHING 消散了。<span class='t-dim'>房间里安静下来。</span>", "t-ok");
+          unlock("winner");
+          return battleEnd(true);
+        }
+      } else { line("<span class='t-dim'>（攻击 / 防御 / 逃走）</span>"); return; }
+      var ed = 10 + Math.floor(Math.random() * 16);
+      if (BTL.guard) { ed = Math.round(ed / 2); BTL.guard = false; }
+      BTL.php -= ed;
+      line("SOMETHING 侵蚀了你 " + ed + " 点。");
+      if (BTL.php <= 0) {
+        line("眼前一黑……<span class='t-ws'>你在 WHITE SPACE 醒来。</span>", "t-err");
+        return battleEnd(false);
+      }
+      battleStatus();
+    }
+    function battleEnd() {
+      BTL = null; mode = "shell"; promptEl.textContent = "❯";
+    }
+
+    /* ============ 命令表 ============ */
     var CMDS = {
       help: function () {
         line("可用命令：");
         [["help","这份菜单"],["whoami","我是谁"],["stats","站点数据"],["neofetch","系统信息"],
          ["cf","Codeforces 分数"],["at","AtCoder 分数"],["upsolve","补题清单"],
-         ["acm","题解分区"],["omori","模组指南"],["date","现在时间"],["ls","看看有什么"],
-         ["clear","清屏"],["omori ...","还有别的入口吗？"]].forEach(function (c) {
+         ["find 词","搜索全站文章"],["random","随机来一篇"],["battle","和 SOMETHING 打一架"],
+         ["achievements","成就进度"],["acm","题解分区"],["omori","模组指南"],["date","现在时间"],
+         ["ls","看看有什么"],["clear","清屏"]].forEach(function (c) {
           line('  <span class="t-cmd">' + esc(c[0]) + '</span><span class="t-dim"> — ' + esc(c[1]) + "</span>");
         });
+        line('<span class="t-dim">……以及没有写在这里的东西。隐藏命令数：未知。</span>');
       },
       whoami: function () {
         line("<b>NirvanaCeleste</b>（张邵杰）");
-        line('<span class="t-dim">算法竞赛选手 · OMORI 模组作者 · ARG 爱好者</span>');
+        line('<span class="t-dim">算法竞赛选手 · OMORI 模组作者 · 有几个秘密藏在站里</span>');
         line('→ <a href="/about/">关于页</a>');
       },
       stats: function () {
         line("Codeforces  <b>" + D.cf.now + "</b> (" + (D.cf.delta >= 0 ? "+" : "") + D.cf.delta + " · " + D.cf.n + " 场 rated)");
         line("AtCoder     <b>" + D.ac.now + "</b> (" + (D.ac.delta >= 0 ? "+" : "") + D.ac.delta + " · " + D.ac.n + " 场 rated)");
         line("复盘场次    <b>" + D.contests + "</b>");
-        line("待补题目    <b>" + (D.wrong + D.skip) + "</b> (🔥没写对 " + D.wrong + " · 🧊没尝试 " + D.skip + " · ✅已补 " + D.done + ")");
+        line("待补题目    <b>" + (D.wrong + D.skip) + "</b> (🔥" + D.wrong + " · 🧊" + D.skip + " · ✅" + D.done + ")");
       },
       neofetch: function () {
-        line("<pre class='t-pre'>      ▲\n     ▲ ▲       nirvana@blog\n    ▲   ▲      ────────────\n   ▲ ▲ ▲ ▲     OS:      Hugo + Blowfish\n     ▲ ▲       Shell:   home-term v1\n                CF/AC:   " + D.cf.now + " / " + D.ac.now + "\n                待补:    " + (D.wrong + D.skip) + " 题</pre>");
+        line("<pre class='t-pre'>      ▲\n     ▲ ▲       nirvana@blog\n    ▲   ▲      ────────────\n   ▲ ▲ ▲ ▲     OS:      Hugo + Blowfish\n     ▲ ▲       Shell:   home-term v2\n                CF/AC:   " + D.cf.now + " / " + D.ac.now + "\n                待补:    " + (D.wrong + D.skip) + " 题\n                成就:    " + Object.keys(achList()).length + "/" + Object.keys(ACHS).length + "</pre>");
       },
       cf: function () {
         line("Codeforces: <b>" + D.cf.now + "</b>（" + (D.cf.delta >= 0 ? "+" : "") + D.cf.delta + "）最近 " + esc(D.cf.last || "—") + "，共 " + D.cf.n + " 场 rated");
@@ -168,37 +239,134 @@
       guide: function () { line('→ <a href="/omori/modding-guide/">打开模组指南</a>'); },
       omori: function () {
         var on = document.documentElement.classList.toggle("ws-mode");
-        if (on) line('<span class="t-ws">[WHITE SPACE] …… 这里什么都没有。输入 omori 回到现实。</span>');
+        if (on) { line('<span class="t-ws">[WHITE SPACE] …… 这里什么都没有。输入 omori 回到现实。</span>'); unlock("white"); }
         else line("欢迎回来。");
       },
+      battle: function () { battleStart(); },
+      achievements: function () {
+        var got = achList();
+        line("成就进度 <b>" + Object.keys(got).length + "/" + Object.keys(ACHS).length + "</b>");
+        Object.keys(ACHS).forEach(function (id) {
+          line("  " + (got[id] ? "🏆" : "🔒") + " " + (got[id] ? "<b>" + esc(ACHS[id].name) + "</b>" : "???" ) +
+               ' <span class="t-dim">— ' + esc(ACHS[id].hint) + "</span>");
+        });
+      },
+      find: function (rest) {
+        var q = (rest || "").trim().toLowerCase();
+        if (!q) { line("用法：find 关键词 <span class='t-dim'>（标题或标签里搜）</span>"); return; }
+        var hits = (D.posts || []).filter(function (p) {
+          return (p.t + " " + (p.g || "")).toLowerCase().indexOf(q) >= 0;
+        });
+        if (!hits.length) { line("没找到「" + esc(rest) + "」相关的文章。", "t-err"); return; }
+        line("找到 " + hits.length + " 篇：");
+        hits.slice(0, 8).forEach(function (p) { line('  → <a href="' + p.u + '">' + esc(p.t) + "</a>"); });
+        unlock("librarian");
+      },
+      random: function () {
+        var ps = D.posts || [];
+        if (!ps.length) return;
+        var p = ps[Math.floor(Math.random() * ps.length)];
+        line("命运指向了：→ <a href='" + p.u + "'>" + esc(p.t) + "</a>");
+      },
       date: function () { line(new Date().toLocaleString("zh-CN")); },
-      ls: function () { line('<span class="t-ok">acm/</span>  <span class="t-ok">omori/</span>  <span class="t-ok">about/</span>  <span class="t-dim">search.md</span>  <span class="t-ws">setting_theme_core.css</span>'); },
+      ls: function () {
+        line('<span class="t-ok">acm/</span>  <span class="t-ok">omori/</span>  <span class="t-ok">about/</span>  <span class="t-dim">search.md</span>');
+      },
       clear: function () { body.innerHTML = ""; },
       echo: function (rest) { line(esc(rest) || ""); },
+
+      /* ===== 隐藏层 ===== */
+      "ls -a": function () {
+        CMDS.ls();
+        line('<span class="t-ws">.secret   setting_theme_core.css</span>');
+      },
+      cat: function (rest) {
+        if ((rest || "").trim() === ".secret") {
+          line('<span class="t-dim">「位相偏移了。这个站的角落里躺着一个说谎的文件——它自称 css，却不是。」</span>');
+          line('<span class="t-dim">（试试 xxd setting_theme_core.css）</span>');
+        } else if ((rest || "").indexOf("setting_theme_core") >= 0) {
+          line("cat: setting_theme_core.css: 二进制文件 <span class='t-dim'>（咦，css 会是二进制的吗？）</span>", "t-err");
+        } else line("cat: " + esc(rest || "?") + ": 没有那个文件", "t-err");
+      },
+      xxd: function (rest) {
+        if ((rest || "").indexOf("setting_theme_core") >= 0) {
+          line("<pre class='t-pre'>00000000  89 50 4e 47 0d 0a 1a 0a  00 00 00 0d 49 48 44 52  |.PNG....</pre>");
+          line("魔数 <b>89 50 4E 47</b> —— 这不是 CSS，是一张 <b>PNG 图片</b>。", "t-ok");
+          line('→ 它就藏在 <a href="/setting_theme_core.css">/setting_theme_core.css</a>。剩下的谜题，在现实里。');
+          unlock("seethru");
+        } else line("xxd: " + esc(rest || "?") + ": 没有那个文件", "t-err");
+      },
       sudo: function () { line('<span class="t-err">权限不足：这里的管理员本来就是你。</span>'); },
-      arg: function () { line('<span class="t-dim">something is watching ...</span>'); },
-      exit: function () { line('<span class="t-dim">出不去的。这里没有门。</span>'); }
+      rm: function (rest) {
+        if ((rest || "").indexOf("-rf") >= 0 && (rest || "").indexOf("/") >= 0) {
+          unlock("world");
+          win.classList.add("glitch");
+          line("<span class='t-err'>rm: 正在删除 /acm ... 完成</span>");
+          line("<span class='t-err'>rm: 正在删除 /omori ... 完成</span>");
+          line("<span class='t-err'>rm: 正在删除 成就/ 手办/ 高考成绩/ ... </span>");
+          setTimeout(function () {
+            line("<span class='t-err'>rm: 正在删除 你的博客 ...</span>");
+          }, 700);
+          setTimeout(function () {
+            win.classList.remove("glitch");
+            line("开个玩笑。你的数据一根毫毛都没少。", "t-ok");
+          }, 1600);
+        } else line("rm: 拒绝操作 <span class='t-dim'>（真想删的话你懂的）</span>", "t-err");
+      },
+      exit: function () { line('<span class="t-dim">出不去的。这里没有门。</span>'); },
+      reality: function () {
+        if (document.documentElement.classList.contains("ws-mode")) CMDS.omori();
+        else line('<span class="t-dim">你本来就在现实里。……是吗？</span>');
+      },
+      crt: function () {
+        var on = win.classList.toggle("crt");
+        line(on ? "扫描线已开启。" : "扫描线已关闭。");
+      }
     };
 
     function run(raw) {
       var s = raw.trim();
       if (!s) return;
-      line('<span class="term-prompt">❯</span> ' + esc(s), "t-in");
+      line('<span class="term-prompt">' + (mode === "battle" ? "⚔" : "❯") + "</span> " + esc(s), "t-in");
       hist.push(s); hi = hist.length;
+      if (mode === "battle") { battleTurn(s); unlock("first"); return; }
+      unlock("first");
       var sp = s.indexOf(" ");
-      var cmd = (sp < 0 ? s : s.slice(0, sp)).toLowerCase();
+      var head = (sp < 0 ? s : s.slice(0, sp));
       var rest = sp < 0 ? "" : s.slice(sp + 1);
-      if (CMDS[cmd]) CMDS[cmd](rest);
-      else line('command not found: ' + esc(cmd) + '  <span class="t-dim">（help 看看能干啥）</span>', "t-err");
+      if (CMDS[head.toLowerCase()]) CMDS[head.toLowerCase()](rest);
+      else if (head.toLowerCase() === "ls" && rest.trim() === "-a") CMDS["ls -a"]();
+      else line('command not found: ' + esc(head) + '  <span class="t-dim">（help 看看能干啥）</span>', "t-err");
     }
 
     input.addEventListener("keydown", function (e) {
       if (e.key === "Enter") { run(input.value); input.value = ""; }
       else if (e.key === "ArrowUp") { e.preventDefault(); if (hi > 0) { hi--; input.value = hist[hi] || ""; } }
       else if (e.key === "ArrowDown") { e.preventDefault(); if (hi < hist.length) { hi++; input.value = hist[hi] || ""; } }
+      else if (e.key === "Tab") {
+        e.preventDefault();
+        var v = input.value.trim().toLowerCase();
+        if (v && mode === "shell") {
+          var names = Object.keys(CMDS).filter(function (c) { return c.indexOf(" ") < 0 && c.indexOf(v) === 0; });
+          if (names.length === 1) input.value = names[0] + " ";
+          else if (names.length > 1) line('<span class="t-dim">' + names.join("  ") + "</span>");
+        }
+      }
     });
     win.addEventListener("click", function () {
       if (!window.getSelection().toString()) input.focus({ preventScroll: true });
+    });
+
+    /* ===== Konami 秘技 ===== */
+    var KONAMI = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+    var kidx = 0;
+    window.addEventListener("keydown", function (e) {
+      kidx = (e.key === KONAMI[kidx]) ? kidx + 1 : (e.key === KONAMI[0] ? 1 : 0);
+      if (kidx === KONAMI.length) {
+        kidx = 0;
+        line("🎮 <b>秘技发动</b> —— 三十条命已到账。", "t-ach");
+        unlock("kodachi");
+      }
     });
 
     /* 统计卡数字增长 */
@@ -216,7 +384,16 @@
     }, { threshold: 0.4 });
     document.querySelectorAll(".stat-num").forEach(function (el) { io.observe(el); });
 
-    boot();
+    /* 开机 */
+    var lines = [
+      ["Nirvana Celeste Space  ·  home-terminal v2", "t-sys"],
+      ["You have been living here for as long as you can remember.", "t-dim"],
+      ["输入 help 查看命令 · ↑↓ 翻历史 · Tab 补全", "t-ok"]
+    ];
+    var k = 0;
+    (function next() {
+      if (k < lines.length) { typeLine(lines[k][0], lines[k][1], function(){ k++; setTimeout(next, 120); }); }
+    })();
   })();
   </script>
 {{ end }}
