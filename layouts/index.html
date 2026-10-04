@@ -26,16 +26,6 @@
         <input id="ht-input" autocomplete="off" spellcheck="false" enterkeyhint="send" aria-label="终端输入">
       </div>
     </div>
-    <div class="term-chips" aria-label="快捷命令">
-      <button class="t-chip" data-cmd="help">help</button>
-      <button class="t-chip" data-cmd="ls">ls</button>
-      <button class="t-chip" data-cmd="cd album">cd album</button>
-      <button class="t-chip" data-cmd="cd door">cd door</button>
-      <button class="t-chip" data-cmd="cd letters">cd letters</button>
-      <button class="t-chip" data-cmd="cd acm">cd acm</button>
-      <button class="t-chip" data-cmd="cd omori">cd omori</button>
-      <button class="t-chip" data-cmd="whoami">whoami</button>
-    </div>
   </section>
 
   <script>
@@ -147,17 +137,10 @@
       if (!window.getSelection().toString()) input.focus({ preventScroll: true });
     });
 
-    document.querySelectorAll(".t-chip").forEach(function (ch) {
-      ch.addEventListener("click", function () {
-        run(ch.dataset.cmd || "");
-        input.focus({ preventScroll: true });
-      });
-    });
-
     var lines = [
       ["Nirvana Celeste Space", "t-sys"],
       ["You have been living here for as long as you can remember.", "t-dim"],
-      ["输入 help · 或点下方的快捷命令", "t-ok"]
+      ["输入 help 查看命令", "t-ok"]
     ];
     var k = 0;
     (function next() {
@@ -165,14 +148,6 @@
     })();
   })();
   </script>
-
-      <p class="text-sm opacity-70">12 章完整中文翻译教程 · 环境搭建到插件开发 · 模组《未竟之事》开发日志</p>
-    </a>
-    <a href="/acm/" class="block p-6 border-2 rounded-xl shadow-sm hover:shadow-lg transition bg-white/80 dark:bg-neutral-800/80 border-neutral-200 dark:border-neutral-700">
-      <div class="text-xl font-bold mb-1">💻 算法竞赛复盘</div>
-      <p class="text-sm opacity-70">ABC / Codeforces / 牛客 题解 · 补题清单 · rating 走势 · 持续更新</p>
-    </a>
-  </div>
 
   {{/* ===== 迷你终端（伏笔层，~ 或 SOMETHING 唤出） ===== */}}
   <div class="term-window mini-term hidden" id="mini-term" aria-hidden="true">

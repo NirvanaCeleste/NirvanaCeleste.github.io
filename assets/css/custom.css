@@ -367,13 +367,6 @@ html.ws-mode .home-term { background:#0a0a0a; }
 .ts-cell i.warn { color:#f2cc60; }
 .ts-cell:hover { background:rgba(154,111,240,.18); color:#fff; }
 .ts-right { margin-left:auto; color:#5f5f72; white-space:nowrap; }
-/* 快捷命令 chips */
-.term-chips { display:flex; flex-wrap:wrap; gap:.5em; justify-content:center; margin-top:.9em; }
-.t-chip { font-family:Consolas,"Cascadia Mono",monospace; font-size:.8em;
-  color:#c9c9dd; background:rgba(20,20,26,.8); border:1px solid rgba(154,111,240,.35);
-  border-radius:999px; padding:.32em .95em; cursor:pointer; transition:all .15s; }
-.t-chip:hover { background:rgba(154,111,240,.22); color:#fff; transform:translateY(-2px);
-  box-shadow:0 5px 14px rgba(154,111,240,.25); }
 @media (max-width:900px) {
   .home-term { height:420px; }
 }
