@@ -502,3 +502,73 @@ html.ws-mode .home-term { background:#0a0a0a; }
 @media (max-width:900px) {
   .home-term { min-height:300px; max-height:400px; }
 }
+
+/* ---------- /space/ BLACK SPACE（OMORI 官网语汇） ---------- */
+.bs-page { width:100%; max-width:1400px; margin:0 auto; }
+.bs-room { position:relative; border-radius:16px; overflow:hidden; min-height:560px;
+  background:#050507; border:1px solid rgba(255,255,255,.10); }
+.bs-room::after { content:attr(data-hover); position:absolute; left:16px; top:12px;
+  color:rgba(255,255,255,.35); font-size:.8em; font-family:Consolas,monospace;
+  letter-spacing:.1em; }
+.bs-svg { width:100%; height:560px; display:block; }
+.bs-stroke { fill:none; stroke:rgba(255,255,255,.78); stroke-width:3; stroke-linecap:round; }
+.bs-sketch2 { stroke:rgba(255,255,255,.25); stroke-width:2; }
+.bs-fill { fill:rgba(255,255,255,.85); }
+.bs-floor { stroke:rgba(255,255,255,.16); stroke-width:2; }
+.bs-item { cursor:pointer; transition:opacity .3s, transform .18s; transform-box:fill-box; transform-origin:center; }
+.bs-item:hover { transform:scale(1.05); }
+.bs-door rect:first-child { fill:#050507; }
+.bs-door:hover rect:first-child { fill:rgba(255,255,255,.06); }
+.bs-bulb2 { fill:#0a0a0c; stroke:rgba(255,255,255,.7); stroke-width:2; transition:.4s; }
+.bs-room.lit .bs-bulb2 { fill:#fff3b0; stroke:#ffe066;
+  filter:drop-shadow(0 0 22px rgba(255,224,102,.85)); }
+.bs-room.lit { background:#0a0a0c; }
+.bs-knife { opacity:.35; }
+.bs-knife:hover { opacity:.95; }
+.bs-shadow .bs-ghost2 { fill:#000; stroke:rgba(255,255,255,.07); stroke-width:1.5; }
+.bs-shadow { opacity:.5; }
+.bs-shadow:hover { opacity:1; }
+.bs-shadow .bs-eyebg { fill:#050507; stroke:rgba(255,255,255,.25); stroke-width:1; }
+.bs-back { position:absolute; left:16px; bottom:14px; color:rgba(255,255,255,.4);
+  font-family:Consolas,monospace; font-size:.8em; text-decoration:none; }
+.bs-back:hover { color:rgba(255,255,255,.85); }
+/* OMORI 对话框（官网同款：白底黑框 + 名字牌 + ▼） */
+.bs-dlg { position:absolute; left:50%; bottom:26px; transform:translate(-50%, 10px);
+  width:min(640px, 90%); background:#fff; border:3px solid #111; border-radius:6px 16px 14px 8px;
+  padding:1.5em 1.2em .9em; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; }
+.bs-dlg.on { opacity:1; transform:translate(-50%, 0); pointer-events:auto; cursor:pointer; }
+.bs-dlg-name { position:absolute; left:14px; top:-16px; background:#111; color:#fff;
+  font-size:.78em; font-weight:800; letter-spacing:.18em; padding:.25em .8em; border-radius:4px; }
+.bs-dlg-text { color:#111; font-weight:700; font-size:1.02em; line-height:1.7; min-height:1.7em; }
+.bs-dlg-next { position:absolute; right:14px; bottom:6px; color:#111; font-size:.8em;
+  animation:bsNext 1s steps(2) infinite; }
+@keyframes bsNext { 0%{opacity:1} 50%{opacity:.15} 100%{opacity:1} }
+@media (max-width:640px) { .bs-svg { height:440px; } .bs-room { min-height:440px; } }
+
+/* ---------- /save/ 存档点（UNDERTALE 官网语汇） ---------- */
+.ut-page { width:100%; max-width:900px; margin:0 auto; }
+.ut-stage { position:relative; display:flex; flex-direction:column; align-items:center;
+  min-height:560px; padding:4.5em 1.2em 3em; border-radius:16px;
+  background:#050507; border:1px solid rgba(255,255,255,.10); }
+.ut-star-wrap { cursor:pointer; outline:none; }
+.ut-star { width:84px; height:84px; display:block;
+  animation:utBlink 1.6s steps(2) infinite; }
+.ut-star-poly { fill:#fff; filter:drop-shadow(0 0 18px rgba(255,255,255,.65)); }
+.ut-star-wrap.saved .ut-star-poly { fill:#ffe066;
+  filter:drop-shadow(0 0 34px rgba(255,224,102,.95)); }
+.ut-star-wrap.saved .ut-star { animation:utPop .5s ease; }
+@keyframes utBlink { 0%{opacity:1} 50%{opacity:.55} 100%{opacity:1} }
+@keyframes utPop { 0%{transform:scale(1)} 40%{transform:scale(1.28)} 100%{transform:scale(1)} }
+.ut-menu { display:flex; gap:2.2em; margin-top:2.6em; flex-wrap:wrap; justify-content:center; }
+.ut-btn { background:transparent; border:none; color:rgba(255,255,255,.6);
+  font-family:"Courier New",Consolas,monospace; font-weight:800; font-size:1.12em;
+  letter-spacing:.08em; cursor:pointer; padding:.3em .4em; }
+.ut-btn:hover, .ut-btn.sel { color:#ffe066; text-shadow:0 0 12px rgba(255,224,102,.5); }
+.ut-text { margin-top:2em; color:#fff; font-family:"Courier New",Consolas,monospace;
+  font-size:.98em; line-height:1.8; min-height:2em; text-align:center; max-width:560px; }
+.ut-panel { margin-top:1em; width:100%; display:flex; justify-content:center; }
+.ut-stat-pre { color:rgba(255,255,255,.82); font-family:"Courier New",Consolas,monospace;
+  font-size:.95em; line-height:1.9; white-space:pre; }
+.ut-back { position:absolute; left:16px; bottom:14px; color:rgba(255,255,255,.4);
+  font-family:Consolas,monospace; font-size:.8em; text-decoration:none; }
+.ut-back:hover { color:rgba(255,255,255,.85); }

@@ -1,0 +1,113 @@
+{{ define "main" }}
+  {{/* 角色属性：比赛当 LV，赛中过题当 EXP，rating 当 ATK/DEF */}}
+  {{ $posts := where site.RegularPages "Section" "acm" }}
+  {{ $posts = where $posts "Params.upsolve" "!=" nil }}
+  {{ $lv := len $posts }}
+  {{ $exp := 0 }}{{ $ups := 0 }}
+  {{ range $posts }}
+    {{ $letters := slice }}
+    {{ range findRESubmatch `<h2[^>]*>\s*([A-Za-z][0-9]?)[\.\s\x{3000}:-]` .Content 32 }}
+      {{ $letters = $letters | append (upper (index . 1)) }}
+    {{ end }}
+    {{ $st := dict }}
+    {{ range .Params.upsolve }}
+      {{ $st = merge $st (dict (upper .problem) .status) }}
+      {{ $letters = $letters | append (upper .problem) }}
+    {{ end }}
+    {{ range $letters | uniq }}
+      {{ if not (index $st .) }}{{ $exp = add $exp 1 }}{{ else }}{{ $ups = add $ups 1 }}{{ end }}
+    {{ end }}
+  {{ end }}
+  {{ $atk := 0 }}
+  {{ if fileExists "static/data/cf-rating.json" }}
+    {{ $d := readFile "static/data/cf-rating.json" | transform.Unmarshal }}
+    {{ if gt (len $d) 0 }}{{ $atk = (index $d (sub (len $d) 1)).new }}{{ end }}
+  {{ end }}
+
+  <article class="ut-page">
+    <div class="ut-stage" id="ut-stage" aria-label="存档点">
+      <div class="ut-star-wrap" id="ut-star" role="button" tabindex="0" aria-label="存档">
+        <svg viewBox="0 0 64 64" class="ut-star">
+          <polygon points="32,4 37,24 58,24 41,37 47,58 32,45 17,58 23,37 6,24 27,24"
+            class="ut-star-poly" />
+        </svg>
+      </div>
+
+      <div class="ut-menu" id="ut-menu" role="menu" aria-label="菜单">
+        <button class="ut-btn" data-m="stat" role="menuitem">* STAT</button>
+        <button class="ut-btn" data-m="item" role="menuitem">* ITEM</button>
+        <button class="ut-btn" data-m="save" role="menuitem">* SAVE</button>
+      </div>
+
+      <div class="ut-text" id="ut-text" aria-live="polite"></div>
+      <div class="ut-panel" id="ut-panel"></div>
+
+      <a class="ut-back" href="/">❮ ~/home</a>
+    </div>
+  </article>
+
+  <script>
+  (function () {
+    "use strict";
+    var LV = {{ $lv }}, EXP = {{ $exp }}, UPS = {{ $ups }}, ATK = {{ $atk }};
+    var textEl = document.getElementById("ut-text");
+    var panelEl = document.getElementById("ut-panel");
+    var typeTimer = null;
+    function ut(text, done) {
+      clearInterval(typeTimer);
+      var i = 0;
+      textEl.textContent = "";
+      typeTimer = setInterval(function () {
+        if (i >= text.length) { clearInterval(typeTimer); if (done) done(); return; }
+        textEl.textContent += text[i++];
+      }, 30);
+    }
+
+    var KEY = "ut-determination";
+    function saves() { return parseInt(localStorage.getItem(KEY) || "0", 10) || 0; }
+
+    function doSave() {
+      var n = saves() + 1;
+      localStorage.setItem(KEY, String(n));
+      var star = document.getElementById("ut-star");
+      star.classList.add("saved");
+      setTimeout(function () { star.classList.remove("saved"); }, 800);
+      ut("＊ 你充满了决心。＊ 决心被记录了下来。（第 " + n + " 次）");
+    }
+
+    document.getElementById("ut-star").addEventListener("click", doSave);
+    document.getElementById("ut-star").addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); doSave(); }
+    });
+
+    document.querySelectorAll(".ut-btn").forEach(function (b) {
+      b.addEventListener("click", function () {
+        document.querySelectorAll(".ut-btn").forEach(function (x) { x.classList.remove("sel"); });
+        b.classList.add("sel");
+        var m = b.dataset.m;
+        if (m === "save") { panelEl.innerHTML = ""; doSave(); return; }
+        if (m === "stat") {
+          ut("＊ 这就是你自己。");
+          panelEl.innerHTML =
+            '<pre class="ut-stat-pre">NIRVANA    LV ' + LV + '\n' +
+            'HP #### 99    EXP ' + EXP + '\n' +
+            'ATK ' + ATK + '   DEF ——\n' +
+            'WEAPON: 键盘    ARMOR: 耳机\n' +
+            'GOLD: ' + UPS + 'G（欠着的题）</pre>';
+          return;
+        }
+        if (m === "item") {
+          ut("＊ 口袋里的东西。");
+          panelEl.innerHTML =
+            '<pre class="ut-stat-pre">＊ 奶油吐司     ×3\n' +
+            '＊ 凌晨三点的执念 ×1\n' +
+            '＊ Mewo 的毛      ×1\n' +
+            '＊ 没调完的 D 题   ×' + Math.max(1, UPS) + '</pre>';
+        }
+      });
+    });
+
+    setTimeout(function () { ut("＊ （这里闪烁着光芒。你充满了决心。）"); }, 500);
+  })();
+  </script>
+{{ end }}
