@@ -1,71 +1,12 @@
 {{ define "main" }}
   {{ .Content }}
 
-  {{/* ===== 数据汇聚 ===== */}}
-  {{ $cfNow := 0 }}{{ $cfDelta := 0 }}{{ $cfN := 0 }}{{ $cfLast := "" }}
-  {{ $acNow := 0 }}{{ $acDelta := 0 }}{{ $acN := 0 }}{{ $acLast := "" }}
-  {{ $cfHist := slice }}{{ $acHist := slice }}
-  {{ if fileExists "static/data/cf-rating.json" }}
-    {{ $d := readFile "static/data/cf-rating.json" | transform.Unmarshal }}
-    {{ if gt (len $d) 0 }}
-      {{ $l := index $d (sub (len $d) 1) }}
-      {{ $cfNow = $l.new }}{{ $cfDelta = sub $l.new $l.old }}{{ $cfN = len $d }}{{ $cfLast = $l.contest }}
-      {{ $cfHist = $d }}
-    {{ end }}
-  {{ end }}
-  {{ if fileExists "static/data/atcoder-rating.json" }}
-    {{ $d := readFile "static/data/atcoder-rating.json" | transform.Unmarshal }}
-    {{ if gt (len $d) 0 }}
-      {{ $l := index $d (sub (len $d) 1) }}
-      {{ $acNow = $l.new }}{{ $acDelta = sub $l.new $l.old }}{{ $acN = len $d }}{{ $acLast = $l.contest }}
-      {{ $acHist = $d }}
-    {{ end }}
-  {{ end }}
-  {{ $posts := where site.RegularPages "Section" "acm" }}
-  {{ $ups := where $posts "Params.upsolve" "!=" nil }}
-  {{ $wrong := 0 }}{{ $skip := 0 }}{{ $done := 0 }}
-  {{ $board := dict }}
-  {{ range $ups }}
-    {{ range .Params.upsolve }}
-      {{ if eq .status "wrong" }}{{ $wrong = add $wrong 1 }}
-      {{ else if eq .status "skip" }}{{ $skip = add $skip 1 }}
-      {{ else if eq .status "done" }}{{ $done = add $done 1 }}
-      {{ end }}
-      {{ $k := .problem }}
-      {{ $cur := index $board $k | default (dict "w" 0 "s" 0 "d" 0) }}
-      {{ if eq .status "wrong" }}{{ $cur = merge $cur (dict "w" (add (index $cur "w") 1)) }}
-      {{ else if eq .status "skip" }}{{ $cur = merge $cur (dict "s" (add (index $cur "s") 1)) }}
-      {{ else if eq .status "done" }}{{ $cur = merge $cur (dict "d" (add (index $cur "d") 1)) }}
-      {{ end }}
-      {{ $board = merge $board (dict $k $cur) }}
-    {{ end }}
-  {{ end }}
-  {{/* 每日活跃：该帖题号集合 = 正文 h2 ∪ upsolve，不在 upsolve 里 = 赛中过 */}}
-  {{ $days := dict }}
-  {{ range $ups }}
-    {{ $letters := slice }}
-    {{ range findRESubmatch `<h2[^>]*>\s*([A-Za-z][0-9]?)[\.\s\x{3000}:-]` .Content 32 }}
-      {{ $letters = $letters | append (upper (index . 1)) }}
-    {{ end }}
-    {{ $st := dict }}
-    {{ range .Params.upsolve }}
-      {{ $st = merge $st (dict (upper .problem) .status) }}
-      {{ $letters = $letters | append (upper .problem) }}
-    {{ end }}
-    {{ $ok := 0 }}
-    {{ range $letters | uniq }}
-      {{ if not (index $st .) }}{{ $ok = add $ok 1 }}{{ end }}
-    {{ end }}
-    {{ $k := .Date.Format "2006-01-02" }}
-    {{ $cur2 := index $days $k | default slice }}
-    {{ $days = merge $days (dict $k ($cur2 | append (dict "n" $ok "t" .Title "u" .RelPermalink))) }}
-  {{ end }}
   {{ $indexPosts := slice }}
   {{ range where site.RegularPages "Section" "in" (slice "acm" "omori") }}
     {{ $indexPosts = $indexPosts | append (dict "t" .Title "u" .RelPermalink "g" (delimit (.Params.tags | default slice) ",") ) }}
   {{ end }}
 
-  <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done "posts" $indexPosts "days" $days | jsonify | safeJS }}</script>
+  <script id="__home_data" type="application/json">{{ dict "posts" $indexPosts | jsonify | safeJS }}</script>
 
 
 
@@ -84,13 +25,6 @@
         <span class="term-prompt" id="ht-prompt">❯</span>
         <input id="ht-input" autocomplete="off" spellcheck="false" enterkeyhint="send" aria-label="终端输入">
       </div>
-      <div class="term-status" role="status">
-        <a class="ts-cell" href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">CF <b>{{ $cfNow }}</b><i class="{{ if ge $cfDelta 0 }}up{{ else }}down{{ end }}">{{ if ge $cfDelta 0 }}+{{ end }}{{ $cfDelta }}</i></a>
-        <a class="ts-cell" href="https://atcoder.jp/users/NirvanaCeleste" target="_blank" rel="noopener">AC <b>{{ $acNow }}</b><i class="{{ if ge $acDelta 0 }}up{{ else }}down{{ end }}">{{ if ge $acDelta 0 }}+{{ end }}{{ $acDelta }}</i></a>
-        <a class="ts-cell" href="/acm/">复盘 <b>{{ len $ups }}</b></a>
-        <a class="ts-cell" href="/acm/upsolve/">待补 <b>{{ add $wrong $skip }}</b><i class="warn">🔥{{ $wrong }}</i></a>
-        <span class="ts-right">UTF-8 · zh-CN</span>
-      </div>
     </div>
     <div class="term-chips" aria-label="快捷命令">
       <button class="t-chip" data-cmd="help">help</button>
@@ -98,6 +32,8 @@
       <button class="t-chip" data-cmd="cd album">cd album</button>
       <button class="t-chip" data-cmd="cd door">cd door</button>
       <button class="t-chip" data-cmd="cd letters">cd letters</button>
+      <button class="t-chip" data-cmd="cd acm">cd acm</button>
+      <button class="t-chip" data-cmd="cd omori">cd omori</button>
       <button class="t-chip" data-cmd="whoami">whoami</button>
     </div>
   </section>
@@ -137,7 +73,10 @@
     var ROOMS = {
       album: { path: "/album/" },
       door: { path: "/door/" },
-      letters: { path: "/letters/" }
+      letters: { path: "/letters/" },
+      acm: { path: "/acm/" },
+      omori: { path: "/omori/modding-guide/" },
+      about: { path: "/about/" }
     };
 
     function go(name) {
@@ -227,22 +166,6 @@
   })();
   </script>
 
-  {{/* ===== 活跃热力日历 ===== */}}
-  <section class="hm-panel" aria-label="活跃热力图">
-    <div class="chart-head">
-      <span class="chart-title">📅 活跃热力图</span>
-      <span class="hm-legend">
-        <i class="lv0"></i><i class="lv1"></i><i class="lv2"></i><i class="lv3"></i>
-        <span class="hm-legend-text">颜色 = 当天赛中过题数 · 能点进复盘</span>
-      </span>
-    </div>
-    <div class="hm-wrap" id="hm-wrap"></div>
-  </section>
-
-  {{/* ===== 双入口 ===== */}}
-  <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 mb-10">
-    <a href="/omori/modding-guide/" class="block p-6 border-2 rounded-xl shadow-sm hover:shadow-lg transition bg-white/80 dark:bg-neutral-800/80 border-neutral-200 dark:border-neutral-700">
-      <div class="text-xl font-bold mb-1">🎮 OMORI 模组制作指南</div>
       <p class="text-sm opacity-70">12 章完整中文翻译教程 · 环境搭建到插件开发 · 模组《未竟之事》开发日志</p>
     </a>
     <a href="/acm/" class="block p-6 border-2 rounded-xl shadow-sm hover:shadow-lg transition bg-white/80 dark:bg-neutral-800/80 border-neutral-200 dark:border-neutral-700">
@@ -266,9 +189,6 @@
       <input id="term-input" autocomplete="off" spellcheck="false" aria-label="终端输入">
     </div>
   </div>
-
-  {{/* OMORI 同款手绘对话框 tooltip */}}
-  <div class="omori-dlg" id="omori-dlg" aria-hidden="true"><span class="omori-dlg-text"></span></div>
 
   {{ partial "splash.html" . }}
 
@@ -304,30 +224,6 @@
     });
     function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
-    /* ============ OMORI 对话框（打字机） ============ */
-    var dlg = document.getElementById("omori-dlg");
-    var dlgText = dlg.querySelector(".omori-dlg-text");
-    var typeTimer = null;
-    function showDlg(text, ev) {
-      var x = Math.min(window.innerWidth - 270, ((ev && ev.clientX) || window.innerWidth / 2) + 14);
-      var y = Math.max(8, ((ev && ev.clientY) || window.innerHeight / 2) - 54);
-      if (x < 8) x = 8;
-      dlg.style.left = x + "px"; dlg.style.top = y + "px";
-      dlg.classList.add("show");
-      dlg.setAttribute("aria-hidden", "false");
-      clearInterval(typeTimer);
-      var i = 0;
-      dlgText.textContent = "";
-      typeTimer = setInterval(function () {
-        if (i >= text.length) { clearInterval(typeTimer); return; }
-        dlgText.textContent += text[i++];
-      }, 16);
-    }
-    function hideDlg() {
-      clearInterval(typeTimer);
-      dlg.classList.remove("show");
-      dlg.setAttribute("aria-hidden", "true");
-    }
     function line(html, cls) {
       var el = document.createElement("div");
       el.className = "t-line " + (cls || "");
@@ -385,76 +281,6 @@
       else if (TC[head]) TC[head](rest);
       else line('command not found: ' + esc(head), "t-err");
     });
-
-    /* ============ 活跃热力日历 ============ */
-    var NS = "http://www.w3.org/2000/svg";
-    var hmWrap = document.getElementById("hm-wrap");
-    var dayMap = {};
-    var dayKeys = Object.keys(D.days || {});
-    dayKeys.forEach(function (k) {
-      var n = 0;
-      (D.days[k] || []).forEach(function (r) { n += r.n; });
-      dayMap[k] = { n: n, rows: D.days[k] };
-    });
-    var C = 13, G = 3, DAYS = ["一", "", "三", "", "五", "", "日"];
-    var hEnd = new Date(); hEnd.setHours(0, 0, 0, 0);
-    var hKeys = dayKeys.sort();
-    var hFirst = hKeys.length ? new Date(hKeys[0] + "T00:00:00") : new Date(hEnd);
-    hFirst.setDate(hFirst.getDate() - 7);
-    hFirst.setDate(hFirst.getDate() - ((hFirst.getDay() + 6) % 7));
-    var weeks = Math.ceil((hEnd - hFirst) / (7 * 864e5)) + 1;
-    if (weeks < 8) weeks = 8;
-    var hm = document.createElementNS(NS, "svg");
-    hm.setAttribute("viewBox", "0 0 " + (weeks * (C + G) + 34) + " " + (7 * (C + G) + 18));
-    hm.setAttribute("class", "hm-svg");
-    for (var w = 0; w < weeks; w++) {
-      var mLbl = null;
-      for (var dd = 0; dd < 7; dd++) {
-        var cur = new Date(hFirst.getTime() + (w * 7 + dd) * 864e5);
-        if (cur > hEnd) continue;
-        var key = cur.getFullYear() + "-" + String(cur.getMonth() + 1).padStart(2, "0") + "-" + String(cur.getDate()).padStart(2, "0");
-        var rec = dayMap[key];
-        var lv = rec ? (rec.n >= 6 ? 3 : rec.n >= 3 ? 2 : 1) : 0;
-        var cell = document.createElementNS(NS, "rect");
-        cell.setAttribute("x", 34 + w * (C + G));
-        cell.setAttribute("y", 14 + dd * (C + G));
-        cell.setAttribute("width", C); cell.setAttribute("height", C); cell.setAttribute("rx", 3);
-        cell.setAttribute("class", "hm-cell lv" + lv + (rec ? " has" : ""));
-        if (rec) {
-          cell.style.cursor = "pointer";
-          (function (k2, r2) {
-            var link = r2.rows.length === 1 ? r2.rows[0].u : null;
-            cell.addEventListener("mouseenter", function (e) {
-              showDlg(k2 + "\n" + r2.rows.map(function (q) { return q.t + "：赛中过 " + q.n + " 题"; }).join("\n") + (link ? "\n点击打开复盘" : ""), e);
-            });
-            cell.addEventListener("mousemove", function (e) {
-              dlg.style.left = Math.max(8, Math.min(window.innerWidth - 270, e.clientX + 14)) + "px";
-              dlg.style.top = Math.max(8, e.clientY - 54) + "px";
-            });
-            cell.addEventListener("mouseleave", hideDlg);
-            if (link) cell.addEventListener("click", function () { window.location.href = link; });
-          })(key, rec);
-        }
-        hm.appendChild(cell);
-        if (dd === 0 && cur.getDate() <= 7) mLbl = cur;
-      }
-      if (mLbl) {
-        var mt = document.createElementNS(NS, "text");
-        mt.setAttribute("x", 34 + w * (C + G)); mt.setAttribute("y", 8);
-        mt.setAttribute("class", "hm-month");
-        mt.textContent = (mLbl.getMonth() + 1) + "月";
-        hm.appendChild(mt);
-      }
-    }
-    DAYS.forEach(function (d, i) {
-      if (!d) return;
-      var t = document.createElementNS(NS, "text");
-      t.setAttribute("x", 28); t.setAttribute("y", 14 + i * (C + G) + 10);
-      t.setAttribute("class", "hm-day"); t.setAttribute("text-anchor", "end");
-      t.textContent = d;
-      hm.appendChild(t);
-    });
-    hmWrap.appendChild(hm);
 
 
   })();
