@@ -1,5 +1,5 @@
 {{ define "main" }}
-  {{/* 角色属性：比赛当 LV，赛中过题当 EXP，rating 当 ATK/DEF */}}
+  {{/* 属性数据：比赛=场次，赛中过题=EXP，CF rating=ATK */}}
   {{ $posts := where site.RegularPages "Section" "acm" }}
   {{ $posts = where $posts "Params.upsolve" "!=" nil }}
   {{ $lv := len $posts }}
@@ -24,25 +24,22 @@
     {{ if gt (len $d) 0 }}{{ $atk = (index $d (sub (len $d) 1)).new }}{{ end }}
   {{ end }}
 
-  <article class="ut-page">
-    <div class="ut-stage" id="ut-stage" aria-label="存档点">
-      <div class="ut-star-wrap" id="ut-star" role="button" tabindex="0" aria-label="存档">
-        <svg viewBox="0 0 64 64" class="ut-star">
-          <polygon points="32,4 37,24 58,24 41,37 47,58 32,45 17,58 23,37 6,24 27,24"
-            class="ut-star-poly" />
-        </svg>
+  <article class="cp-page">
+    <div class="cp-stage" aria-label="检查点">
+      <button class="cp-prompt" id="cp-prompt" aria-label="记录">
+        <span class="cp-gt">❯</span><span class="cp-block" id="cp-block"></span>
+      </button>
+
+      <div class="cp-menu" role="menu" aria-label="命令">
+        <button class="cp-btn" data-m="stat">stat</button>
+        <button class="cp-btn" data-m="item">item</button>
+        <button class="cp-btn" data-m="save">save</button>
       </div>
 
-      <div class="ut-menu" id="ut-menu" role="menu" aria-label="菜单">
-        <button class="ut-btn" data-m="stat" role="menuitem">* STAT</button>
-        <button class="ut-btn" data-m="item" role="menuitem">* ITEM</button>
-        <button class="ut-btn" data-m="save" role="menuitem">* SAVE</button>
-      </div>
+      <div class="cp-text" id="cp-text" aria-live="polite"></div>
+      <div class="cp-panel" id="cp-panel"></div>
 
-      <div class="ut-text" id="ut-text" aria-live="polite"></div>
-      <div class="ut-panel" id="ut-panel"></div>
-
-      <a class="ut-back" href="/">❮ ~/home</a>
+      <a class="cp-back" href="/">❮ ~/home</a>
     </div>
   </article>
 
@@ -50,64 +47,60 @@
   (function () {
     "use strict";
     var LV = {{ $lv }}, EXP = {{ $exp }}, UPS = {{ $ups }}, ATK = {{ $atk }};
-    var textEl = document.getElementById("ut-text");
-    var panelEl = document.getElementById("ut-panel");
+    var textEl = document.getElementById("cp-text");
+    var panelEl = document.getElementById("cp-panel");
     var typeTimer = null;
-    function ut(text, done) {
+    function type(text) {
       clearInterval(typeTimer);
       var i = 0;
       textEl.textContent = "";
       typeTimer = setInterval(function () {
-        if (i >= text.length) { clearInterval(typeTimer); if (done) done(); return; }
+        if (i >= text.length) { clearInterval(typeTimer); return; }
         textEl.textContent += text[i++];
       }, 30);
     }
 
-    var KEY = "ut-determination";
-    function saves() { return parseInt(localStorage.getItem(KEY) || "0", 10) || 0; }
+    var KEY = "room-checkpoint";
+    function count() { return parseInt(localStorage.getItem(KEY) || "0", 10) || 0; }
 
     function doSave() {
-      var n = saves() + 1;
+      var n = count() + 1;
       localStorage.setItem(KEY, String(n));
-      var star = document.getElementById("ut-star");
-      star.classList.add("saved");
-      setTimeout(function () { star.classList.remove("saved"); }, 800);
-      ut("＊ 你充满了决心。＊ 决心被记录了下来。（第 " + n + " 次）");
+      var p = document.getElementById("cp-prompt");
+      p.classList.add("saved");
+      setTimeout(function () { p.classList.remove("saved"); }, 800);
+      type("已记录。这是第 " + n + " 次。");
     }
 
-    document.getElementById("ut-star").addEventListener("click", doSave);
-    document.getElementById("ut-star").addEventListener("keydown", function (e) {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); doSave(); }
-    });
+    document.getElementById("cp-prompt").addEventListener("click", doSave);
 
-    document.querySelectorAll(".ut-btn").forEach(function (b) {
+    document.querySelectorAll(".cp-btn").forEach(function (b) {
       b.addEventListener("click", function () {
-        document.querySelectorAll(".ut-btn").forEach(function (x) { x.classList.remove("sel"); });
+        document.querySelectorAll(".cp-btn").forEach(function (x) { x.classList.remove("sel"); });
         b.classList.add("sel");
         var m = b.dataset.m;
         if (m === "save") { panelEl.innerHTML = ""; doSave(); return; }
         if (m === "stat") {
-          ut("＊ 这就是你自己。");
+          type("这就是现在的你。");
           panelEl.innerHTML =
-            '<pre class="ut-stat-pre">NIRVANA    LV ' + LV + '\n' +
-            'HP #### 99    EXP ' + EXP + '\n' +
-            'ATK ' + ATK + '   DEF ——\n' +
-            'WEAPON: 键盘    ARMOR: 耳机\n' +
-            'GOLD: ' + UPS + 'G（欠着的题）</pre>';
+            '<pre class="cp-pre">场次     ' + LV + '\n' +
+            '过题     ' + EXP + '\n' +
+            'CF       ' + ATK + '\n' +
+            '欠着的   ' + UPS + ' 题</pre>';
           return;
         }
         if (m === "item") {
-          ut("＊ 口袋里的东西。");
+          type("带着的东西。");
           panelEl.innerHTML =
-            '<pre class="ut-stat-pre">＊ 奶油吐司     ×3\n' +
-            '＊ 凌晨三点的执念 ×1\n' +
-            '＊ Mewo 的毛      ×1\n' +
-            '＊ 没调完的 D 题   ×' + Math.max(1, UPS) + '</pre>';
+            '<pre class="cp-pre">半杯凉掉的水     ×1\n' +
+            '没写完的思路     ×3\n' +
+            '一根数据线       ×1\n' +
+            '欠着的题         ×' + Math.max(1, UPS) + '</pre>';
         }
       });
     });
 
-    setTimeout(function () { ut("＊ （这里闪烁着光芒。你充满了决心。）"); }, 500);
+    setTimeout(function () { type("在这里停一下。（点 ❮ 记录。）"); }, 500);
   })();
   </script>
 {{ end }}

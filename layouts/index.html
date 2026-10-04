@@ -140,8 +140,8 @@
 
     /* 可进入的页面（命令 = 门） */
     var ROOMS = {
-      space: { path: "/space/", desc: "黑色空间" },
-      save:  { path: "/save/",  desc: "存档点" }
+      space: { path: "/space/" },
+      save:  { path: "/save/" }
     };
 
     function go(name) {
@@ -167,10 +167,9 @@
         });
       },
       ls: function () {
-        Object.keys(ROOMS).forEach(function (k) {
-          line("<span class='t-ok'>" + (k + "/").padEnd(8, " ") + "</span>" + esc(ROOMS[k].desc));
-        });
-        line("<span class='t-dim'>blog.md</span>");
+        var out = [];
+        Object.keys(ROOMS).forEach(function (k) { out.push("<span class='t-ok'>" + k + "/</span>"); });
+        line(out.join("  ") + "  <span class='t-dim'>blog.md</span>");
       },
       cd: function (rest) {
         var name = (rest || "").trim().replace(/\/$/, "");

@@ -465,72 +465,77 @@ html.ws-mode .home-term { background:#0a0a0a; }
   .home-term { min-height:300px; max-height:400px; }
 }
 
-/* ---------- /space/ BLACK SPACE（OMORI 官网语汇） ---------- */
+/* ---------- /space/ 空房间（本站终端语言：深底 + 绿描线 + 紫悬停） ---------- */
 .bs-page { width:100%; max-width:1400px; margin:0 auto; }
 .bs-room { position:relative; border-radius:16px; overflow:hidden; min-height:560px;
-  background:#050507; border:1px solid rgba(255,255,255,.10); }
+  background:#0d0d12; border:1px solid rgba(154,111,240,.22);
+  font-family:Consolas,"Cascadia Mono","Courier New",monospace; }
 .bs-room::after { content:attr(data-hover); position:absolute; left:16px; top:12px;
-  color:rgba(255,255,255,.35); font-size:.8em; font-family:Consolas,monospace;
-  letter-spacing:.1em; }
+  color:rgba(126,231,135,.45); font-size:.8em; letter-spacing:.12em; }
 .bs-svg { width:100%; height:560px; display:block; }
-.bs-stroke { fill:none; stroke:rgba(255,255,255,.78); stroke-width:3; stroke-linecap:round; }
-.bs-sketch2 { stroke:rgba(255,255,255,.25); stroke-width:2; }
-.bs-fill { fill:rgba(255,255,255,.85); }
-.bs-floor { stroke:rgba(255,255,255,.16); stroke-width:2; }
-.bs-item { cursor:pointer; transition:opacity .3s, transform .18s; transform-box:fill-box; transform-origin:center; }
-.bs-item:hover { transform:scale(1.05); }
-.bs-door rect:first-child { fill:#050507; }
-.bs-door:hover rect:first-child { fill:rgba(255,255,255,.06); }
-.bs-bulb2 { fill:#0a0a0c; stroke:rgba(255,255,255,.7); stroke-width:2; transition:.4s; }
-.bs-room.lit .bs-bulb2 { fill:#fff3b0; stroke:#ffe066;
-  filter:drop-shadow(0 0 22px rgba(255,224,102,.85)); }
-.bs-room.lit { background:#0a0a0c; }
+.bs-stroke { fill:none; stroke:rgba(126,231,135,.7); stroke-width:3; stroke-linecap:round; }
+.bs-fill { fill:rgba(126,231,135,.8); }
+.bs-floor { stroke:rgba(255,255,255,.09); stroke-width:2; }
+.bs-item { cursor:pointer; transition:opacity .3s, transform .18s, filter .18s;
+  transform-box:fill-box; transform-origin:center; }
+.bs-item:hover { transform:scale(1.05);
+  filter:drop-shadow(0 0 10px rgba(154,111,240,.8)); }
+.bs-door rect:first-child { fill:#0d0d12; }
+.bs-door:hover rect:first-child { fill:rgba(126,231,135,.06); }
+.bs-bulb2 { fill:#0d0d12; stroke:rgba(126,231,135,.65); stroke-width:2; transition:.4s; }
+.bs-room.lit .bs-bulb2 { fill:#c9f2b0; stroke:#9fe87a;
+  filter:drop-shadow(0 0 20px rgba(159,232,122,.7)); }
+.bs-room.lit { background:#101016; }
 .bs-knife { opacity:.35; }
 .bs-knife:hover { opacity:.95; }
-.bs-shadow .bs-ghost2 { fill:#000; stroke:rgba(255,255,255,.07); stroke-width:1.5; }
+.bs-shadow .bs-ghost2 { fill:#08080b; stroke:rgba(255,255,255,.06); stroke-width:1.5; }
 .bs-shadow { opacity:.5; }
 .bs-shadow:hover { opacity:1; }
-.bs-shadow .bs-eyebg { fill:#050507; stroke:rgba(255,255,255,.25); stroke-width:1; }
+.bs-shadow .bs-eyebg { fill:#08080b; stroke:rgba(126,231,135,.2); stroke-width:1; }
 .bs-back { position:absolute; left:16px; bottom:14px; color:rgba(255,255,255,.4);
   font-family:Consolas,monospace; font-size:.8em; text-decoration:none; }
-.bs-back:hover { color:rgba(255,255,255,.85); }
-/* OMORI 对话框（官网同款：白底黑框 + 名字牌 + ▼） */
+.bs-back:hover { color:rgba(126,231,135,.9); }
+/* 控制台输出条（打字机） */
 .bs-dlg { position:absolute; left:50%; bottom:26px; transform:translate(-50%, 10px);
-  width:min(640px, 90%); background:#fff; border:3px solid #111; border-radius:6px 16px 14px 8px;
-  padding:1.5em 1.2em .9em; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; }
+  width:min(640px, 90%); background:rgba(13,13,18,.96);
+  border:1px solid rgba(154,111,240,.35); border-radius:10px;
+  padding:.85em 1.1em .7em; opacity:0; pointer-events:none;
+  transition:opacity .25s, transform .25s;
+  font-family:Consolas,"Cascadia Mono","Courier New",monospace; }
 .bs-dlg.on { opacity:1; transform:translate(-50%, 0); pointer-events:auto; cursor:pointer; }
-.bs-dlg-name { position:absolute; left:14px; top:-16px; background:#111; color:#fff;
-  font-size:.78em; font-weight:800; letter-spacing:.18em; padding:.25em .8em; border-radius:4px; }
-.bs-dlg-text { color:#111; font-weight:700; font-size:1.02em; line-height:1.7; min-height:1.7em; }
-.bs-dlg-next { position:absolute; right:14px; bottom:6px; color:#111; font-size:.8em;
+.bs-dlg-text { color:#d6d6e2; font-size:.95em; line-height:1.7; min-height:1.7em; }
+.bs-dlg-text::before { content:"» "; color:#7ee787; font-weight:700; }
+.bs-dlg-next { position:absolute; right:12px; bottom:6px; color:#7ee787; font-size:.8em;
   animation:bsNext 1s steps(2) infinite; }
 @keyframes bsNext { 0%{opacity:1} 50%{opacity:.15} 100%{opacity:1} }
 @media (max-width:640px) { .bs-svg { height:440px; } .bs-room { min-height:440px; } }
 
-/* ---------- /save/ 存档点（UNDERTALE 官网语汇） ---------- */
-.ut-page { width:100%; max-width:900px; margin:0 auto; }
-.ut-stage { position:relative; display:flex; flex-direction:column; align-items:center;
+/* ---------- /save/ 检查点（本站终端语言：提示符 + 方块光标） ---------- */
+.cp-page { width:100%; max-width:900px; margin:0 auto; }
+.cp-stage { position:relative; display:flex; flex-direction:column; align-items:center;
   min-height:560px; padding:4.5em 1.2em 3em; border-radius:16px;
-  background:#050507; border:1px solid rgba(255,255,255,.10); }
-.ut-star-wrap { cursor:pointer; outline:none; }
-.ut-star { width:84px; height:84px; display:block;
-  animation:utBlink 1.6s steps(2) infinite; }
-.ut-star-poly { fill:#fff; filter:drop-shadow(0 0 18px rgba(255,255,255,.65)); }
-.ut-star-wrap.saved .ut-star-poly { fill:#ffe066;
-  filter:drop-shadow(0 0 34px rgba(255,224,102,.95)); }
-.ut-star-wrap.saved .ut-star { animation:utPop .5s ease; }
-@keyframes utBlink { 0%{opacity:1} 50%{opacity:.55} 100%{opacity:1} }
-@keyframes utPop { 0%{transform:scale(1)} 40%{transform:scale(1.28)} 100%{transform:scale(1)} }
-.ut-menu { display:flex; gap:2.2em; margin-top:2.6em; flex-wrap:wrap; justify-content:center; }
-.ut-btn { background:transparent; border:none; color:rgba(255,255,255,.6);
-  font-family:"Courier New",Consolas,monospace; font-weight:800; font-size:1.12em;
-  letter-spacing:.08em; cursor:pointer; padding:.3em .4em; }
-.ut-btn:hover, .ut-btn.sel { color:#ffe066; text-shadow:0 0 12px rgba(255,224,102,.5); }
-.ut-text { margin-top:2em; color:#fff; font-family:"Courier New",Consolas,monospace;
-  font-size:.98em; line-height:1.8; min-height:2em; text-align:center; max-width:560px; }
-.ut-panel { margin-top:1em; width:100%; display:flex; justify-content:center; }
-.ut-stat-pre { color:rgba(255,255,255,.82); font-family:"Courier New",Consolas,monospace;
-  font-size:.95em; line-height:1.9; white-space:pre; }
-.ut-back { position:absolute; left:16px; bottom:14px; color:rgba(255,255,255,.4);
+  background:#0d0d12; border:1px solid rgba(154,111,240,.22);
+  font-family:Consolas,"Cascadia Mono","Courier New",monospace; }
+.cp-prompt { display:flex; align-items:center; gap:.18em; background:transparent;
+  border:none; cursor:pointer; padding:.2em .4em; }
+.cp-gt { color:#7ee787; font-size:3em; font-weight:700; }
+.cp-block { display:inline-block; width:.55em; height:2.4em;
+  background:#7ee787; animation:cpBlink 1.1s steps(2) infinite; }
+@keyframes cpBlink { 0%{opacity:1} 50%{opacity:0} 100%{opacity:1} }
+.cp-prompt.saved .cp-gt { color:#f2cc60; }
+.cp-prompt.saved .cp-block { background:#f2cc60; animation:cpPop .5s ease; }
+@keyframes cpPop { 0%{transform:scale(1)} 40%{transform:scale(1.35)} 100%{transform:scale(1)} }
+.cp-menu { display:flex; gap:1.8em; margin-top:2.4em; flex-wrap:wrap; justify-content:center; }
+.cp-btn { background:transparent; border:none; color:rgba(255,255,255,.45);
+  font-family:inherit; font-size:1.05em; cursor:pointer; padding:.25em .3em; }
+.cp-btn::before { content:"["; color:rgba(154,111,240,.5); }
+.cp-btn::after { content:"]"; color:rgba(154,111,240,.5); }
+.cp-btn:hover, .cp-btn.sel { color:#f2cc60; }
+.cp-text { margin-top:2em; color:#d6d6e2; font-size:.98em; line-height:1.8;
+  min-height:2em; text-align:center; max-width:560px; }
+.cp-panel { margin-top:1em; width:100%; display:flex; justify-content:center; }
+.cp-pre { color:rgba(214,214,226,.85); font-family:inherit; font-size:.95em;
+  line-height:1.9; white-space:pre; text-align:left; }
+.cp-back { position:absolute; left:16px; bottom:14px; color:rgba(255,255,255,.4);
   font-family:Consolas,monospace; font-size:.8em; text-decoration:none; }
-.ut-back:hover { color:rgba(255,255,255,.85); }
+.cp-back:hover { color:rgba(126,231,135,.9); }
