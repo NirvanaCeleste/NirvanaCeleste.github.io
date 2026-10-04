@@ -68,6 +68,7 @@
   <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast "hist" $cfHist) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast "hist" $acHist) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done "posts" $indexPosts "board" $board "days" $days | jsonify | safeJS }}</script>
 
   {{/* ===== 统计卡 ===== */}}
+  <section class="home-stats-wrap" aria-label="站点统计">
     <div class="home-stats">
       <a class="stat-card" href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">
         <div class="stat-num" data-val="{{ $cfNow }}">0</div>
@@ -87,6 +88,7 @@
       </a>
     </div>
   </section>
+
 
 
   {{/* ===== 明面终端：导航启动器（输命令进入页面） ===== */}}
@@ -237,7 +239,6 @@
       </div>
       <div class="chart-box" id="chart-box">
         <svg id="chart-svg" viewBox="0 0 640 200" preserveAspectRatio="none"></svg>
-        <div class="chart-tip" id="chart-tip"></div>
         <div class="chart-foot" id="chart-foot">悬停看点 · 能点进对应复盘</div>
       </div>
     </div>
@@ -440,7 +441,8 @@
       var vals = h.map(function (x) { return x.new; });
       var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
       if (mx - mn < 40) { mn -= 20; mx += 20; }
-      var W = 640, H = 200, pad = 14;
+      var W = Math.max(280, box.clientWidth || 640), H = 200, pad = 14;
+      chartSvg.setAttribute("viewBox", "0 0 " + W + " " + H);
       function X(i) { return pad + (W - 2 * pad) * (h.length === 1 ? 0.5 : i / (h.length - 1)); }
       function Y(v) { return H - pad - (H - 2 * pad) * (v - mn) / (mx - mn); }
       var pts = h.map(function (x, i) { return X(i).toFixed(1) + "," + Y(x.new).toFixed(1); }).join(" ");
@@ -488,30 +490,31 @@
       });
     });
     draw("cf");
+    var rsT;
+    window.addEventListener("resize", function () { clearTimeout(rsT); rsT = setTimeout(function () { draw(curTab); }, 150); });
 
     /* ============ 补题键盘 ============ */
     var kb = document.getElementById("kb-grid");
     var board = D.board || {};
-    var letters = [];
-    Object.keys(board).forEach(function (k) {
-      var m = k.match(/^([A-Z])(\d?)$/);
-      if (m) letters.push({ key: k, base: m[1], sub: m[2] || "", v: board[k] });
+    function statOf(k) { return board[k] || { w: 0, s: 0, d: 0 }; }
+    var row1 = ["A","B","C","D","E"].map(function (b) { return { key: b, base: b, sub: "", v: statOf(b) }; });
+    var specials = Object.keys(board).filter(function (k) { return /^[A-F]\d$/.test(k); }).sort();
+    var row2 = specials.concat(["F","G"]).map(function (k) {
+      var m = k.match(/^([A-Z])(\d)$/);
+      return { key: k, base: m ? m[1] : k, sub: m ? m[2] : "", v: statOf(k) };
     });
-    letters.sort(function (a, b) { return a.key < b.key ? -1 : 1; });
-    var ROW1 = "ABCDEF", rows = [];
-    var row1 = letters.filter(function (l) { return ROW1.indexOf(l.base) >= 0 && l.base !== "F"; });
-    var row2 = letters.filter(function (l) { return l.base === "F" || l.base === "G"; });
     [row1, row2].forEach(function (row) {
       if (!row.length) return;
       var r = document.createElement("div");
       r.className = "kb-row";
       row.forEach(function (l) {
-        var cls = l.v.w ? "wrong" : l.v.s ? "skip" : "ok";
+        var has = l.v.w + l.v.s + l.v.d > 0;
+        var cls = !has ? "none" : l.v.w ? "wrong" : l.v.s ? "skip" : "ok";
         var k = document.createElement("a");
         k.href = "/acm/upsolve/";
         k.className = "kb-key " + cls;
         k.innerHTML = l.base + (l.sub ? "<sub>" + l.sub + "</sub>" : "");
-        k.title = l.key + "：没写对 " + l.v.w + " · 没尝试 " + l.v.s + " · 已补 " + l.v.d;
+        k.title = has ? (l.key + "：没写对 " + l.v.w + " · 没尝试 " + l.v.s + " · 已补 " + l.v.d) : "暂无记录";
         r.appendChild(k);
       });
       kb.appendChild(r);

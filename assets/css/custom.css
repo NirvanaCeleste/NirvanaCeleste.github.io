@@ -264,6 +264,8 @@ html.ws-mode { filter:grayscale(1) contrast(1.06); transition:filter .8s ease; }
 .kb-key.ok { color:#2f9e50; border-color:rgba(47,158,80,.55); background:rgba(47,158,80,.08); }
 .kb-key.wrong { color:#e05252; border-color:rgba(224,82,82,.6); background:rgba(224,82,82,.10); }
 .kb-key.skip { color:#4f89d0; border-color:rgba(96,165,250,.5); background:rgba(96,165,250,.08); }
+.kb-key.none { color:rgba(120,120,140,.55); border-style:dashed;
+  border-color:rgba(120,120,140,.4); background:transparent; cursor:default; }
 .kb-key:hover { transform:translateY(-2px) scale(1.06); box-shadow:0 6px 16px rgba(0,0,0,.18); }
 .kb-legend { font-size:.74em; opacity:.75; display:flex; gap:.9em; flex-wrap:wrap; align-items:center; }
 .kb-dot { display:inline-block; width:.8em; height:.8em; border-radius:3px; margin-right:.25em; vertical-align:-1px; }
