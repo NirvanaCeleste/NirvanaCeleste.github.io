@@ -140,23 +140,25 @@
 
     /* 可进入的页面（命令 = 门） */
     var ROOMS = {
-      space: { path: "/space/",  desc: "黑色空间 · 手绘门与打字机对话" },
-      save:  { path: "/save/",   desc: "存档点 · 一颗闪烁的星（充满决心）" }
+      space: { path: "/space/" },
+      save:  { path: "/save/" }
     };
 
     function go(name) {
       var r = ROOMS[name];
       if (!r) { line("cd: 没有那个房间： " + esc(name), "t-err"); return; }
-      line("连接中 <span class='t-dim'>……</span> " + esc(r.desc));
+      line("连接中<span class='t-dim'>……</span>");
       setTimeout(function () { window.location.href = r.path; }, 420);
     }
 
     var CMDS = {
       help: function () {
-        line("可用：<span class='t-cmd'>cd open pwd whoami clear</span>");
+        line("可用：<span class='t-cmd'>ls cd open pwd whoami clear</span>");
+      },
+      ls: function () {
         var out = [];
-        Object.keys(ROOMS).forEach(function (k) { out.push("<span class='t-cmd'>" + k + "</span>"); });
-        line("房间：" + out.join("  ") + "  <span class='t-dim'>· cd 空格 + 房间名，进去。</span>");
+        Object.keys(ROOMS).forEach(function (k) { out.push("<span class='t-ok'>" + k + "/</span>"); });
+        line(out.join("  ") + "  <span class='t-dim'>blog.md</span>");
       },
       cd: function (rest) {
         var name = (rest || "").trim().replace(/\/$/, "");
