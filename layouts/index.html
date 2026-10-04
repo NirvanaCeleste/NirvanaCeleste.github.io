@@ -44,7 +44,7 @@
         <span class="term-dot" style="background:#febc2e"></span>
         <span class="term-dot" style="background:#28c840"></span>
         <span class="term-title">nirvana@blog: ~/home</span>
-        <span class="term-hint">输入 help · 有 7 个成就藏着</span>
+        <span class="term-hint">输入 help · 试试 battle / find</span>
       </div>
       <div class="term-body" id="term-body" aria-live="polite"></div>
       <div class="term-input-line">
@@ -98,28 +98,7 @@
     var D = {};
     try { D = JSON.parse(document.getElementById("__home_data").textContent) || {}; } catch (e) {}
 
-    /* ============ 成就系统 ============ */
-    var ACHS = {
-      first:   { name: "初次见面",   hint: "执行任意命令" },
-      white:   { name: "WHITE SPACE", hint: "进入那个地方" },
-      seethru: { name: "看穿伪装",   hint: "发现会说谎的文件" },
-      winner:  { name: "战胜 SOMETHING", hint: "在战斗中获胜" },
-      kodachi: { name: "上上下下左右左右BA", hint: "输入某个古老的秘技" },
-      world:   { name: "毁灭世界",   hint: "删除一切" },
-      librarian:{ name: "图书管理员", hint: "用 find 找到一篇文章" }
-    };
-    var ACHKEY = "home_ach_v1";
-    function achList() {
-      try { return JSON.parse(localStorage.getItem(ACHKEY) || "{}"); } catch (e) { return {}; }
-    }
-    function unlock(id) {
-      var a = achList();
-      if (a[id] || !ACHS[id]) return;
-      a[id] = Date.now();
-      localStorage.setItem(ACHKEY, JSON.stringify(a));
-      line("🏆 解锁成就 <b>「" + ACHS[id].name + "」</b> <span class='t-dim'>(" + Object.keys(achList()).length + "/" + Object.keys(ACHS).length + ")</span>", "t-ach");
-    }
-
+    /* ============ 终端状态 ============ */
     var hist = [], hi = -1, mode = "shell";
     var BTL = null;
 
@@ -177,7 +156,6 @@
         line(crit ? "<b>会心一击！</b>造成了 " + dmg + " 点伤害！" : "造成了 " + dmg + " 点伤害。");
         if (BTL.ehp <= 0) {
           line("SOMETHING 消散了。<span class='t-dim'>房间里安静下来。</span>", "t-ok");
-          unlock("winner");
           return battleEnd(true);
         }
       } else { line("<span class='t-dim'>（攻击 / 防御 / 逃走）</span>"); return; }
@@ -202,14 +180,14 @@
         [["help","这份菜单"],["whoami","我是谁"],["stats","站点数据"],["neofetch","系统信息"],
          ["cf","Codeforces 分数"],["at","AtCoder 分数"],["upsolve","补题清单"],
          ["find 词","搜索全站文章"],["random","随机来一篇"],["battle","和 SOMETHING 打一架"],
-         ["achievements","成就进度"],["acm","题解分区"],["omori","模组指南"],["date","现在时间"],
+         ["acm","题解分区"],["omori","模组指南"],["date","现在时间"],
          ["ls","看看有什么"],["clear","清屏"]].forEach(function (c) {
           line('  <span class="t-cmd">' + esc(c[0]) + '</span><span class="t-dim"> — ' + esc(c[1]) + "</span>");
         });
         line('<span class="t-dim">……以及没有写在这里的东西。隐藏命令数：未知。</span>');
       },
       whoami: function () {
-        line("<b>NirvanaCeleste</b>（张邵杰）");
+        line("<b>NirvanaCeleste</b>");
         line('<span class="t-dim">算法竞赛选手 · OMORI 模组作者 · 有几个秘密藏在站里</span>');
         line('→ <a href="/about/">关于页</a>');
       },
@@ -220,7 +198,7 @@
         line("待补题目    <b>" + (D.wrong + D.skip) + "</b> (🔥" + D.wrong + " · 🧊" + D.skip + " · ✅" + D.done + ")");
       },
       neofetch: function () {
-        line("<pre class='t-pre'>      ▲\n     ▲ ▲       nirvana@blog\n    ▲   ▲      ────────────\n   ▲ ▲ ▲ ▲     OS:      Hugo + Blowfish\n     ▲ ▲       Shell:   home-term v2\n                CF/AC:   " + D.cf.now + " / " + D.ac.now + "\n                待补:    " + (D.wrong + D.skip) + " 题\n                成就:    " + Object.keys(achList()).length + "/" + Object.keys(ACHS).length + "</pre>");
+        line("<pre class='t-pre'>      ▲\n     ▲ ▲       nirvana@blog\n    ▲   ▲      ────────────\n   ▲ ▲ ▲ ▲     OS:      Hugo + Blowfish\n     ▲ ▲       Shell:   home-term v2\n                CF/AC:   " + D.cf.now + " / " + D.ac.now + "\n                待补:    " + (D.wrong + D.skip) + " 题\n                </pre>");
       },
       cf: function () {
         line("Codeforces: <b>" + D.cf.now + "</b>（" + (D.cf.delta >= 0 ? "+" : "") + D.cf.delta + "）最近 " + esc(D.cf.last || "—") + "，共 " + D.cf.n + " 场 rated");
@@ -239,18 +217,10 @@
       guide: function () { line('→ <a href="/omori/modding-guide/">打开模组指南</a>'); },
       omori: function () {
         var on = document.documentElement.classList.toggle("ws-mode");
-        if (on) { line('<span class="t-ws">[WHITE SPACE] …… 这里什么都没有。输入 omori 回到现实。</span>'); unlock("white"); }
+        if (on) { line('<span class="t-ws">[WHITE SPACE] …… 这里什么都没有。输入 omori 回到现实。</span>'); }
         else line("欢迎回来。");
       },
       battle: function () { battleStart(); },
-      achievements: function () {
-        var got = achList();
-        line("成就进度 <b>" + Object.keys(got).length + "/" + Object.keys(ACHS).length + "</b>");
-        Object.keys(ACHS).forEach(function (id) {
-          line("  " + (got[id] ? "🏆" : "🔒") + " " + (got[id] ? "<b>" + esc(ACHS[id].name) + "</b>" : "???" ) +
-               ' <span class="t-dim">— ' + esc(ACHS[id].hint) + "</span>");
-        });
-      },
       find: function (rest) {
         var q = (rest || "").trim().toLowerCase();
         if (!q) { line("用法：find 关键词 <span class='t-dim'>（标题或标签里搜）</span>"); return; }
@@ -260,7 +230,6 @@
         if (!hits.length) { line("没找到「" + esc(rest) + "」相关的文章。", "t-err"); return; }
         line("找到 " + hits.length + " 篇：");
         hits.slice(0, 8).forEach(function (p) { line('  → <a href="' + p.u + '">' + esc(p.t) + "</a>"); });
-        unlock("librarian");
       },
       random: function () {
         var ps = D.posts || [];
@@ -293,17 +262,15 @@
           line("<pre class='t-pre'>00000000  89 50 4e 47 0d 0a 1a 0a  00 00 00 0d 49 48 44 52  |.PNG....</pre>");
           line("魔数 <b>89 50 4E 47</b> —— 这不是 CSS，是一张 <b>PNG 图片</b>。", "t-ok");
           line('→ 它就藏在 <a href="/setting_theme_core.css">/setting_theme_core.css</a>。剩下的谜题，在现实里。');
-          unlock("seethru");
         } else line("xxd: " + esc(rest || "?") + ": 没有那个文件", "t-err");
       },
       sudo: function () { line('<span class="t-err">权限不足：这里的管理员本来就是你。</span>'); },
       rm: function (rest) {
         if ((rest || "").indexOf("-rf") >= 0 && (rest || "").indexOf("/") >= 0) {
-          unlock("world");
           win.classList.add("glitch");
           line("<span class='t-err'>rm: 正在删除 /acm ... 完成</span>");
           line("<span class='t-err'>rm: 正在删除 /omori ... 完成</span>");
-          line("<span class='t-err'>rm: 正在删除 成就/ 手办/ 高考成绩/ ... </span>");
+          line("<span class='t-err'>rm: 正在删除 手办/ 高考成绩/ 奖状/ ... </span>");
           setTimeout(function () {
             line("<span class='t-err'>rm: 正在删除 你的博客 ...</span>");
           }, 700);
@@ -329,8 +296,7 @@
       if (!s) return;
       line('<span class="term-prompt">' + (mode === "battle" ? "⚔" : "❯") + "</span> " + esc(s), "t-in");
       hist.push(s); hi = hist.length;
-      if (mode === "battle") { battleTurn(s); unlock("first"); return; }
-      unlock("first");
+      if (mode === "battle") { battleTurn(s); return; }
       var sp = s.indexOf(" ");
       var head = (sp < 0 ? s : s.slice(0, sp));
       var rest = sp < 0 ? "" : s.slice(sp + 1);
@@ -364,8 +330,7 @@
       kidx = (e.key === KONAMI[kidx]) ? kidx + 1 : (e.key === KONAMI[0] ? 1 : 0);
       if (kidx === KONAMI.length) {
         kidx = 0;
-        line("🎮 <b>秘技发动</b> —— 三十条命已到账。", "t-ach");
-        unlock("kodachi");
+        line("🎮 <b>秘技发动</b> —— 三十条命已到账。", "t-ok");
       }
     });
 

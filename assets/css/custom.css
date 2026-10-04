@@ -265,9 +265,6 @@ html.dark .stat-num { color:#b394f5; }
 html.ws-mode { filter:grayscale(1) contrast(1.06); transition:filter .8s ease; }
 html.ws-mode .term-window { background:#0a0a0a; }
 
-/* 成就提示行 */
-.t-ach { color:#f2cc60; font-weight:600; text-shadow:0 0 12px rgba(242,204,96,.35); }
-
 /* rm -rf 故障动画 */
 .term-window.glitch { animation:glitchShake .09s linear infinite; }
 .term-window.glitch .term-body { animation:glitchFlicker .12s steps(2) infinite; }
