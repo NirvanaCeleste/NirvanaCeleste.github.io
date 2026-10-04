@@ -40,12 +40,32 @@
       {{ $board = merge $board (dict $k $cur) }}
     {{ end }}
   {{ end }}
+  {{/* 每日活跃：该帖题号集合 = 正文 h2 ∪ upsolve，不在 upsolve 里 = 赛中过 */}}
+  {{ $days := dict }}
+  {{ range $ups }}
+    {{ $letters := slice }}
+    {{ range findRESubmatch `<h2[^>]*>\s*([A-Za-z][0-9]?)[\.\s\x{3000}:-]` .Content 32 }}
+      {{ $letters = $letters | append (upper (index . 1)) }}
+    {{ end }}
+    {{ $st := dict }}
+    {{ range .Params.upsolve }}
+      {{ $st = merge $st (dict (upper .problem) .status) }}
+      {{ $letters = $letters | append (upper .problem) }}
+    {{ end }}
+    {{ $ok := 0 }}
+    {{ range $letters | uniq }}
+      {{ if not (index $st .) }}{{ $ok = add $ok 1 }}{{ end }}
+    {{ end }}
+    {{ $k := .Date.Format "2006-01-02" }}
+    {{ $cur2 := index $days $k | default slice }}
+    {{ $days = merge $days (dict $k ($cur2 | append (dict "n" $ok "t" .Title "u" .RelPermalink))) }}
+  {{ end }}
   {{ $indexPosts := slice }}
   {{ range where site.RegularPages "Section" "in" (slice "acm" "omori") }}
     {{ $indexPosts = $indexPosts | append (dict "t" .Title "u" .RelPermalink "g" (delimit (.Params.tags | default slice) ",") ) }}
   {{ end }}
 
-  <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast "hist" $cfHist) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast "hist" $acHist) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done "posts" $indexPosts "board" $board | jsonify | safeJS }}</script>
+  <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast "hist" $cfHist) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast "hist" $acHist) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done "posts" $indexPosts "board" $board "days" $days | jsonify | safeJS }}</script>
 
   {{/* ===== WHITE SPACE 互动场景 + 统计卡 ===== */}}
   <section class="home-hero">
@@ -168,6 +188,18 @@
     </div>
   </section>
 
+  {{/* ===== 活跃热力日历 ===== */}}
+  <section class="hm-panel" aria-label="活跃热力图">
+    <div class="chart-head">
+      <span class="chart-title">📅 活跃热力图</span>
+      <span class="hm-legend">
+        <i class="lv0"></i><i class="lv1"></i><i class="lv2"></i><i class="lv3"></i>
+        <span class="hm-legend-text">颜色 = 当天赛中过题数 · 能点进复盘</span>
+      </span>
+    </div>
+    <div class="hm-wrap" id="hm-wrap"></div>
+  </section>
+
   {{/* ===== 双入口 ===== */}}
   <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 mb-10">
     <a href="/omori/modding-guide/" class="block p-6 border-2 rounded-xl shadow-sm hover:shadow-lg transition bg-white/80 dark:bg-neutral-800/80 border-neutral-200 dark:border-neutral-700">
@@ -195,6 +227,9 @@
       <input id="term-input" autocomplete="off" spellcheck="false" aria-label="终端输入">
     </div>
   </div>
+
+  {{/* OMORI 同款手绘对话框 tooltip */}}
+  <div class="omori-dlg" id="omori-dlg" aria-hidden="true"><span class="omori-dlg-text"></span></div>
 
   {{ partial "splash.html" . }}
 
@@ -264,6 +299,31 @@
       } else if (e.key === "Escape") { closeTerm(); }
     });
     function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+    /* ============ OMORI 对话框（打字机） ============ */
+    var dlg = document.getElementById("omori-dlg");
+    var dlgText = dlg.querySelector(".omori-dlg-text");
+    var typeTimer = null;
+    function showDlg(text, ev) {
+      var x = Math.min(window.innerWidth - 270, ((ev && ev.clientX) || window.innerWidth / 2) + 14);
+      var y = Math.max(8, ((ev && ev.clientY) || window.innerHeight / 2) - 54);
+      if (x < 8) x = 8;
+      dlg.style.left = x + "px"; dlg.style.top = y + "px";
+      dlg.classList.add("show");
+      dlg.setAttribute("aria-hidden", "false");
+      clearInterval(typeTimer);
+      var i = 0;
+      dlgText.textContent = "";
+      typeTimer = setInterval(function () {
+        if (i >= text.length) { clearInterval(typeTimer); return; }
+        dlgText.textContent += text[i++];
+      }, 16);
+    }
+    function hideDlg() {
+      clearInterval(typeTimer);
+      dlg.classList.remove("show");
+      dlg.setAttribute("aria-hidden", "true");
+    }
     function line(html, cls) {
       var el = document.createElement("div");
       el.className = "t-line " + (cls || "");
@@ -368,20 +428,25 @@
         c.style.cursor = "pointer";
         var delta = x.new - x.old;
         var post = findPost(x.contest || "", isAC);
-        c.addEventListener("mouseenter", function () {
-          chartTip.innerHTML = "<b>" + esc(x.contest) + "</b><br>" + x.new +
-            "（" + (delta >= 0 ? "+" : "") + delta + "）· rank " + x.rank +
-            (post ? "<br><span class='chart-go'>点击打开复盘 →</span>" : "");
-          chartTip.style.opacity = 1;
+        c.addEventListener("mouseenter", function (e) {
+          showDlg((x.contest || "?") + "\n" + x.new + "（" + (delta >= 0 ? "+" : "") + delta + "）· rank " + x.rank + (post ? "\n点击打开复盘" : ""), e);
         });
         c.addEventListener("mousemove", function (e) {
-          var r = box.getBoundingClientRect();
-          chartTip.style.left = Math.min(r.width - 150, e.clientX - r.left + 12) + "px";
-          chartTip.style.top = (e.clientY - r.top - 10) + "px";
+          var nx = Math.min(window.innerWidth - 270, e.clientX + 14);
+          var ny = Math.max(8, e.clientY - 54);
+          dlg.style.left = nx + "px"; dlg.style.top = ny + "px";
         });
-        c.addEventListener("mouseleave", function () { chartTip.style.opacity = 0; });
+        c.addEventListener("mouseleave", hideDlg);
         c.addEventListener("click", function () { if (post) window.location.href = post.u; });
         chartSvg.appendChild(c);
+        if (x.new === mx) {
+          var star = document.createElementNS(NS, "text");
+          star.setAttribute("x", X(i)); star.setAttribute("y", Y(x.new) - 10);
+          star.setAttribute("class", "chart-star");
+          star.setAttribute("text-anchor", "middle");
+          star.textContent = "★";
+          chartSvg.appendChild(star);
+        }
       });
     }
     document.querySelectorAll(".ctab").forEach(function (b) {
@@ -420,6 +485,75 @@
       });
       kb.appendChild(r);
     });
+
+    /* ============ 活跃热力日历 ============ */
+    var hmWrap = document.getElementById("hm-wrap");
+    var dayMap = {};
+    var dayKeys = Object.keys(D.days || {});
+    dayKeys.forEach(function (k) {
+      var n = 0;
+      (D.days[k] || []).forEach(function (r) { n += r.n; });
+      dayMap[k] = { n: n, rows: D.days[k] };
+    });
+    var C = 13, G = 3, DAYS = ["一", "", "三", "", "五", "", "日"];
+    var hEnd = new Date(); hEnd.setHours(0, 0, 0, 0);
+    var hKeys = dayKeys.sort();
+    var hFirst = hKeys.length ? new Date(hKeys[0] + "T00:00:00") : new Date(hEnd);
+    hFirst.setDate(hFirst.getDate() - 7);
+    hFirst.setDate(hFirst.getDate() - ((hFirst.getDay() + 6) % 7));
+    var weeks = Math.ceil((hEnd - hFirst) / (7 * 864e5)) + 1;
+    if (weeks < 8) weeks = 8;
+    var hm = document.createElementNS(NS, "svg");
+    hm.setAttribute("viewBox", "0 0 " + (weeks * (C + G) + 34) + " " + (7 * (C + G) + 18));
+    hm.setAttribute("class", "hm-svg");
+    for (var w = 0; w < weeks; w++) {
+      var mLbl = null;
+      for (var dd = 0; dd < 7; dd++) {
+        var cur = new Date(hFirst.getTime() + (w * 7 + dd) * 864e5);
+        if (cur > hEnd) continue;
+        var key = cur.getFullYear() + "-" + String(cur.getMonth() + 1).padStart(2, "0") + "-" + String(cur.getDate()).padStart(2, "0");
+        var rec = dayMap[key];
+        var lv = rec ? (rec.n >= 6 ? 3 : rec.n >= 3 ? 2 : 1) : 0;
+        var cell = document.createElementNS(NS, "rect");
+        cell.setAttribute("x", 34 + w * (C + G));
+        cell.setAttribute("y", 14 + dd * (C + G));
+        cell.setAttribute("width", C); cell.setAttribute("height", C); cell.setAttribute("rx", 3);
+        cell.setAttribute("class", "hm-cell lv" + lv + (rec ? " has" : ""));
+        if (rec) {
+          cell.style.cursor = "pointer";
+          (function (k2, r2) {
+            var link = r2.rows.length === 1 ? r2.rows[0].u : null;
+            cell.addEventListener("mouseenter", function (e) {
+              showDlg(k2 + "\n" + r2.rows.map(function (q) { return q.t + "：赛中过 " + q.n + " 题"; }).join("\n") + (link ? "\n点击打开复盘" : ""), e);
+            });
+            cell.addEventListener("mousemove", function (e) {
+              dlg.style.left = Math.max(8, Math.min(window.innerWidth - 270, e.clientX + 14)) + "px";
+              dlg.style.top = Math.max(8, e.clientY - 54) + "px";
+            });
+            cell.addEventListener("mouseleave", hideDlg);
+            if (link) cell.addEventListener("click", function () { window.location.href = link; });
+          })(key, rec);
+        }
+        hm.appendChild(cell);
+        if (dd === 0 && cur.getDate() <= 7) mLbl = cur;
+      }
+      if (mLbl) {
+        var mt = document.createElementNS(NS, "text");
+        mt.setAttribute("x", 34 + w * (C + G)); mt.setAttribute("y", 8);
+        mt.setAttribute("class", "hm-month");
+        mt.textContent = (mLbl.getMonth() + 1) + "月";
+        hm.appendChild(mt);
+      }
+    }
+    DAYS.forEach(function (d, i) {
+      if (!d) return;
+      var t = document.createElementNS(NS, "text");
+      t.setAttribute("x", 28); t.setAttribute("y", 14 + i * (C + G) + 10);
+      t.setAttribute("class", "hm-day"); t.setAttribute("text-anchor", "end");
+      t.textContent = d;
+      hm.appendChild(t);
+    });
+    hmWrap.appendChild(hm);
 
     /* ============ 统计卡数字增长 ============ */
     function countUp(el) {
