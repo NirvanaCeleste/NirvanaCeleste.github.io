@@ -65,34 +65,12 @@
     {{ $indexPosts = $indexPosts | append (dict "t" .Title "u" .RelPermalink "g" (delimit (.Params.tags | default slice) ",") ) }}
   {{ end }}
 
-  <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast "hist" $cfHist) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast "hist" $acHist) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done "posts" $indexPosts "board" $board "days" $days | jsonify | safeJS }}</script>
-
-  {{/* ===== 统计卡 ===== */}}
-  <section class="home-stats-wrap" aria-label="站点统计">
-    <div class="home-stats">
-      <a class="stat-card" href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">
-        <div class="stat-num" data-val="{{ $cfNow }}">0</div>
-        <div class="stat-label">Codeforces <span class="stat-delta {{ if ge $cfDelta 0 }}up{{ else }}down{{ end }}">{{ if ge $cfDelta 0 }}+{{ end }}{{ $cfDelta }}</span></div>
-      </a>
-      <a class="stat-card" href="https://atcoder.jp/users/NirvanaCeleste" target="_blank" rel="noopener">
-        <div class="stat-num" data-val="{{ $acNow }}">0</div>
-        <div class="stat-label">AtCoder <span class="stat-delta {{ if ge $acDelta 0 }}up{{ else }}down{{ end }}">{{ if ge $acDelta 0 }}+{{ end }}{{ $acDelta }}</span></div>
-      </a>
-      <a class="stat-card" href="/acm/">
-        <div class="stat-num" data-val="{{ len $ups }}">0</div>
-        <div class="stat-label">复盘场次</div>
-      </a>
-      <a class="stat-card" href="/acm/upsolve/">
-        <div class="stat-num" data-val="{{ add $wrong $skip }}">0</div>
-        <div class="stat-label">待补题目 🔥{{ $wrong }} · 🧊{{ $skip }}</div>
-      </a>
-    </div>
-  </section>
+  <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done "posts" $indexPosts "days" $days | jsonify | safeJS }}</script>
 
 
 
-  {{/* ===== 明面终端：导航启动器（输命令进入页面） ===== */}}
-  <section class="home-term-row" aria-label="交互终端">
+  {{/* ===== 明面终端：首页主角 ===== */}}
+  <section class="term-hero" aria-label="交互终端">
     <div class="term-window home-term" id="ht-window">
       <div class="term-bar">
         <span class="term-dot" style="background:#ff5f57"></span>
@@ -106,6 +84,21 @@
         <span class="term-prompt" id="ht-prompt">❯</span>
         <input id="ht-input" autocomplete="off" spellcheck="false" enterkeyhint="send" aria-label="终端输入">
       </div>
+      <div class="term-status" role="status">
+        <a class="ts-cell" href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">CF <b>{{ $cfNow }}</b><i class="{{ if ge $cfDelta 0 }}up{{ else }}down{{ end }}">{{ if ge $cfDelta 0 }}+{{ end }}{{ $cfDelta }}</i></a>
+        <a class="ts-cell" href="https://atcoder.jp/users/NirvanaCeleste" target="_blank" rel="noopener">AC <b>{{ $acNow }}</b><i class="{{ if ge $acDelta 0 }}up{{ else }}down{{ end }}">{{ if ge $acDelta 0 }}+{{ end }}{{ $acDelta }}</i></a>
+        <a class="ts-cell" href="/acm/">复盘 <b>{{ len $ups }}</b></a>
+        <a class="ts-cell" href="/acm/upsolve/">待补 <b>{{ add $wrong $skip }}</b><i class="warn">🔥{{ $wrong }}</i></a>
+        <span class="ts-right">UTF-8 · zh-CN</span>
+      </div>
+    </div>
+    <div class="term-chips" aria-label="快捷命令">
+      <button class="t-chip" data-cmd="help">help</button>
+      <button class="t-chip" data-cmd="ls">ls</button>
+      <button class="t-chip" data-cmd="cd album">cd album</button>
+      <button class="t-chip" data-cmd="cd door">cd door</button>
+      <button class="t-chip" data-cmd="cd letters">cd letters</button>
+      <button class="t-chip" data-cmd="whoami">whoami</button>
     </div>
   </section>
 
@@ -215,10 +208,17 @@
       if (!window.getSelection().toString()) input.focus({ preventScroll: true });
     });
 
+    document.querySelectorAll(".t-chip").forEach(function (ch) {
+      ch.addEventListener("click", function () {
+        run(ch.dataset.cmd || "");
+        input.focus({ preventScroll: true });
+      });
+    });
+
     var lines = [
       ["Nirvana Celeste Space", "t-sys"],
       ["You have been living here for as long as you can remember.", "t-dim"],
-      ["输入 help 查看命令", "t-ok"]
+      ["输入 help · 或点下方的快捷命令", "t-ok"]
     ];
     var k = 0;
     (function next() {
@@ -226,34 +226,6 @@
     })();
   })();
   </script>
-
-  {{/* ===== 可视化：rating 图表 + 补题键盘 ===== */}}
-  <section class="viz-row">
-    <div class="chart-panel">
-      <div class="chart-head">
-        <span class="chart-title">📈 Rating 走势</span>
-        <span class="chart-tabs">
-          <button class="ctab active" data-tab="cf">Codeforces</button>
-          <button class="ctab" data-tab="ac">AtCoder</button>
-        </span>
-      </div>
-      <div class="chart-box" id="chart-box">
-        <svg id="chart-svg" viewBox="0 0 640 200" preserveAspectRatio="none"></svg>
-        <div class="chart-foot" id="chart-foot">悬停看点 · 能点进对应复盘</div>
-      </div>
-    </div>
-    <div class="kb-panel">
-      <div class="chart-title">⌨ 补题键盘</div>
-      <div class="kb-grid" id="kb-grid"></div>
-      <div class="kb-legend">
-        <span class="kb-dot ok"></span>全过/已补
-        <span class="kb-dot wrong"></span>没写对
-        <span class="kb-dot skip"></span>没尝试
-        <span class="kb-dim"></span>无记录
-      </div>
-      <div class="kb-foot">点击键盘直达 <a href="/acm/upsolve/">补题清单</a></div>
-    </div>
-  </section>
 
   {{/* ===== 活跃热力日历 ===== */}}
   <section class="hm-panel" aria-label="活跃热力图">
@@ -414,113 +386,8 @@
       else line('command not found: ' + esc(head), "t-err");
     });
 
-    /* ============ Rating 交互图表 ============ */
-    var chartSvg = document.getElementById("chart-svg");
-    var chartTip = document.getElementById("chart-tip");
-    var chartFoot = document.getElementById("chart-foot");
-    var box = document.getElementById("chart-box");
-    var NS = "http://www.w3.org/2000/svg";
-    var curTab = "cf";
-    function findPost(contest, isAC) {
-      var ps = D.posts || [];
-        for (var i = 0; i < ps.length; i++) {
-          var t = ps[i].t || "";
-          if (isAC) {
-            var m = contest.match(/ABC (\d+)/);
-            if (m && t.indexOf("Contest " + m[1]) >= 0) return ps[i];
-          } else if (t.indexOf(contest) === 0) return ps[i];
-        }
-        return null;
-    }
-    function draw(tab) {
-      curTab = tab;
-      chartSvg.innerHTML = "";
-      var h = (tab === "cf" ? (D.cf.hist || []) : (D.ac.hist || []));
-      var isAC = tab === "ac";
-      if (!h.length) return;
-      var vals = h.map(function (x) { return x.new; });
-      var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
-      if (mx - mn < 40) { mn -= 20; mx += 20; }
-      var W = Math.max(280, box.clientWidth || 640), H = 200, pad = 14;
-      chartSvg.setAttribute("viewBox", "0 0 " + W + " " + H);
-      function X(i) { return pad + (W - 2 * pad) * (h.length === 1 ? 0.5 : i / (h.length - 1)); }
-      function Y(v) { return H - pad - (H - 2 * pad) * (v - mn) / (mx - mn); }
-      var pts = h.map(function (x, i) { return X(i).toFixed(1) + "," + Y(x.new).toFixed(1); }).join(" ");
-      var area = document.createElementNS(NS, "polygon");
-      area.setAttribute("points", pts + " " + X(h.length - 1).toFixed(1) + "," + (H - pad) + " " + X(0).toFixed(1) + "," + (H - pad));
-      area.setAttribute("class", "chart-area");
-      chartSvg.appendChild(area);
-      var pl = document.createElementNS(NS, "polyline");
-      pl.setAttribute("points", pts);
-      pl.setAttribute("class", "chart-line");
-      chartSvg.appendChild(pl);
-      h.forEach(function (x, i) {
-        var c = document.createElementNS(NS, "circle");
-        c.setAttribute("cx", X(i)); c.setAttribute("cy", Y(x.new)); c.setAttribute("r", 5);
-        c.setAttribute("class", "chart-dot" + (x.new === mx ? " max" : ""));
-        c.style.cursor = "pointer";
-        var delta = x.new - x.old;
-        var post = findPost(x.contest || "", isAC);
-        c.addEventListener("mouseenter", function (e) {
-          showDlg((x.contest || "?") + "\n" + x.new + "（" + (delta >= 0 ? "+" : "") + delta + "）· rank " + x.rank + (post ? "\n点击打开复盘" : ""), e);
-        });
-        c.addEventListener("mousemove", function (e) {
-          var nx = Math.min(window.innerWidth - 270, e.clientX + 14);
-          var ny = Math.max(8, e.clientY - 54);
-          dlg.style.left = nx + "px"; dlg.style.top = ny + "px";
-        });
-        c.addEventListener("mouseleave", hideDlg);
-        c.addEventListener("click", function () { if (post) window.location.href = post.u; });
-        chartSvg.appendChild(c);
-        if (x.new === mx) {
-          var star = document.createElementNS(NS, "text");
-          star.setAttribute("x", X(i)); star.setAttribute("y", Y(x.new) - 10);
-          star.setAttribute("class", "chart-star");
-          star.setAttribute("text-anchor", "middle");
-          star.textContent = "★";
-          chartSvg.appendChild(star);
-        }
-      });
-    }
-    document.querySelectorAll(".ctab").forEach(function (b) {
-      b.addEventListener("click", function () {
-        document.querySelectorAll(".ctab").forEach(function (x) { x.classList.remove("active"); });
-        b.classList.add("active");
-        draw(b.dataset.tab);
-      });
-    });
-    draw("cf");
-    var rsT;
-    window.addEventListener("resize", function () { clearTimeout(rsT); rsT = setTimeout(function () { draw(curTab); }, 150); });
-
-    /* ============ 补题键盘 ============ */
-    var kb = document.getElementById("kb-grid");
-    var board = D.board || {};
-    function statOf(k) { return board[k] || { w: 0, s: 0, d: 0 }; }
-    var row1 = ["A","B","C","D","E"].map(function (b) { return { key: b, base: b, sub: "", v: statOf(b) }; });
-    var specials = Object.keys(board).filter(function (k) { return /^[A-F]\d$/.test(k); }).sort();
-    var row2 = specials.concat(["F","G"]).map(function (k) {
-      var m = k.match(/^([A-Z])(\d)$/);
-      return { key: k, base: m ? m[1] : k, sub: m ? m[2] : "", v: statOf(k) };
-    });
-    [row1, row2].forEach(function (row) {
-      if (!row.length) return;
-      var r = document.createElement("div");
-      r.className = "kb-row";
-      row.forEach(function (l) {
-        var has = l.v.w + l.v.s + l.v.d > 0;
-        var cls = !has ? "none" : l.v.w ? "wrong" : l.v.s ? "skip" : "ok";
-        var k = document.createElement("a");
-        k.href = "/acm/upsolve/";
-        k.className = "kb-key " + cls;
-        k.innerHTML = l.base + (l.sub ? "<sub>" + l.sub + "</sub>" : "");
-        k.title = has ? (l.key + "：没写对 " + l.v.w + " · 没尝试 " + l.v.s + " · 已补 " + l.v.d) : "暂无记录";
-        r.appendChild(k);
-      });
-      kb.appendChild(r);
-    });
-
     /* ============ 活跃热力日历 ============ */
+    var NS = "http://www.w3.org/2000/svg";
     var hmWrap = document.getElementById("hm-wrap");
     var dayMap = {};
     var dayKeys = Object.keys(D.days || {});
@@ -589,20 +456,7 @@
     });
     hmWrap.appendChild(hm);
 
-    /* ============ 统计卡数字增长 ============ */
-    function countUp(el) {
-      var target = parseInt(el.dataset.val || "0", 10);
-      var t0 = performance.now(), dur = 900;
-      (function f(t) {
-        var p = Math.min(1, (t - t0) / dur);
-        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
-        if (p < 1) requestAnimationFrame(f);
-      })(t0);
-    }
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (en) { if (en.isIntersecting) { countUp(en.target); io.unobserve(en.target); } });
-    }, { threshold: 0.4 });
-    document.querySelectorAll(".stat-num").forEach(function (el) { io.observe(el); });
+
   })();
   </script>
 {{ end }}

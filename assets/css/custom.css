@@ -215,65 +215,11 @@ html.dark .upsolve-done  .upsolve-item { border-color:rgba(91,216,99,.4);  borde
 .chip-accent { background:linear-gradient(135deg, rgba(154,111,240,.18), rgba(91,216,99,.12)) !important;
   border-color:rgba(154,111,240,.55) !important; font-weight:700; }
 
-/* ---------- 首页：统计卡 ---------- */
-.home-stats { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:.8em; align-content:stretch; margin:.6em 0 1.4em; }
-@media (max-width:640px) { .home-stats { grid-template-columns:1fr 1fr; } }
-.stat-card { display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
-  padding:1em 1.1em; border-radius:14px; text-decoration:none !important;
-  border:1.5px solid rgba(154,111,240,.30);
-  background:linear-gradient(135deg, rgba(154,111,240,.09), rgba(96,165,250,.05));
-  transition:transform .15s, box-shadow .15s; }
-.stat-card:hover { transform:translateY(-3px); box-shadow:0 8px 22px rgba(154,111,240,.18); }
-.stat-num { font-size:1.9em; font-weight:800; line-height:1.1; color:#9a6ff0;
-  font-variant-numeric:tabular-nums; }
-html.dark .stat-num { color:#b394f5; }
-.stat-label { font-size:.78em; opacity:.75; margin-top:.25em; }
-.stat-delta.up { color:#3fbf62; font-weight:700; }
-.stat-delta.down { color:#eb5a5a; font-weight:700; }
 html.ws-mode { filter:grayscale(1) contrast(1.06); transition:filter .8s ease; }
 
-/* ---------- 首页：图表 + 补题键盘 ---------- */
-.viz-row { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr); gap:1em; margin:0 0 1.6em; }
-.chart-panel, .kb-panel { border:1.5px solid rgba(154,111,240,.28); border-radius:14px;
-  padding:1em 1.1em; background:linear-gradient(135deg, rgba(154,111,240,.06), rgba(96,165,250,.04)); }
+/* ---------- 首页面板通用（热力图沿用 head/title） ---------- */
 .chart-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:.5em; flex-wrap:wrap; gap:.4em; }
 .chart-title { font-weight:800; font-size:1.02em; }
-.chart-tabs { display:flex; gap:.35em; }
-.ctab { border:1.5px solid rgba(154,111,240,.4); background:transparent; color:inherit;
-  border-radius:8px; padding:.18em .7em; font-size:.8em; cursor:pointer; font-weight:600; }
-.ctab.active { background:rgba(154,111,240,.9); color:#fff; border-color:transparent; }
-.chart-box { position:relative; }
-#chart-svg { width:100%; height:200px; }
-.chart-line { fill:none; stroke:#9a6ff0; stroke-width:2.5; stroke-linejoin:round; }
-.chart-area { fill:rgba(154,111,240,.13); }
-.chart-dot { fill:#9a6ff0; stroke:#fff; stroke-width:1.5; transition:r .15s; }
-.chart-dot:hover, .chart-dot.max { r:7; }
-.chart-dot.max { fill:#f2cc60; }
-.chart-tip { position:absolute; opacity:0; pointer-events:none; z-index:5;
-  background:rgba(18,18,24,.94); color:#eee; border:1px solid rgba(255,255,255,.22);
-  padding:.45em .8em; border-radius:9px; font-size:.78em; line-height:1.5;
-  transition:opacity .15s; max-width:230px; }
-.chart-go { color:#8ab4ff; }
-.chart-foot, .kb-foot { font-size:.76em; opacity:.6; margin-top:.4em; }
-.kb-grid { display:flex; flex-direction:column; gap:.5em; margin:.7em 0 .6em; }
-.kb-row { display:flex; gap:.5em; flex-wrap:wrap; }
-.kb-key { display:inline-flex; align-items:center; justify-content:center;
-  min-width:2.6em; height:2.6em; border-radius:10px; font-weight:800; font-size:1.05em;
-  border:2px solid; text-decoration:none !important; transition:transform .12s, box-shadow .12s; }
-.kb-key sub { font-size:.55em; }
-.kb-key.ok { color:#2f9e50; border-color:rgba(47,158,80,.55); background:rgba(47,158,80,.08); }
-.kb-key.wrong { color:#e05252; border-color:rgba(224,82,82,.6); background:rgba(224,82,82,.10); }
-.kb-key.skip { color:#4f89d0; border-color:rgba(96,165,250,.5); background:rgba(96,165,250,.08); }
-.kb-key.none { color:rgba(120,120,140,.55); border-style:dashed;
-  border-color:rgba(120,120,140,.4); background:transparent; cursor:default; }
-.kb-key:hover { transform:translateY(-2px) scale(1.06); box-shadow:0 6px 16px rgba(0,0,0,.18); }
-.kb-legend { font-size:.74em; opacity:.75; display:flex; gap:.9em; flex-wrap:wrap; align-items:center; }
-.kb-dot { display:inline-block; width:.8em; height:.8em; border-radius:3px; margin-right:.25em; vertical-align:-1px; }
-.kb-dot.ok { background:rgba(47,158,80,.7); }
-.kb-dot.wrong { background:rgba(224,82,82,.75); }
-.kb-dot.skip { background:rgba(96,165,250,.7); }
-.kb-dim { display:inline-block; width:.8em; height:.8em; border-radius:3px;
-  border:1.5px dashed rgba(120,120,140,.5); margin-right:.25em; vertical-align:-1px; }
 
 /* ---------- 迷你终端（伏笔层） ---------- */
 .term-window { display:flex; flex-direction:column;
@@ -438,33 +384,49 @@ html.dark .omori-dlg::after, html.ws-mode .omori-dlg::after { background:#111;
 /* 折线峰值 ★ */
 .chart-star { fill:#f2cc60; font-size:14px; }
 
-/* ---------- 首页明面终端（home-term，自 3dd3aa8 移植） ---------- */
-.home-term-row { margin:.2em 0 1.4em; }
-.home-term { min-height:360px; max-height:460px; position:relative; }
+/* ---------- 首页明面终端（主角） ---------- */
+.term-hero { max-width:900px; margin:1.1em auto 1.6em; }
+.home-term { height:480px; position:relative; }
 html:not(.dark) .home-term { background:#141419; }
+.home-term .term-body { font-size:.95em; line-height:1.75; }
+.home-term:focus-within { border-color:rgba(154,111,240,.65);
+  box-shadow:0 0 0 3px rgba(154,111,240,.14), 0 18px 48px rgba(0,0,0,.42); }
 .term-body::-webkit-scrollbar { width:6px; }
 .term-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,.15); border-radius:3px; }
 html.ws-mode .home-term { background:#0a0a0a; }
-/* rm -rf 故障动画 */
-.term-window.glitch { animation:glitchShake .09s linear infinite; }
-.term-window.glitch .term-body { animation:glitchFlicker .12s steps(2) infinite; }
-@keyframes glitchShake { 0%{transform:translate(0,0)} 25%{transform:translate(1px,-1px)}
-  50%{transform:translate(-1px,1px)} 75%{transform:translate(1px,1px)} 100%{transform:translate(-1px,-1px)} }
-@keyframes glitchFlicker { 0%{opacity:1} 50%{opacity:.55} 100%{opacity:1} }
-/* CRT 扫描线（隐藏命令 crt 开启） */
-.term-window.crt::after { content:""; position:absolute; inset:0; pointer-events:none;
-  background:repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 3px); }
-/* 贪吃蛇画布 */
-.snake-pre { line-height:1.15; margin:.3em 0; letter-spacing:.05em; }
-/* matrix 数字雨 */
-.matrix-rain { position:absolute; inset:0; overflow:hidden; background:rgba(0,0,0,.92);
-  z-index:6; pointer-events:none; }
-.matrix-col { position:absolute; top:-60%; color:#39ff6a; opacity:.85;
-  font-family:Consolas,monospace; font-size:.85em; line-height:1.25; white-space:pre;
-  text-shadow:0 0 6px rgba(57,255,106,.55); animation:mfall linear forwards; }
-@keyframes mfall { to { top:105%; } }
+/* 输入框：隔绝主题全局 input 样式（紫边框/内边距问题修复） */
+.term-input-line input,
+.term-input-line #ht-input,
+.term-input-line #term-input {
+  background:transparent !important; border:none !important; outline:none !important;
+  box-shadow:none !important; padding:0 !important; margin:0 !important;
+  color:#f0f0f8; caret-color:#7ee787; font:inherit; border-radius:0;
+  min-height:0; height:1.7em; -webkit-appearance:none; appearance:none; }
+/* tmux 风状态栏（统计并入终端） */
+.term-status { display:flex; align-items:center; gap:.2em; padding:.45em .9em;
+  background:rgba(255,255,255,.05); border-top:1px solid rgba(255,255,255,.09);
+  font-family:Consolas,"Cascadia Mono",monospace; font-size:.78em; overflow-x:auto;
+  scrollbar-width:none; }
+.term-status::-webkit-scrollbar { display:none; }
+.ts-cell { display:inline-flex; align-items:baseline; gap:.4em; color:#b9b9c6;
+  text-decoration:none !important; padding:.25em .55em; border-radius:6px;
+  white-space:nowrap; transition:background .15s, color .15s; }
+.ts-cell b { color:#e6e6f0; font-weight:700; }
+.ts-cell i { font-style:normal; font-size:.88em; }
+.ts-cell i.up { color:#7ee787; }
+.ts-cell i.down { color:#ff7b72; }
+.ts-cell i.warn { color:#f2cc60; }
+.ts-cell:hover { background:rgba(154,111,240,.18); color:#fff; }
+.ts-right { margin-left:auto; color:#5f5f72; white-space:nowrap; }
+/* 快捷命令 chips */
+.term-chips { display:flex; flex-wrap:wrap; gap:.5em; justify-content:center; margin-top:.9em; }
+.t-chip { font-family:Consolas,"Cascadia Mono",monospace; font-size:.8em;
+  color:#c9c9dd; background:rgba(20,20,26,.8); border:1px solid rgba(154,111,240,.35);
+  border-radius:999px; padding:.32em .95em; cursor:pointer; transition:all .15s; }
+.t-chip:hover { background:rgba(154,111,240,.22); color:#fff; transform:translateY(-2px);
+  box-shadow:0 5px 14px rgba(154,111,240,.25); }
 @media (max-width:900px) {
-  .home-term { min-height:300px; max-height:400px; }
+  .home-term { height:420px; }
 }
 
 /* ---------- 房间共享（剧本场景页：终端语言） ---------- */
