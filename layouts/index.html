@@ -1,28 +1,222 @@
 {{ define "main" }}
   {{ .Content }}
-  
-  
 
-  <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 mb-10">
+  {{/* ===== 汇聚首页数据：rating + 补题统计 ===== */}}
+  {{ $cfNow := 0 }}{{ $cfDelta := 0 }}{{ $cfN := 0 }}{{ $cfLast := "" }}
+  {{ $acNow := 0 }}{{ $acDelta := 0 }}{{ $acN := 0 }}{{ $acLast := "" }}
+  {{ if fileExists "static/data/cf-rating.json" }}
+    {{ $d := readFile "static/data/cf-rating.json" | transform.Unmarshal }}
+    {{ if gt (len $d) 0 }}
+      {{ $l := index $d (sub (len $d) 1) }}
+      {{ $cfNow = $l.new }}{{ $cfDelta = sub $l.new $l.old }}{{ $cfN = len $d }}{{ $cfLast = $l.contest }}
+    {{ end }}
+  {{ end }}
+  {{ if fileExists "static/data/atcoder-rating.json" }}
+    {{ $d := readFile "static/data/atcoder-rating.json" | transform.Unmarshal }}
+    {{ if gt (len $d) 0 }}
+      {{ $l := index $d (sub (len $d) 1) }}
+      {{ $acNow = $l.new }}{{ $acDelta = sub $l.new $l.old }}{{ $acN = len $d }}{{ $acLast = $l.contest }}
+    {{ end }}
+  {{ end }}
+  {{ $posts := where site.RegularPages "Section" "acm" }}
+  {{ $ups := where $posts "Params.upsolve" "!=" nil }}
+  {{ $wrong := 0 }}{{ $skip := 0 }}{{ $done := 0 }}
+  {{ range $ups }}
+    {{ range .Params.upsolve }}
+      {{ if eq .status "wrong" }}{{ $wrong = add $wrong 1 }}
+      {{ else if eq .status "skip" }}{{ $skip = add $skip 1 }}
+      {{ else if eq .status "done" }}{{ $done = add $done 1 }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  <script id="__home_data" type="application/json">{{ dict "cf" (dict "now" $cfNow "delta" $cfDelta "n" $cfN "last" $cfLast) "ac" (dict "now" $acNow "delta" $acDelta "n" $acN "last" $acLast) "contests" (len $ups) "wrong" $wrong "skip" $skip "done" $done | jsonify | safeJS }}</script>
+
+  {{/* ===== 主角：交互终端 ===== */}}
+  <section class="home-hero">
+    <div class="term-window" id="term-window">
+      <div class="term-bar">
+        <span class="term-dot" style="background:#ff5f57"></span>
+        <span class="term-dot" style="background:#febc2e"></span>
+        <span class="term-dot" style="background:#28c840"></span>
+        <span class="term-title">nirvana@blog: ~/home</span>
+        <span class="term-hint">试试输入 help</span>
+      </div>
+      <div class="term-body" id="term-body" aria-live="polite"></div>
+      <div class="term-input-line">
+        <span class="term-prompt">❯</span>
+        <input id="term-input" autocomplete="off" spellcheck="false" enterkeyhint="send" aria-label="终端输入">
+      </div>
+    </div>
+
+    {{/* ===== 统计卡 ===== */}}
+    <div class="home-stats">
+      <a class="stat-card" href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">
+        <div class="stat-num" data-count="{{ $cfN }}" data-prefix="" data-val="{{ $cfNow }}">0</div>
+        <div class="stat-label">Codeforces <span class="stat-delta {{ if ge $cfDelta 0 }}up{{ else }}down{{ end }}">{{ if ge $cfDelta 0 }}+{{ end }}{{ $cfDelta }}</span></div>
+      </a>
+      <a class="stat-card" href="https://atcoder.jp/users/NirvanaCeleste" target="_blank" rel="noopener">
+        <div class="stat-num" data-val="{{ $acNow }}">0</div>
+        <div class="stat-label">AtCoder <span class="stat-delta {{ if ge $acDelta 0 }}up{{ else }}down{{ end }}">{{ if ge $acDelta 0 }}+{{ end }}{{ $acDelta }}</span></div>
+      </a>
+      <a class="stat-card" href="/acm/">
+        <div class="stat-num" data-val="{{ len $ups }}">0</div>
+        <div class="stat-label">复盘场次</div>
+      </a>
+      <a class="stat-card" href="/acm/upsolve/">
+        <div class="stat-num" data-val="{{ add $wrong $skip }}">0</div>
+        <div class="stat-label">待补题目 🔥{{ $wrong }} · 🧊{{ $skip }}</div>
+      </a>
+    </div>
+  </section>
+
+  {{/* ===== 双入口 ===== */}}
+  <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2 mb-10">
     <a href="/omori/modding-guide/" class="block p-6 border-2 rounded-xl shadow-sm hover:shadow-lg transition bg-white/80 dark:bg-neutral-800/80 border-neutral-200 dark:border-neutral-700">
       <div class="text-xl font-bold mb-1">🎮 OMORI 模组制作指南</div>
       <p class="text-sm opacity-70">12 章完整中文翻译教程 · 环境搭建到插件开发 · 模组《未竟之事》开发日志</p>
     </a>
     <a href="/acm/" class="block p-6 border-2 rounded-xl shadow-sm hover:shadow-lg transition bg-white/80 dark:bg-neutral-800/80 border-neutral-200 dark:border-neutral-700">
       <div class="text-xl font-bold mb-1">💻 算法竞赛复盘</div>
-      <p class="text-sm opacity-70">ABC / Codeforces / 牛客 题解 · 按平台与难度标签检索 · 持续更新</p>
+      <p class="text-sm opacity-70">ABC / Codeforces / 牛客 题解 · 补题清单 · rating 走势 · 持续更新</p>
     </a>
   </div>
 
-  <h2 class="mt-8 mb-4">最近发布</h2>
-  <div class="grid gap-4">
-    {{ range where .Site.RegularPages "Section" "in" .Site.Params.mainSections }}
-      <div class="p-4 border rounded shadow-sm">
-        <a href="{{ .RelPermalink }}" class="text-xl font-bold">{{ .Title }}</a>
-        <p class="text-sm text-gray-500">{{ .Date.Format "2006-01-02" }}</p>
-      </div>
-    {{ end }}
-  </div>
-
   {{ partial "splash.html" . }}
+
+  <script>
+  (function () {
+    "use strict";
+    var body = document.getElementById("term-body");
+    var input = document.getElementById("term-input");
+    var win = document.getElementById("term-window");
+    var D = {};
+    try { D = JSON.parse(document.getElementById("__home_data").textContent) || {}; } catch (e) {}
+    var hist = [], hi = -1;
+
+    function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+    function line(html, cls) {
+      var el = document.createElement("div");
+      el.className = "t-line " + (cls || "");
+      el.innerHTML = html;
+      body.appendChild(el);
+      body.scrollTop = body.scrollHeight;
+      return el;
+    }
+    function typeLine(text, cls, done) {
+      var el = line("", cls);
+      var i = 0;
+      (function tick() {
+        if (i <= text.length) {
+          el.textContent = text.slice(0, i);
+          i += 1 + Math.floor(Math.random() * 2);
+          body.scrollTop = body.scrollHeight;
+          setTimeout(tick, 14);
+        } else { el.textContent = text; if (done) done(); }
+      })();
+    }
+    function boot() {
+      var lines = [
+        ["Nirvana Celeste Space  ·  home-terminal v1", "t-sys"],
+        ["You have been living here for as long as you can remember.", "t-dim"],
+        ["输入 help 查看可用命令 · ↑↓ 翻历史", "t-ok"]
+      ];
+      var k = 0;
+      (function next() {
+        if (k < lines.length) { typeLine(lines[k][0], lines[k][1], function(){ k++; setTimeout(next, 120); }); }
+      })();
+    }
+
+    var CMDS = {
+      help: function () {
+        line("可用命令：");
+        [["help","这份菜单"],["whoami","我是谁"],["stats","站点数据"],["neofetch","系统信息"],
+         ["cf","Codeforces 分数"],["at","AtCoder 分数"],["upsolve","补题清单"],
+         ["acm","题解分区"],["omori","模组指南"],["date","现在时间"],["ls","看看有什么"],
+         ["clear","清屏"],["omori ...","还有别的入口吗？"]].forEach(function (c) {
+          line('  <span class="t-cmd">' + esc(c[0]) + '</span><span class="t-dim"> — ' + esc(c[1]) + "</span>");
+        });
+      },
+      whoami: function () {
+        line("<b>NirvanaCeleste</b>（张邵杰）");
+        line('<span class="t-dim">算法竞赛选手 · OMORI 模组作者 · ARG 爱好者</span>');
+        line('→ <a href="/about/">关于页</a>');
+      },
+      stats: function () {
+        line("Codeforces  <b>" + D.cf.now + "</b> (" + (D.cf.delta >= 0 ? "+" : "") + D.cf.delta + " · " + D.cf.n + " 场 rated)");
+        line("AtCoder     <b>" + D.ac.now + "</b> (" + (D.ac.delta >= 0 ? "+" : "") + D.ac.delta + " · " + D.ac.n + " 场 rated)");
+        line("复盘场次    <b>" + D.contests + "</b>");
+        line("待补题目    <b>" + (D.wrong + D.skip) + "</b> (🔥没写对 " + D.wrong + " · 🧊没尝试 " + D.skip + " · ✅已补 " + D.done + ")");
+      },
+      neofetch: function () {
+        line("<pre class='t-pre'>      ▲\n     ▲ ▲       nirvana@blog\n    ▲   ▲      ────────────\n   ▲ ▲ ▲ ▲     OS:      Hugo + Blowfish\n     ▲ ▲       Shell:   home-term v1\n                CF/AC:   " + D.cf.now + " / " + D.ac.now + "\n                待补:    " + (D.wrong + D.skip) + " 题</pre>");
+      },
+      cf: function () {
+        line("Codeforces: <b>" + D.cf.now + "</b>（" + (D.cf.delta >= 0 ? "+" : "") + D.cf.delta + "）最近 " + esc(D.cf.last || "—") + "，共 " + D.cf.n + " 场 rated");
+        line('→ <a href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">codeforces.com/profile/NirvanaCeleste</a>');
+      },
+      at: function () {
+        line("AtCoder: <b>" + D.ac.now + "</b>（" + (D.ac.delta >= 0 ? "+" : "") + D.ac.delta + "）最近 " + esc(D.ac.last || "—") + "，共 " + D.ac.n + " 场 rated");
+        line('→ <a href="https://atcoder.jp/users/NirvanaCeleste" target="_blank" rel="noopener">atcoder.jp/users/NirvanaCeleste</a>');
+      },
+      atcoder: function () { CMDS.at(); },
+      upsolve: function () {
+        line("待补 <b>" + (D.wrong + D.skip) + "</b> 题 · 已补 " + D.done + " 题");
+        line('→ <a href="/acm/upsolve/">打开补题清单</a>');
+      },
+      acm: function () { line('→ <a href="/acm/">进入算法竞赛分区</a>'); },
+      guide: function () { line('→ <a href="/omori/modding-guide/">打开模组指南</a>'); },
+      omori: function () {
+        var on = document.documentElement.classList.toggle("ws-mode");
+        if (on) line('<span class="t-ws">[WHITE SPACE] …… 这里什么都没有。输入 omori 回到现实。</span>');
+        else line("欢迎回来。");
+      },
+      date: function () { line(new Date().toLocaleString("zh-CN")); },
+      ls: function () { line('<span class="t-ok">acm/</span>  <span class="t-ok">omori/</span>  <span class="t-ok">about/</span>  <span class="t-dim">search.md</span>  <span class="t-ws">setting_theme_core.css</span>'); },
+      clear: function () { body.innerHTML = ""; },
+      echo: function (rest) { line(esc(rest) || ""); },
+      sudo: function () { line('<span class="t-err">权限不足：这里的管理员本来就是你。</span>'); },
+      arg: function () { line('<span class="t-dim">something is watching ...</span>'); },
+      exit: function () { line('<span class="t-dim">出不去的。这里没有门。</span>'); }
+    };
+
+    function run(raw) {
+      var s = raw.trim();
+      if (!s) return;
+      line('<span class="term-prompt">❯</span> ' + esc(s), "t-in");
+      hist.push(s); hi = hist.length;
+      var sp = s.indexOf(" ");
+      var cmd = (sp < 0 ? s : s.slice(0, sp)).toLowerCase();
+      var rest = sp < 0 ? "" : s.slice(sp + 1);
+      if (CMDS[cmd]) CMDS[cmd](rest);
+      else line('command not found: ' + esc(cmd) + '  <span class="t-dim">（help 看看能干啥）</span>', "t-err");
+    }
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { run(input.value); input.value = ""; }
+      else if (e.key === "ArrowUp") { e.preventDefault(); if (hi > 0) { hi--; input.value = hist[hi] || ""; } }
+      else if (e.key === "ArrowDown") { e.preventDefault(); if (hi < hist.length) { hi++; input.value = hist[hi] || ""; } }
+    });
+    win.addEventListener("click", function () {
+      if (!window.getSelection().toString()) input.focus({ preventScroll: true });
+    });
+
+    /* 统计卡数字增长 */
+    function countUp(el) {
+      var target = parseInt(el.dataset.val || "0", 10);
+      var t0 = performance.now(), dur = 900;
+      (function f(t) {
+        var p = Math.min(1, (t - t0) / dur);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(f);
+      })(t0);
+    }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) { if (en.isIntersecting) { countUp(en.target); io.unobserve(en.target); } });
+    }, { threshold: 0.4 });
+    document.querySelectorAll(".stat-num").forEach(function (el) { io.observe(el); });
+
+    boot();
+  })();
+  </script>
 {{ end }}
