@@ -6,10 +6,14 @@ date: 2026-07-25
 draft: false
 comments: true
 upsolve:
+  - problem: "E"
+    url: "https://atcoder.jp/contests/abc468/tasks/abc468_e"
+    status: "skip"
+    note: "实际未解（原 E.cpp 里存的是 F 的解法）"
   - problem: "F"
     url: "https://atcoder.jp/contests/abc468/tasks/abc468_f"
-    status: "skip"
-    note: "空模板"
+    status: "done"
+    note: "解法当时误存为 E.cpp，校勘已归位（帖内 F 节）"
   - problem: "G"
     url: "https://atcoder.jp/contests/abc468/tasks/abc468_g"
     status: "skip"
@@ -242,6 +246,28 @@ https://atcoder.jp/contests/abc468/tasks/abc468_e
 
 输出所求值对 $998244353$ 取模后的结果。
 
+
+/* 校勘注：E 是「子区间平均数之和」（模 998244353）。原先贴在这里的代码其实是一道「双容器贪心」题的解法——正是下面 F 题的做法，当时应该是把 F 的代码误存成了 E.cpp。本题实际没有做出，已记入补题清单。 */
+
+## F
+https://atcoder.jp/contests/abc468/tasks/abc468_f
+
+> 给定一个正整数 $N$ 和一个排列 $P=(P_1,P_2,\ldots,P_N)$，它是 $(1,2,\ldots,N)$ 的一个排列。
+> 求通过以下操作能获得的最大得分：
+> - 维护两个变量 $x$ 和 $y$，初始为 $0$。
+> - 按顺序遍历 $P$ 中的每个元素，每次可以选择放入 $x$ 或 $y$。
+> - 如果放入后该变量变大，则得 $1$ 分。
+> 求最大得分。
+
+**输入**
+
+第一行包含一个整数 $N$（$1 \le N \le 5 \times 10^5$）。
+第二行包含 $N$ 个整数 $P_1, P_2, \ldots, P_N$，是 $(1,2,\ldots,N)$ 的一个排列。
+
+**输出**
+
+输出最大得分。
+
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
@@ -303,44 +329,10 @@ int main(){
     return 0;
 }
 ```
-/*
-（算法思路略，代码由用户提供）
-*/
-
-## F
-https://atcoder.jp/contests/abc468/tasks/abc468_f
-
-> 给定一个正整数 $N$ 和一个排列 $P=(P_1,P_2,\ldots,P_N)$，它是 $(1,2,\ldots,N)$ 的一个排列。
-> 求通过以下操作能获得的最大得分：
-> - 维护两个变量 $x$ 和 $y$，初始为 $0$。
-> - 按顺序遍历 $P$ 中的每个元素，每次可以选择放入 $x$ 或 $y$。
-> - 如果放入后该变量变大，则得 $1$ 分。
-> 求最大得分。
-
-**输入**
-
-第一行包含一个整数 $N$（$1 \le N \le 5 \times 10^5$）。
-第二行包含 $N$ 个整数 $P_1, P_2, \ldots, P_N$，是 $(1,2,\ldots,N)$ 的一个排列。
-
-**输出**
-
-输出最大得分。
-
-```cpp
-#include <bits/stdc++.h>
-using namespace std;
-const int maxn = 200020;
-
-
-int main(){
-
-
-    return 0;
-}
-```
-/*
-（算法思路略，代码由用户提供）
-*/
+/* 维护两个容器的当前值，始终让 x ≤ y。每个到达的 p（排列，互不相同）：
+   p > y：放到 y 上，y ← p，得 1 分；x < p < y：放到 x 上，x ← p，得 1 分；
+   p < x：放哪都不得分。按这个贪心从左到右扫一遍计数。
+   （这段代码当时误存在 E.cpp 里，校勘时归位到本题。） */
 
 ## G
 https://atcoder.jp/contests/abc468/tasks/abc468_g
