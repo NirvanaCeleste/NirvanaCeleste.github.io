@@ -125,12 +125,25 @@
       else if (e.key === "ArrowDown") { e.preventDefault(); if (hi < hist.length) { hi++; input.value = hist[hi] || ""; } }
       else if (e.key === "Tab") {
         e.preventDefault();
-        var v = input.value.trim().toLowerCase();
-        if (v) {
-          var names = Object.keys(CMDS).concat(Object.keys(ROOMS)).filter(function (c) { return c.indexOf(v) === 0; });
-          if (names.length === 1) input.value = names[0] + " ";
-          else if (names.length > 1) line("<span class='t-dim'>" + names.join("  ") + "</span>");
+        var raw = input.value;
+        var endsSpace = /\s$/.test(raw);
+        var v = raw.trim().toLowerCase();
+        if (!v) return;
+        var sp = v.indexOf(" ");
+        var names, prefixCmd = "";
+        if (sp < 0 && !endsSpace) {
+          /* 补命令名或房间名 */
+          names = Object.keys(CMDS).concat(Object.keys(ROOMS)).filter(function (c) { return c.indexOf(v) === 0; });
+        } else {
+          /* 补 cd 的参数：房间名 */
+          var head = sp < 0 ? v : v.slice(0, sp);
+          var word = sp < 0 ? "" : v.slice(sp + 1).replace(/\/$/, "");
+          if (head !== "cd") return;
+          prefixCmd = head + " ";
+          names = Object.keys(ROOMS).filter(function (c) { return c.indexOf(word) === 0; });
         }
+        if (names.length === 1) input.value = prefixCmd + names[0] + (prefixCmd ? "" : " ");
+        else if (names.length > 1) line("<span class='t-dim'>" + names.join("  ") + "</span>");
       }
     });
     win.addEventListener("click", function () {
