@@ -26,17 +26,6 @@
         <input id="ht-input" autocomplete="off" spellcheck="false" enterkeyhint="send" aria-label="终端输入">
       </div>
     </div>
-    <div class="term-chips" aria-label="快捷命令">
-      <button class="t-chip" data-cmd="help">help</button>
-      <button class="t-chip" data-cmd="ls">ls</button>
-      <button class="t-chip" data-cmd="cd album">cd album</button>
-      <button class="t-chip" data-cmd="cd door">cd door</button>
-      <button class="t-chip" data-cmd="cd letters">cd letters</button>
-      <button class="t-chip" data-cmd="cd acm">cd acm</button>
-      <button class="t-chip" data-cmd="cd omori">cd omori</button>
-      <button class="t-chip" data-cmd="cd about">cd about</button>
-      <button class="t-chip" data-cmd="whoami">whoami</button>
-    </div>
   </section>
 
   <script>
@@ -148,17 +137,10 @@
       if (!window.getSelection().toString()) input.focus({ preventScroll: true });
     });
 
-    document.querySelectorAll(".t-chip").forEach(function (ch) {
-      ch.addEventListener("click", function () {
-        run(ch.dataset.cmd || "");
-        input.focus({ preventScroll: true });
-      });
-    });
-
     var lines = [
       ["Nirvana Celeste Space", "t-sys"],
       ["You have been living here for as long as you can remember.", "t-dim"],
-      ["输入 help · 或点下方的快捷命令", "t-ok"]
+      ["输入 help 查看命令", "t-ok"]
     ];
     var k = 0;
     (function next() {
