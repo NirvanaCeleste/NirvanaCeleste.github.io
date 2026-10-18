@@ -15,7 +15,7 @@
 
   <article class="max-w-full">
     <header class="mb-8">
-      <h1 class="text-4xl font-bold mt-2 mb-3">📋 {{ .Title }}</h1>
+      <h1 class="text-4xl font-bold mt-2 mb-3">{{ .Title }}</h1>
       <p class="text-sm opacity-60">{{ .Date.Format "2006-01-02" }}</p>
     </header>
 
@@ -25,9 +25,9 @@
 
     <div class="upsolve-stats">
       <span>共收录 <b>{{ len $posts }}</b> 场比赛</span>
-      <span class="upsolve-stat wrong">🔥 没写对 <b>{{ $wrong }}</b></span>
-      <span class="upsolve-stat skip">🧊 没尝试 <b>{{ $skip }}</b></span>
-      <span class="upsolve-stat done">✅ 已补 <b>{{ $done }}</b></span>
+      <span class="upsolve-stat wrong">没写对 <b>{{ $wrong }}</b></span>
+      <span class="upsolve-stat skip">没尝试 <b>{{ $skip }}</b></span>
+      <span class="upsolve-stat done">已补 <b>{{ $done }}</b></span>
     </div>
 
     {{ $total := add (add $wrong $skip) $done }}
@@ -39,14 +39,14 @@
     </div>
 
     {{ $groups := slice
-      (dict "key" "wrong" "icon" "🔥" "label" "比赛时没写对" "hint" "交了没过 / 没调出来的，优先级最高" "count" $wrong)
-      (dict "key" "skip"  "icon" "🧊" "label" "根本没尝试"     "hint" "题面都没碰的，按难度挑着补"         "count" $skip)
-      (dict "key" "done"  "icon" "✅" "label" "赛后已补"       "hint" "复盘时补完的，留档"                 "count" $done)
+      (dict "key" "wrong" "label" "比赛时没写对" "hint" "交了没过 / 没调出来的，优先级最高" "count" $wrong)
+      (dict "key" "skip"  "label" "根本没尝试"     "hint" "题面都没碰的，按难度挑着补"         "count" $skip)
+      (dict "key" "done"  "label" "赛后已补"       "hint" "复盘时补完的，留档"                 "count" $done)
     }}
 
     {{ range $g := $groups }}
       <section class="upsolve-group upsolve-{{ $g.key }}">
-        <h2>{{ $g.icon }} {{ $g.label }} <span class="upsolve-badge">{{ $g.count }}</span></h2>
+        <h2>{{ $g.label }} <span class="upsolve-badge">{{ $g.count }}</span></h2>
         <p class="upsolve-hint">{{ $g.hint }}</p>
         {{ if eq $g.count 0 }}
           <p class="upsolve-empty">这一栏暂时是空的。</p>

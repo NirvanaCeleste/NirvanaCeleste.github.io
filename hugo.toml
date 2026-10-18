@@ -35,23 +35,23 @@ title = "NirvanaCeleste's Blog"
 
 [menu]
   [[menu.main]]
-    name = '🏠 主页'
+    name = '主页'
     url = '/'
     weight = 1
   [[menu.main]]
-    name = '💻 ACM 题解'
+    name = 'ACM 题解'
     url = '/acm/'
     weight = 2
   [[menu.main]]
-    name = '🎮 OMORI 模组'
+    name = 'OMORI 模组'
     url = '/omori/'
     weight = 3
   [[menu.main]]
-    name = '👤 关于'
+    name = '关于'
     url = '/about/'
     weight = 4
   [[menu.main]]
-    name = '🔍 搜索'
+    name = '搜索'
     url = '/search/'
     weight = 5
 

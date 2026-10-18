@@ -613,7 +613,7 @@ this.setPictureAnimation(id, frames, delay, loops, wait);
 
 记得加上一条 `this.removePictureCustomFrames();`
 
-#### 雾效 [🕊️](https://mods.one/author/FoG)
+#### 雾效 [FoG](https://mods.one/author/FoG)
 
 雾效是我很少见到有模组使用的功能。原版游戏的一些区域会用雾效来营造雾气氤氲的氛围,比如北湖。
 

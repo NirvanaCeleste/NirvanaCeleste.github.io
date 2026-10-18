@@ -11,10 +11,10 @@ sitemap: true
     <div class="about-name">NirvanaCeleste</div>
     <div class="about-sub">算法竞赛选手 · OMORI 模组开发者</div>
     <div class="tagchips" style="margin-top:.8em">
-      <a class="chip" href="https://www.luogu.com.cn/user/800543" target="_blank" rel="noopener">🏅 洛谷 · uid 800543</a>
-      <a class="chip" href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">⚔️ Codeforces · NirvanaCeleste</a>
-      <a class="chip" href="https://atcoder.jp/users/NirvanaCeleste" target="_blank" rel="noopener">🎯 AtCoder · NirvanaCeleste</a>
-      <a class="chip" href="https://github.com/NirvanaCeleste" target="_blank" rel="noopener">🐙 GitHub · NirvanaCeleste</a>
+      <a class="chip" href="https://www.luogu.com.cn/user/800543" target="_blank" rel="noopener">洛谷 · uid 800543</a>
+      <a class="chip" href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">Codeforces · NirvanaCeleste</a>
+      <a class="chip" href="https://atcoder.jp/users/NirvanaCeleste" target="_blank" rel="noopener">AtCoder · NirvanaCeleste</a>
+      <a class="chip" href="https://github.com/NirvanaCeleste" target="_blank" rel="noopener">GitHub · NirvanaCeleste</a>
     </div>
   </div>
 </div>
@@ -23,7 +23,7 @@ sitemap: true
 
 - **算法竞赛复盘** —— AtCoder / Codeforces / 牛客的赛后题解与思路整理,见 [ACM 题解](/acm/)
 - **OMORI 模组开发** —— 自己的模组《未竟之事》开发中,进度见[开发日志](/omori/devlog-2026-07/);同时维护[《OMORI 模组制作指南》中文翻译](/omori/modding-guide/)(12 章完整教程)
-- **这个博客** —— 记录上面这些事,偶尔藏点小彩蛋 🕳️
+- **这个博客** —— 记录上面这些事,偶尔藏点小彩蛋
 
 ## 关于本站
 

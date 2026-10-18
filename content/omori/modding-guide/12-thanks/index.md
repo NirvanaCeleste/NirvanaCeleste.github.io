@@ -34,7 +34,7 @@ OMORI.
 - [Mods.one Discord Server](https://discord.gg/EDTMF85Hnp):了解 <span class="og-g">mods.one</span> 本站动态的好去处。
 - [OMORI Modding Hub Discord Server](https://discord.gg/pkBEr7ywCG):服务一切 Mod 制作需求的服务器。大多数大型 Mod 的更新和发布都在这里,游玩和制作 Mod 方面的技术支持也触手可及。
 
-## 🎬 开发者内部内容
+## 开发者内部内容
 
 ## **待办:**
 
