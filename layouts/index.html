@@ -80,6 +80,7 @@
       ["help",   "显示本帮助"],
       ["ls",     "列出房间"],
       ["cd",     "进入房间（cd 空格 + 房间名）"],
+      ["bg",     "换壁纸（bg ls / bg 1-8 / bg blur 0-24 / bg off）"],
       ["pwd",    "当前位置"],
       ["whoami", "我是谁"],
       ["clear",  "清屏"]
@@ -91,6 +92,7 @@
           line("<span class='t-cmd'>" + h[0].padEnd(8, " ") + "</span><span class='t-dim'>" + esc(h[1]) + "</span>");
         });
       },
+      bg: function (rest) { bgCmd(rest); },
       ls: function () {
         var out = [];
         Object.keys(ROOMS).forEach(function (k) { out.push("<span class='t-ok'>" + k + "/</span>"); });
@@ -107,6 +109,72 @@
       exit: function () { line("<span class='t-dim'>这里没有出口。只有门。</span>"); }
     };
     /* 房间名直接当命令也行：cd save / save 等价 */
+
+    /* ===== 壁纸系统（借鉴 quiz-app 外观系统：预设双端图 + 模糊度 + 持久化） ===== */
+    var BG_KEY = "blog.appearance.bg.v1";
+    var mqPhone = window.matchMedia("(max-width: 900px)");
+    function bgRead() {
+      try {
+        var s = JSON.parse(localStorage.getItem(BG_KEY));
+        if (s && s.n >= 1 && s.n <= 8) return { n: s.n | 0, blur: Math.max(0, Math.min(24, s.blur | 0)) };
+      } catch (e) {}
+      return null;
+    }
+    function bgWrite(v) {
+      try { v ? localStorage.setItem(BG_KEY, JSON.stringify(v)) : localStorage.removeItem(BG_KEY); } catch (e) {}
+    }
+    function bgApply() {
+      var root = document.documentElement, v = bgRead();
+      if (!v) {
+        delete root.dataset.siteBg;
+        root.style.removeProperty("--site-bg");
+        root.style.removeProperty("--site-bg-blur");
+        root.style.removeProperty("--site-bg-opacity");
+        return;
+      }
+      var file = (mqPhone.matches ? "mobile-" : "desktop-") + ("0" + v.n).slice(-2) + ".jpg";
+      root.dataset.siteBg = "on";
+      root.style.setProperty("--site-bg", 'url("/bg/' + file + '")');
+      root.style.setProperty("--site-bg-blur", v.blur + "px");
+      root.style.setProperty("--site-bg-opacity", 0.75);
+    }
+    if (mqPhone.addEventListener) mqPhone.addEventListener("change", bgApply);
+    else if (mqPhone.addListener) mqPhone.addListener(bgApply);
+    bgApply();
+
+    function bgCmd(rest) {
+      var arg = (rest || "").trim().toLowerCase();
+      if (!arg) {
+        var cur = bgRead();
+        line(cur
+          ? "壁纸 <span class='t-ok'>" + cur.n + "</span> · blur " + cur.blur + "px。用法：bg ls / bg 1-8 / bg blur 0-24 / bg off"
+          : "未选壁纸（用默认底图）。用法：bg ls / bg 1-8 / bg blur 0-24 / bg off");
+        return;
+      }
+      if (arg === "ls") {
+        var s = bgRead(), out = [];
+        for (var i = 1; i <= 8; i++) out.push(s && s.n === i ? "<span class='t-ok'>[" + i + "]</span>" : i);
+        line("壁纸：" + out.join("  ") + "  <span class='t-dim'>（" + (mqPhone.matches ? "手机端图" : "桌面端图") + "）</span>");
+        return;
+      }
+      if (arg === "off") { bgWrite(null); bgApply(); line("已恢复默认底图。"); return; }
+      var m = arg.match(/^blur\s+(\d{1,2})$/);
+      if (m) {
+        var b = Math.min(24, parseInt(m[1], 10));
+        var cur2 = bgRead() || { n: 1, blur: 0 };
+        bgWrite({ n: cur2.n, blur: b }); bgApply();
+        line("blur → " + b + "px");
+        return;
+      }
+      if (/^[1-8]$/.test(arg)) {
+        var cur3 = bgRead();
+        bgWrite({ n: parseInt(arg, 10), blur: cur3 ? cur3.blur : 0 }); bgApply();
+        line("壁纸 → <span class='t-ok'>" + arg + "</span> <span class='t-dim'>（" + (mqPhone.matches ? "mobile" : "desktop") + "-0" + arg + "）</span>");
+        return;
+      }
+      line("用法：bg 1-8 · bg ls · bg blur 0-24 · bg off", "t-err");
+    }
+
     function run(s) {
       if (!s) return;
       line("<span class='term-prompt'>❯</span> " + esc(s), "t-in");

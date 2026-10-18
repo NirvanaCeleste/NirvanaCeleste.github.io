@@ -1,4 +1,4 @@
-/* 全局半透明背景图（全站都保留） */
+/* 全局半透明背景图（全站都保留）——首页终端 bg 命令可换壁纸（借鉴 quiz-app 外观系统） */
 body::before {
   content: "";
   position: fixed;
@@ -7,12 +7,25 @@ body::before {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background-image: url('/background.jpg');
+  background-image: var(--site-bg, url('/background.jpg'));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.3;
+  opacity: var(--site-bg-opacity, 0.3);
+  filter: blur(var(--site-bg-blur, 0px));
 }
+
+/* 显式选了壁纸：终端玻璃化（磨砂 + 微透出底图），底图略微放大遮模糊边缘 */
+html[data-site-bg="on"] body::before { transform: scale(1.05); }
+html[data-site-bg="on"] .home-term {
+  background: rgba(13, 13, 19, .78);
+  backdrop-filter: blur(9px) saturate(1.05);
+  -webkit-backdrop-filter: blur(9px) saturate(1.05);
+}
+html[data-site-bg="on"] .term-status { background: rgba(24, 24, 34, .55); }
+/* OMORI 白空间：清空一切装饰，壁纸不进入 */
+html.ws-mode[data-site-bg="on"] body::before { opacity: 0; }
+html.ws-mode[data-site-bg="on"] .home-term { background: #0a0a0a; backdrop-filter: none; -webkit-backdrop-filter: none; }
 
 /* ========== 仅帖子详情页生效：导航白底 + 正文白底 ========== */
 body.single {
