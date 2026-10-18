@@ -110,65 +110,39 @@
     };
     /* 房间名直接当命令也行：cd save / save 等价 */
 
-    /* ===== 壁纸系统（借鉴 quiz-app 外观系统：预设双端图 + 模糊度 + 持久化） ===== */
-    var BG_KEY = "blog.appearance.bg.v1";
-    var mqPhone = window.matchMedia("(max-width: 900px)");
-    function bgRead() {
-      try {
-        var s = JSON.parse(localStorage.getItem(BG_KEY));
-        if (s && s.n >= 1 && s.n <= 8) return { n: s.n | 0, blur: Math.max(0, Math.min(24, s.blur | 0)) };
-      } catch (e) {}
-      return null;
-    }
+    /* ===== 壁纸系统（借鉴 quiz-app 外观系统）===== */
+    /* 应用与读取的唯一实现在 layouts/partials/extend-head.html（全站生效）；这里只负责写入 */
     function bgWrite(v) {
-      try { v ? localStorage.setItem(BG_KEY, JSON.stringify(v)) : localStorage.removeItem(BG_KEY); } catch (e) {}
+      try { v ? localStorage.setItem("blog.appearance.bg.v1", JSON.stringify(v)) : localStorage.removeItem("blog.appearance.bg.v1"); } catch (e) {}
     }
-    function bgApply() {
-      var root = document.documentElement, v = bgRead();
-      if (!v) {
-        delete root.dataset.siteBg;
-        root.style.removeProperty("--site-bg");
-        root.style.removeProperty("--site-bg-blur");
-        root.style.removeProperty("--site-bg-opacity");
-        return;
-      }
-      var file = (mqPhone.matches ? "mobile-" : "desktop-") + ("0" + v.n).slice(-2) + ".jpg";
-      root.dataset.siteBg = "on";
-      root.style.setProperty("--site-bg", 'url("/bg/' + file + '")');
-      root.style.setProperty("--site-bg-blur", v.blur + "px");
-      root.style.setProperty("--site-bg-opacity", 0.75);
-    }
-    if (mqPhone.addEventListener) mqPhone.addEventListener("change", bgApply);
-    else if (mqPhone.addListener) mqPhone.addListener(bgApply);
-    bgApply();
-
     function bgCmd(rest) {
       var arg = (rest || "").trim().toLowerCase();
       if (!arg) {
-        var cur = bgRead();
+        var cur = window.__bgRead();
         line(cur
           ? "壁纸 <span class='t-ok'>" + cur.n + "</span> · blur " + cur.blur + "px。用法：bg ls / bg 1-8 / bg blur 0-24 / bg off"
           : "未选壁纸（用默认底图）。用法：bg ls / bg 1-8 / bg blur 0-24 / bg off");
         return;
       }
       if (arg === "ls") {
-        var s = bgRead(), out = [];
+        var s = window.__bgRead(), out = [], mqPhone = window.matchMedia("(max-width: 900px)");
         for (var i = 1; i <= 8; i++) out.push(s && s.n === i ? "<span class='t-ok'>[" + i + "]</span>" : i);
         line("壁纸：" + out.join("  ") + "  <span class='t-dim'>（" + (mqPhone.matches ? "手机端图" : "桌面端图") + "）</span>");
         return;
       }
-      if (arg === "off") { bgWrite(null); bgApply(); line("已恢复默认底图。"); return; }
+      if (arg === "off") { bgWrite(null); window.__bgApply(); line("已恢复默认底图。"); return; }
       var m = arg.match(/^blur\s+(\d{1,2})$/);
       if (m) {
         var b = Math.min(24, parseInt(m[1], 10));
-        var cur2 = bgRead() || { n: 1, blur: 0 };
-        bgWrite({ n: cur2.n, blur: b }); bgApply();
+        var cur2 = window.__bgRead() || { n: 1, blur: 0 };
+        bgWrite({ n: cur2.n, blur: b }); window.__bgApply();
         line("blur → " + b + "px");
         return;
       }
       if (/^[1-8]$/.test(arg)) {
-        var cur3 = bgRead();
-        bgWrite({ n: parseInt(arg, 10), blur: cur3 ? cur3.blur : 0 }); bgApply();
+        var cur3 = window.__bgRead();
+        bgWrite({ n: parseInt(arg, 10), blur: cur3 ? cur3.blur : 0 }); window.__bgApply();
+        var mqPhone = window.matchMedia("(max-width: 900px)");
         line("壁纸 → <span class='t-ok'>" + arg + "</span> <span class='t-dim'>（" + (mqPhone.matches ? "mobile" : "desktop") + "-0" + arg + "）</span>");
         return;
       }

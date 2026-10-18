@@ -1,5 +1,6 @@
 baseURL = 'https://NirvanaCeleste.github.io/'
-locale = 'zh-cn'
+defaultContentLanguage = 'zh-cn'   # 站点语言：日期/主题字符串走中文（locale 不是 Hugo 配置项，已移除）
+languageCode = 'zh-cn'
 title = "NirvanaCeleste's Blog"
 
 [params]
@@ -7,6 +8,7 @@ title = "NirvanaCeleste's Blog"
   enableSidebar = true
   enableSearch = false
   math = true
+  dateFormat = '2006-01-02'   # 全站日期统一 ISO 短格式，和题解正文一致
 
 [taxonomies]
   tag = "tags"

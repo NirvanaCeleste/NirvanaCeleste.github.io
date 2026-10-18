@@ -1,0 +1,36 @@
+{{/* 全站自定义注入点：壁纸应用脚本（唯一事实在这里，首页终端只是写入方） */}}
+<script>
+(function () {
+  "use strict";
+  var KEY = "blog.appearance.bg.v1";
+  function read() {
+    try {
+      var s = JSON.parse(localStorage.getItem(KEY));
+      if (s && s.n >= 1 && s.n <= 8) return { n: s.n | 0, blur: Math.max(0, Math.min(24, s.blur | 0)) };
+    } catch (e) {}
+    return null;
+  }
+  function apply() {
+    var root = document.documentElement, v = read();
+    if (!v) {
+      delete root.dataset.siteBg;
+      root.style.removeProperty("--site-bg");
+      root.style.removeProperty("--site-bg-blur");
+      root.style.removeProperty("--site-bg-opacity");
+      return;
+    }
+    var phone = window.matchMedia("(max-width: 900px)");
+    var file = (phone.matches ? "mobile-" : "desktop-") + ("0" + v.n).slice(-2) + ".jpg";
+    root.dataset.siteBg = "on";
+    root.style.setProperty("--site-bg", 'url("/bg/' + file + '")');
+    root.style.setProperty("--site-bg-blur", v.blur + "px");
+    root.style.setProperty("--site-bg-opacity", 0.75);
+  }
+  window.__bgApply = apply;               /* 首页终端写入后调用，同一实现只有一个 */
+  window.__bgRead = read;
+  var mq = window.matchMedia("(max-width: 900px)");
+  if (mq.addEventListener) mq.addEventListener("change", apply);
+  else if (mq.addListener) mq.addListener(apply);
+  apply();
+})();
+</script>
