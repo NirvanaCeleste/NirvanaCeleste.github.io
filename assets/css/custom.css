@@ -91,44 +91,39 @@ h1, h2, h3, h4, h5, h6, .hd-title, .about-name, .upsolve-title, .cfrating-title 
 }
 strong, b { font-synthesis: none; font-weight: 400; color: var(--c-accent); }
 
-/* ===== 全局壁纸层：默认关闭（图纸底优先），终端 bg 命令随时开启 ===== */
+/* ===== 全局壁纸：桌面=雪山草地，手机=钟塔（固定双壁纸，随设备切换） ===== */
 body::before {
   content: "";
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
   z-index: -1;
-  background-image: var(--site-bg, none);
+  background-image: url('/bg/mobile.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: var(--site-bg-opacity, 0);
-  filter: blur(var(--site-bg-blur, 0px));
+  opacity: .7;
 }
-/* 选了壁纸：首页终端玻璃化；阅读页（非首页）淡化壁纸并叠纸色纱罩——装饰让位内容 */
-html[data-site-bg="on"] body::before { transform: scale(1.05); }
-html[data-site-bg="on"] .home-term {
-  background: rgba(16, 13, 10, .78);
+@media (min-width: 901px) {
+  body::before { background-image: url('/bg/desktop.jpg'); }
+}
+/* 阅读页（非首页）：壁纸淡化 + 纸色纱罩——装饰让位内容 */
+body:not(:has(.term-hero))::before { opacity: .4; }
+body:not(:has(.term-hero))::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: rgb(243 236 223 / 78%);
+}
+html.dark body:not(:has(.term-hero))::after { background: rgb(21 18 16 / 78%); }
+/* 深色模式下顶栏/页脚文字加投影，压得住亮色照片 */
+html.dark header.navbar, html.dark #site-footer { text-shadow: 0 1px 6px rgba(0, 0, 0, .55); }
+/* 首页终端玻璃化（常驻） */
+.home-term {
+  background: rgba(13, 13, 19, .78);
   backdrop-filter: blur(9px) saturate(1.05);
   -webkit-backdrop-filter: blur(9px) saturate(1.05);
 }
-html[data-site-bg="on"] body:not(:has(.term-hero))::before { opacity: .45; }
-html[data-site-bg="on"] body:not(:has(.term-hero))::after {
-  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background: rgb(243 236 223 / 80%);
-}
-html.dark[data-site-bg="on"] body:not(:has(.term-hero))::after {
-  background: rgb(21 18 16 / 80%);
-}
-/* 代码块：gruvbox 暖底低饱和（hugo.toml [markup.highlight]，替换 Monokai），
-   块体归入图纸语法：直角 + 墨线描边 */
-article pre {
-  border-radius: 0;
-  border: 1px solid var(--c-line);
-}
-
-/* OMORI 白空间：清空一切装饰，壁纸不进入 */
-html.ws-mode[data-site-bg="on"] body::before { opacity: 0; }
+/* OMORI 白空间：壁纸不进入，终端回纯黑 */
+html.ws-mode body::before { opacity: 0; }
 html.ws-mode .home-term { background: #0a0a0a; backdrop-filter: none; -webkit-backdrop-filter: none; }
 html.ws-mode { filter: grayscale(1) contrast(1.06); transition: filter .8s ease; }
 

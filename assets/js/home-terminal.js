@@ -52,7 +52,6 @@
       ["help",   "显示本帮助"],
       ["ls",     "列出房间"],
       ["cd",     "进入房间（cd 空格 + 房间名）"],
-      ["bg",     "换壁纸（bg ls / bg 1-8 / bg blur 0-24 / bg off）"],
       ["pwd",    "当前位置"],
       ["whoami", "我是谁"],
       ["clear",  "清屏"]
@@ -64,7 +63,6 @@
           line("<span class='t-cmd'>" + h[0].padEnd(8, " ") + "</span><span class='t-dim'>" + esc(h[1]) + "</span>");
         });
       },
-      bg: function (rest) { bgCmd(rest); },
       ls: function () {
         var out = [];
         Object.keys(ROOMS).forEach(function (k) { out.push("<span class='t-ok'>" + k + "/</span>"); });
@@ -81,45 +79,6 @@
       exit: function () { line("<span class='t-dim'>这里没有出口。只有门。</span>"); }
     };
     /* 房间名直接当命令也行：cd save / save 等价 */
-
-    /* ===== 壁纸系统（借鉴 quiz-app 外观系统）===== */
-    /* 应用与读取的唯一实现在 layouts/partials/extend-head.html（全站生效）；这里只负责写入 */
-    function bgWrite(v) {
-      try { v ? localStorage.setItem("blog.appearance.bg.v1", JSON.stringify(v)) : localStorage.removeItem("blog.appearance.bg.v1"); } catch (e) {}
-    }
-    function bgCmd(rest) {
-      var arg = (rest || "").trim().toLowerCase();
-      if (!arg) {
-        var cur = window.__bgRead();
-        line(cur
-          ? "壁纸 <span class='t-ok'>" + cur.n + "</span> · blur " + cur.blur + "px。用法：bg ls / bg 1-8 / bg blur 0-24 / bg off"
-          : "未选壁纸（用默认底图）。用法：bg ls / bg 1-8 / bg blur 0-24 / bg off");
-        return;
-      }
-      if (arg === "ls") {
-        var s = window.__bgRead(), out = [], mqPhone = window.matchMedia("(max-width: 900px)");
-        for (var i = 1; i <= 8; i++) out.push(s && s.n === i ? "<span class='t-ok'>[" + i + "]</span>" : i);
-        line("壁纸：" + out.join("  ") + "  <span class='t-dim'>（" + (mqPhone.matches ? "手机端图" : "桌面端图") + "）</span>");
-        return;
-      }
-      if (arg === "off") { bgWrite(null); window.__bgApply(); line("已恢复默认底图。"); return; }
-      var m = arg.match(/^blur\s+(\d{1,2})$/);
-      if (m) {
-        var b = Math.min(24, parseInt(m[1], 10));
-        var cur2 = window.__bgRead() || { n: 1, blur: 0 };
-        bgWrite({ n: cur2.n, blur: b }); window.__bgApply();
-        line("blur → " + b + "px");
-        return;
-      }
-      if (/^[1-8]$/.test(arg)) {
-        var cur3 = window.__bgRead();
-        bgWrite({ n: parseInt(arg, 10), blur: cur3 ? cur3.blur : 0 }); window.__bgApply();
-        var mqPhone = window.matchMedia("(max-width: 900px)");
-        line("壁纸 → <span class='t-ok'>" + arg + "</span> <span class='t-dim'>（" + (mqPhone.matches ? "mobile" : "desktop") + "-0" + arg + "）</span>");
-        return;
-      }
-      line("用法：bg 1-8 · bg ls · bg blur 0-24 · bg off", "t-err");
-    }
 
     function run(s) {
       if (!s) return;
