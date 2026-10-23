@@ -1,5 +1,5 @@
 ---
-title: "OMORI 模组制作指南(中文翻译)"
+title: "OMORI 模组制作指南（中文翻译）"
 date: 2026-09-28
 weight: 0
 draft: false

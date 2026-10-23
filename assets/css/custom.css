@@ -148,7 +148,10 @@ article h2 { scroll-margin-top: 96px; }
 /* 触控目标 ≥44px：明暗切换图标按钮 */
 #appearance-switcher { padding: 12px; min-width: 44px; min-height: 44px; box-sizing: border-box; }
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: .15em 0; }
-html.dark article img { border-radius: 0; box-shadow: 0 0 0 1px var(--c-line); }
+article .prose img, .article-content img {
+  border-radius: 0; border: 1px solid var(--c-line); background: var(--c-surface);
+}
+figure figcaption { color: var(--c-muted); font-size: .9em; text-align: center; margin-top: .6em; }
 
 /* OMORI 模组指南：<var> 红色待替换变量 / .og-g 绿色程序名 */
 article var {
@@ -163,6 +166,25 @@ article var {
 article .og-g { color: var(--ok); }
 article .og-note, article em { opacity: .95; }
 html.dark article var { color: var(--err); background: rgba(226, 138, 121, .10); }
+
+/* ===== 阅读面板：单页正文落在白卡上，壁纸只在边缘呼吸 =====
+   不用 backdrop-filter——跳题导航栏以 fixed 挂在 article 内，
+   加模糊会改变其包含块导致定位错乱；实底白卡即图纸「纯白卡面」 */
+main > article:has(#single_header) {
+  max-width: 56rem;
+  margin-inline: auto;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  padding: 2.5rem 2.75rem;
+}
+@media (max-width: 640px) {
+  main > article:has(#single_header) { padding: 1.5rem 1.25rem; }
+}
+/* 代码块：注释不斜体（中文合成斜体必糊），滚动条细量化 */
+.chroma .c, .chroma .c1, .chroma .ch, .chroma .cs, .chroma .cm { font-style: normal; }
+article pre { scrollbar-width: thin; }
+article pre::-webkit-scrollbar { height: 6px; }
+article pre::-webkit-scrollbar-thumb { background: var(--c-line); border-radius: 0; }
 
 /* ===== Pagefind 搜索 ===== */
 /* 搜索页：pagefind 自带 40em 宽度太窄，铺满阅读宽度 */
@@ -366,6 +388,10 @@ html.dark .home-term { background: var(--term-bg); }
 .hd-all { display: inline-block; margin-top: 12px; font-size: 14px;
   color: var(--c-accent); text-decoration: none; }
 .hd-all:hover { text-decoration: underline; text-underline-offset: 3px; }
+.hd-social { margin: -32px 0 48px; display: flex; gap: 1.2em; }
+.hd-social a { font-family: Consolas, "Cascadia Mono", monospace; font-size: 13px;
+  color: var(--c-muted); text-decoration: none; border-bottom: 1px dotted var(--c-line); }
+.hd-social a:hover { color: var(--c-accent); border-color: var(--c-accent); }
 .hd-term { margin-top: 48px; }
 .hd-term .home-term { height: 300px; }
 @media (max-width: 640px) {

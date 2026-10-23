@@ -1,8 +1,10 @@
 ---
 title: "搜索"
-date: 2026-09-29
-description: "站内全文搜索(支持中文)"
+description: "站内全文搜索（支持中文）"
 sitemap: true
+showDate: false
+showPagination: false
+comments: false
 ---
 <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
 <div id="pagefind-search"></div>
