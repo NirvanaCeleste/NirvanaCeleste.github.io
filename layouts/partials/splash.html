@@ -37,12 +37,9 @@
     .modal-divider { border: 0; border-top: 1px dashed #444; margin: 15px 0; }
 
     /* 社交标签组 */
-    .social-links-zone { margin: 15px 0; display: flex; gap: 10px; }
-    .social-links-zone a { padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; text-decoration: none; color: #fff; transition: transform 0.2s; }
-    .social-links-zone a:hover { transform: scale(1.05); }
-    .badge-bili { background: #00aeec; }
-    .badge-yt { background: #ff0000; }
-    .badge-tw { background: #14171a; border: 1px solid #555; }
+    .social-links-zone { margin: 15px 0; display: flex; gap: 10px; justify-content: center; }
+    .social-links-zone a { padding: 4px 14px; border-radius: 0; font-size: 0.85rem; text-decoration: none; color: #ddd; border: 1px solid #555; transition: border-color 0.2s, color 0.2s; }
+    .social-links-zone a:hover { border-color: #fff; color: #fff; }
 
     /* 退出按钮 */
     .modal-enter-btn { display: block; width: 100%; padding: 12px; margin-top: 20px; background: #ffffff; color: #000000; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; }
@@ -76,21 +73,14 @@
     <div class="intro-modal-card animate-pop">
         <h2 class="modal-title">Nirvana Celeste Space</h2>
         <div class="modal-body-content">
-            <p><strong>如果你是从 Discord OMORI 社区来的，欢迎你，朋友！有关 OMORI 模组的工作放在了对应分区。</strong></p>
-            <p class="en"><strong>If you are here from the OMORI Discord community, welcome, friend! You can find my OMORI mod work in the corresponding section.</strong></p>
+            <p><strong>如果你是从 Discord OMORI 社区来的，欢迎你，朋友！模组工作在对应分区。</strong></p>
+            <p class="en"><strong>If you are here from the OMORI Discord community — welcome. My mod work lives in its section.</strong></p>
             <hr class="modal-divider">
 
-            <p><strong>关于本站 / About:</strong></p>
-            <p>这个网页基于 GitHub、Cloudflare 和 DigitalPlat 开发，旨在记录我的学习和开发经历，如 OMORI 模组《未竟之事》和 ACM 题解等。</p>
-            <p class="en">This website is built on GitHub, Cloudflare, and DigitalPlat, serving as a space to document my learning and development journey, such as the OMORI mod "Unwritten" and my ACM competitive programming solutions.</p>
-            
-            <p>网站目前较为简陋，但旨在提供一个打破地理限制的访问空间。</p>
-            <p class="en">The site is currently a work in progress, but it is intended to provide accessible space regardless of your location.</p>
-
             <div class="social-links-zone">
-                <a href="https://space.bilibili.com/414300544" target="_blank" class="badge-bili">Bilibili</a>
-                <a href="https://www.youtube.com/@OmoriModUnwrittenStory" target="_blank" class="badge-yt">YouTube</a>
-                <a href="https://x.com/NirvanaCelesteZ" target="_blank" class="badge-tw">Twitter(X)</a>
+                <a href="https://space.bilibili.com/414300544" target="_blank">Bilibili</a>
+                <a href="https://www.youtube.com/@OmoriModUnwrittenStory" target="_blank">YouTube</a>
+                <a href="https://x.com/NirvanaCelesteZ" target="_blank">Twitter(X)</a>
             </div>
         </div>
         <button id="close-splash-btn" class="modal-enter-btn">Enter Space</button>
@@ -103,11 +93,16 @@
             const splash = document.getElementById("welcome-splash");
             if (splash) {
                 splash.classList.remove("hidden");
-                document.getElementById("close-splash-btn").addEventListener("click", function() {
+                const dismiss = () => {
+                    if (!document.getElementById("welcome-splash")) return;
                     splash.classList.add("fade-out-exit");
                     localStorage.setItem("has_visited_before", "true");
                     setTimeout(() => { splash.remove(); }, 600);
-                });
+                    window.removeEventListener("keydown", dismiss);
+                };
+                document.getElementById("close-splash-btn").addEventListener("click", dismiss);
+                document.addEventListener("keydown", dismiss);          // 任意键跳过
+                splash.addEventListener("click", dismiss);              // 点击空白处跳过
             }
         }
     });

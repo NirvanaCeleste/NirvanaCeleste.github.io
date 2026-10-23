@@ -9,6 +9,10 @@ title = "NirvanaCeleste's Blog"
   math = true
   dateFormat = '2006-01-02'   # 全站日期统一 ISO 短格式，和题解正文一致
 
+  [params.article]
+    showReadingTime = false   # 「14 字 · 1 分钟」是模板噪音
+    showWordCount = false
+
 [taxonomies]
   tag = "tags"
   category = "categories"

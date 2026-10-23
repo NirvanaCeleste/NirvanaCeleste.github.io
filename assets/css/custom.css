@@ -30,6 +30,22 @@
   --motion-base: .25s;
 }
 
+/* Blowfish 的 primary 蓝整体替换为纸面系：亮=墨/赭石，暗=亮赭石 */
+:root {
+  --color-primary-300: 176, 134, 11;
+  --color-primary-400: 140, 90, 30;
+  --color-primary-500: 140, 90, 30;
+  --color-primary-600: 122, 76, 24;
+  --color-primary-700: 107, 66, 20;
+}
+html.dark {
+  --color-primary-300: 201, 154, 90;
+  --color-primary-400: 201, 154, 90;
+  --color-primary-500: 201, 154, 90;
+  --color-primary-600: 201, 154, 90;
+  --color-primary-700: 222, 184, 135;
+}
+
 html.dark {
   --c-bg: #151210;            /* 深咖纸 */
   --c-surface: #1e1a16;
@@ -93,6 +109,8 @@ article p { margin-bottom: 1.05em; }
 article blockquote { border-left: 3px solid var(--c-line-strong); }
 .article-content a, .prose a { color: var(--c-accent); }   /* 链接收敛到赭石点缀 */
 article h2 { scroll-margin-top: 96px; }
+/* 阅读列居中：标题与正文都在 max-w-prose 里，贴左会留出大片空右 */
+#single_header, .article-content { margin-inline: auto; }
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: .15em 0; }
 html.dark article img { border-radius: 0; box-shadow: 0 0 0 1px var(--c-line); }
 
@@ -290,6 +308,33 @@ html.dark .home-term { background: var(--term-bg); }
   box-shadow: none !important; padding: 0 !important; margin: 0 !important;
   color: #f0f0f8; caret-color: var(--term-ok); font: inherit; border-radius: 0;
   min-height: 0; height: 1.7em; -webkit-appearance: none; appearance: none;
+}
+
+/* ===== 首页：目录页（排版驱动）===== */
+.home-dir { max-width: 760px; margin: 2.5em auto 2em; padding: 0 24px; }
+.hd-meta { font-family: Consolas, "Cascadia Mono", monospace; font-size: 13px;
+  color: var(--c-muted); letter-spacing: .08em; margin: 0 0 4px; }
+.hd-title { font-size: 44px; font-weight: 700; line-height: 1.15; margin: 0 0 8px; }
+.hd-sub { color: var(--c-muted); font-size: 17px; margin: 0 0 48px; }
+.hd-label { font-family: Consolas, "Cascadia Mono", monospace; font-size: 12px;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--c-muted); margin: 0 0 8px; }
+.hd-recent { margin-bottom: 48px; }
+.hd-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+  padding: 14px 4px; border-bottom: 1px solid var(--c-line);
+  text-decoration: none; color: var(--c-text);
+  transition: background var(--motion-fast) ease; }
+.hd-row:hover { background: var(--c-surface-2); }
+.hd-row-title { font-size: 17px; font-weight: 700; }
+.hd-row-date { font-family: Consolas, "Cascadia Mono", monospace; font-size: 13px;
+  color: var(--c-muted); flex: 0 0 auto; }
+.hd-all { display: inline-block; margin-top: 12px; font-size: 14px;
+  color: var(--c-accent); text-decoration: none; }
+.hd-all:hover { text-decoration: underline; text-underline-offset: 3px; }
+.hd-term { margin-top: 48px; }
+.hd-term .home-term { height: 300px; }
+@media (max-width: 640px) {
+  .hd-title { font-size: 32px; }
+  .home-dir { padding: 0 16px; }
 }
 
 /* ===== 终端外观（明面 + 迷你共用）===== */
