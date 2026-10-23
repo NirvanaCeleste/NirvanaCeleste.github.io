@@ -28,3 +28,12 @@ sitemap: true
 ## 关于本站
 
 本站由 [Hugo](https://gohugo.io/) 构建,托管在 GitHub Pages。文章内容以 Markdown 写作,公式使用 KaTeX 渲染,搜索由 Pagefind 提供。如果你发现某个看起来不太对劲的文件……那可能是故意的。
+
+## 项目
+
+### 在线刷题网站 · quiz-app
+
+网页部招新考核作品：题库练习 + 判分 + 错题本 + 收藏 + 章节统计，React 19 + Vite 纯前端；另带一个 Node 后端管账号、好友对战、排行榜和 AI 复盘（接口 key 由用户在设置里自己填，服务器不落任何密钥）。
+
+- 正式站：<https://quiz.nirvanacelesteblog.dpdns.org>（跑在家里常开的机器上，账号 / 对战 / AI 复盘都在这里）
+- 备份站：<https://nirvanacelesteblog.dpdns.org/quiz-app/>（GitHub Pages 托管的纯静态版；正式站离线时依然能刷题、看错题，页面顶栏会提示服务器离线）

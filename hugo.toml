@@ -1,6 +1,5 @@
 baseURL = 'https://NirvanaCeleste.github.io/'
-defaultContentLanguage = 'zh-cn'   # 站点语言：日期/主题字符串走中文（locale 不是 Hugo 配置项，已移除）
-languageCode = 'zh-cn'
+locale = 'zh-cn'                   # Hugo 0.158+ 的站点语言键（设 defaultContentLanguage 会开启多语言模式，多出个没用的语言切换按钮）
 title = "NirvanaCeleste's Blog"
 
 [params]
@@ -22,7 +21,8 @@ title = "NirvanaCeleste's Blog"
     enabled = true
     provider = "giscus" # 指定使用 giscus
 
-[params.giscus]
+  # giscus 必须挂在 comments 子表下（写成独立 [params.giscus] 主题读不到，评论区整块不渲染）
+  [params.comments.giscus]
     repo = "NirvanaCeleste/NirvanaCeleste.github.io"
     repoId = "R_kgDOTLg_BA"
     category = "General"
@@ -32,7 +32,7 @@ title = "NirvanaCeleste's Blog"
     reactionsEnabled = "1"
     emitMetadata = "0"
     inputPosition = "bottom"
-    theme = "light"
+    theme = "preferred_color_scheme"   # 跟随访问者系统明暗，暗色下不再是白框
     lang = "zh-CN"
 
 [menu]
@@ -56,6 +56,9 @@ title = "NirvanaCeleste's Blog"
     name = '搜索'
     url = '/search/'
     weight = 5
+
+[header]
+  showLanguageSelector = false   # 单语言站点，语言切换器是个点了没反应的按钮
 
 [markup]
   [markup.goldmark]

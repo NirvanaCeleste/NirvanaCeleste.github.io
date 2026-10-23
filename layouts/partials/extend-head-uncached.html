@@ -1,0 +1,43 @@
+{{/* 评论区挂载（每页单独渲染）：Blowfish v2.104 无内置评论，按 giscus 官方任意挂载方式补齐。
+     开关：hugo.toml [params.comments] enabled/provider + [params.comments.giscus]；
+     页面 front matter 写 comments: false 可单独关闭。 */}}
+{{ $c := site.Params.comments }}
+{{ if and $c.enabled (eq $c.provider "giscus") .IsPage }}
+  {{ $g := $c.giscus }}
+  {{ if and $g $g.repo $g.repoId $g.category $g.categoryId }}
+    {{ if ne .Params.comments false }}
+      <script>
+      (function () {
+        function mount() {
+          var art = document.querySelector("main > article");
+          if (!art) return;
+          var box = document.createElement("div");
+          box.className = "giscus-mount";
+          box.style.cssText = "max-width:75ch;margin:2.5em auto 0;padding:0 1.5em;";
+          var s = document.createElement("script");
+          s.src = "https://giscus.app/client.js";
+          s.setAttribute("data-repo", "{{ $g.repo }}");
+          s.setAttribute("data-repo-id", "{{ $g.repoId }}");
+          s.setAttribute("data-category", "{{ $g.category }}");
+          s.setAttribute("data-category-id", "{{ $g.categoryId }}");
+          s.setAttribute("data-mapping", "{{ $g.mapping | default "pathname" }}");
+          s.setAttribute("data-strict", "{{ $g.strict | default "0" }}");
+          s.setAttribute("data-reactions-enabled", "{{ $g.reactionsEnabled | default "1" }}");
+          s.setAttribute("data-emit-metadata", "{{ $g.emitMetadata | default "0" }}");
+          s.setAttribute("data-input-position", "{{ $g.inputPosition | default "bottom" }}");
+          s.setAttribute("data-theme", "{{ $g.theme | default "preferred_color_scheme" }}");
+          s.setAttribute("data-lang", "{{ $g.lang | default "zh-CN" }}");
+          s.crossOrigin = "anonymous";
+          s.async = true;
+          box.appendChild(s);
+          var anchor = art.querySelector(".article-content");
+          if (anchor) anchor.insertAdjacentElement("afterend", box);
+          else art.appendChild(box);
+        }
+        if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
+        else mount();
+      })();
+      </script>
+    {{ end }}
+  {{ end }}
+{{ end }}

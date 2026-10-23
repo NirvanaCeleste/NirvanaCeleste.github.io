@@ -4,3 +4,4 @@ public/
 .buildtest/
 resources/_gen/
 hugo.toml.bak
+_vendor/
