@@ -10,20 +10,39 @@
 
 
 
-  {{/* ===== 明面终端：首页主角 ===== */}}
-  <section class="term-hero" aria-label="交互终端">
-    <div class="term-window home-term" id="ht-window">
-      <div class="term-bar">
-        <span class="term-dot" style="background:#ff5f57"></span>
-        <span class="term-dot" style="background:#febc2e"></span>
-        <span class="term-dot" style="background:#28c840"></span>
-        <span class="term-title">nirvana@blog: ~/home</span>
-        <span class="term-hint">输入 help</span>
-      </div>
-      <div class="term-body" id="ht-body" aria-live="polite"></div>
-      <div class="term-input-line">
-        <span class="term-prompt" id="ht-prompt">❯</span>
-        <input id="ht-input" autocomplete="off" spellcheck="false" enterkeyhint="send" aria-label="终端输入">
+  {{/* ===== 首页：目录页（排版驱动） ===== */}}
+  {{ $recent := where site.RegularPages "Section" "in" (slice "acm" "omori") | first 6 }}
+  <section class="home-dir">
+    <p class="hd-meta">⌂ ~/home · {{ now.Format "2006-01-02" }}</p>
+    <h1 class="hd-title">NirvanaCeleste</h1>
+    <p class="hd-sub">算法竞赛复盘 · OMORI 模组 · 偶尔藏点小彩蛋</p>
+
+    <div class="hd-recent">
+      <p class="hd-label">最近文章</p>
+      {{ range $recent }}
+        <a class="hd-row" href="{{ .RelPermalink }}">
+          <span class="hd-row-title">{{ .Title }}</span>
+          <span class="hd-row-date">{{ .Date.Format "2006-01-02" }}</span>
+        </a>
+      {{ end }}
+      <a class="hd-all" href="/acm/">全部文章 →</a>
+    </div>
+
+    <div class="hd-term">
+      <p class="hd-label">终端 · help 看命令 · bg 换壁纸</p>
+      <div class="term-window home-term" id="ht-window">
+        <div class="term-bar">
+          <span class="term-dot" style="background:#ff5f57"></span>
+          <span class="term-dot" style="background:#febc2e"></span>
+          <span class="term-dot" style="background:#28c840"></span>
+          <span class="term-title">nirvana@blog: ~/home</span>
+          <span class="term-hint">输入 help</span>
+        </div>
+        <div class="term-body" id="ht-body" aria-live="polite"></div>
+        <div class="term-input-line">
+          <span class="term-prompt" id="ht-prompt">❯</span>
+          <input id="ht-input" autocomplete="off" spellcheck="false" enterkeyhint="send" aria-label="终端输入">
+        </div>
       </div>
     </div>
   </section>
