@@ -1,8 +1,10 @@
 {{ define "main" }}
   {{ .Content }}
 
+  {{/* 显式按日期倒序：指南章节带 weight（系列序），Hugo 默认排序会让它们
+     整体压过无 weight 的普通文章，导致最新复盘上不了"最近文章" */}}
   {{ $indexPosts := slice }}
-  {{ range where site.RegularPages "Section" "in" (slice "acm" "omori") }}
+  {{ range sort (where site.RegularPages "Section" "in" (slice "acm" "omori")) "Date" "desc" }}
     {{ $indexPosts = $indexPosts | append (dict "t" .Title "u" .RelPermalink "g" (delimit (.Params.tags | default slice) ",") ) }}
   {{ end }}
 
@@ -11,7 +13,7 @@
 
 
   {{/* ===== 首页：目录页（排版驱动） ===== */}}
-  {{ $recent := where site.RegularPages "Section" "in" (slice "acm" "omori") | first 6 }}
+  {{ $recent := sort (where site.RegularPages "Section" "in" (slice "acm" "omori")) "Date" "desc" | first 6 }}
   <section class="home-dir">
     <p class="hd-meta">⌂ ~/home · {{ now.Format "2006-01-02" }}</p>
     <h1 class="hd-title">NirvanaCeleste</h1>
