@@ -9,12 +9,13 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        font-family: sans-serif;
+        place-items: center;
+        font-family: 'LXGW WenKai Screen', 'Kaiti SC', 'STKaiti', serif;
     }
     .splash-overlay.hidden { display: none !important; }
 
     /* SVG 树木动画 */
-    .tree-animation-container { margin-bottom: 25px; display: flex; justify-content: center; }
+    .tree-animation-container { margin-bottom: 10px; display: flex; justify-content: center; transform: scale(.8); }
     .growing-tree path { fill: none; stroke: #ffffff; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; animation: growLines 2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
     .growing-tree .branch-left { animation-delay: 0.6s; }
     .growing-tree .branch-right { animation-delay: 0.9s; }
@@ -27,7 +28,7 @@
     @keyframes popLeaf { to { transform: scale(1); } }
 
     /* 弹窗卡片 */
-    .intro-modal-card { background: #16161a; border: 2px solid #ffffff; border-radius: 12px; padding: 30px; max-width: 520px; width: 90%; color: #ffffff; box-shadow: 0 20px 40px rgba(0,0,0,0.8); text-align: left; }
+    .intro-modal-card { background: #1e1a16; border: 2px solid #ffffff; border-radius: 0; padding: 30px; max-width: 520px; width: 90%; color: #ffffff; box-shadow: 0 20px 40px rgba(0,0,0,0.8); text-align: left; }
     .animate-pop { transform: scale(0.8); opacity: 0; animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards; }
     @keyframes modalPop { to { transform: scale(1); opacity: 1; } }
 
@@ -42,7 +43,7 @@
     .social-links-zone a:hover { border-color: #fff; color: #fff; }
 
     /* 退出按钮 */
-    .modal-enter-btn { display: block; width: 100%; padding: 12px; margin-top: 20px; background: #ffffff; color: #000000; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+    .modal-enter-btn { display: block; width: 100%; padding: 12px; margin-top: 20px; background: #ffffff; color: #000000; border: none; border-radius: 0; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; }
     .modal-enter-btn:hover { background: #e0e0e0; }
 
     /* 整体退出效果 */

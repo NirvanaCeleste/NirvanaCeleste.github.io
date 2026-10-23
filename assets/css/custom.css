@@ -17,15 +17,18 @@
   --err: #a3261c;             /* 判分语义：错 */
   --warn: #8c5a1e;
   --info: #6b6458;            /* 跳过 = 灰，不再引入第四种彩色 */
-  /* 终端是唯一常暗面板 */
-  --term-bg: #101014;
-  --term-text: #d6d6e2;
-  --term-dim: #77778c;
+  /* 终端是唯一常暗面板（色温与纸面统一：暖黑） */
+  --term-bg: #14110d;
+  --term-text: #e8e2d4;
+  --term-dim: #9a9184;
   --term-ok: #7ee787;
   --term-err: #ff7b72;
   --term-warn: #f2cc60;
   --term-link: #8ab4ff;
   --term-line: rgba(255, 255, 255, .08);
+  /* 三级墨字：替代散落的 8 种“白”，ink-3 对深咖纸 ≥ 4.5:1 */
+  --ink-2: #c9c2b4;
+  --ink-3: #8f887b;
   --motion-fast: .15s;
   --motion-base: .25s;
 }
@@ -61,6 +64,14 @@ html.dark {
   --info: #b8aa98;
 }
 
+/* ===== 可访问性与稳定性（第二轮审查处方）===== */
+html { scrollbar-gutter: stable; }                 /* 消除首页↔文章页的 4px 横向跳变 */
+::selection { background: var(--c-accent); color: var(--c-bg); }
+:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }   /* WCAG 2.4.7 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; }
+}
+
 /* ===== 字体：霞鹜文楷屏幕版（@font-face 见 /fonts/lxgw.css，extend-head 引入） ===== */
 body {
   font-family: 'LXGW WenKai Screen', 'Kaiti SC', 'STKaiti', 'KaiTi', system-ui, sans-serif;
@@ -68,6 +79,13 @@ body {
   color: var(--c-text);
 }
 h1, h2, h3, h4, h5, h6 { font-family: inherit; }
+/* 文楷只加载了 400 一个字重：关闭伪造粗体（发毛发糊的根因），
+   标题靠字号分级、正文重点靠赭石强调色区分 */
+h1, h2, h3, h4, h5, h6, .hd-title, .about-name, .upsolve-title, .cfrating-title {
+  font-synthesis: none;
+  font-weight: 400;
+}
+strong, b { font-synthesis: none; font-weight: 400; color: var(--c-accent); }
 
 /* ===== 全局壁纸层：默认关闭（图纸底优先），终端 bg 命令随时开启 ===== */
 body::before {
@@ -104,13 +122,18 @@ html.ws-mode .home-term { background: #0a0a0a; backdrop-filter: none; -webkit-ba
 html.ws-mode { filter: grayscale(1) contrast(1.06); transition: filter .8s ease; }
 
 /* ===== 阅读体验 ===== */
-article .prose, article article, .article-content { line-height: 1.9; letter-spacing: .015em; }
+article .prose, article article, .article-content { line-height: 1.9; letter-spacing: normal; }
 article p { margin-bottom: 1.05em; }
+article, article .prose, .article-content { color: var(--c-text); }
+article h1, article h2, article h3, article h4 { color: var(--c-text); }
+article blockquote { color: var(--ink-2); }
 article blockquote { border-left: 3px solid var(--c-line-strong); }
 .article-content a, .prose a { color: var(--c-accent); }   /* 链接收敛到赭石点缀 */
 article h2 { scroll-margin-top: 96px; }
-/* 阅读列居中：标题与正文都在 max-w-prose 里，贴左会留出大片空右 */
-#single_header, .article-content { margin-inline: auto; }
+/* 阅读列保持贴左：跳题导航栏按内容左缘定位（左置构图是有意的）。
+   评论区挂载点单独居中，见 .giscus-mount */
+/* 触控目标 ≥44px：明暗切换图标按钮 */
+#appearance-switcher { padding: 12px; min-width: 44px; min-height: 44px; box-sizing: border-box; }
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: .15em 0; }
 html.dark article img { border-radius: 0; box-shadow: 0 0 0 1px var(--c-line); }
 
@@ -186,7 +209,7 @@ html.dark #pagefind-search {
   background: var(--c-surface); }
 .about-avatar { width: 120px; height: 120px; border-radius: 0; object-fit: cover;
   border: 1px solid var(--c-line-strong); }
-.about-name { font-size: 1.9em; font-weight: 700; }
+.about-name { font-size: 1.9em; font-weight: 400; }
 .about-sub { color: var(--c-muted); margin-top: .2em; }
 
 /* ===== 补题清单 /acm/upsolve/ ===== */
@@ -314,7 +337,7 @@ html.dark .home-term { background: var(--term-bg); }
 .home-dir { max-width: 760px; margin: 2.5em auto 2em; padding: 0 24px; }
 .hd-meta { font-family: Consolas, "Cascadia Mono", monospace; font-size: 13px;
   color: var(--c-muted); letter-spacing: .08em; margin: 0 0 4px; }
-.hd-title { font-size: 44px; font-weight: 700; line-height: 1.15; margin: 0 0 8px; }
+.hd-title { font-size: 44px; font-weight: 400; line-height: 1.15; margin: 0 0 8px; }
 .hd-sub { color: var(--c-muted); font-size: 17px; margin: 0 0 48px; }
 .hd-label { font-family: Consolas, "Cascadia Mono", monospace; font-size: 12px;
   letter-spacing: .12em; text-transform: uppercase; color: var(--c-muted); margin: 0 0 8px; }

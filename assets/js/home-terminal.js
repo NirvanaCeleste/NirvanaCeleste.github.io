@@ -16,8 +16,10 @@
       body.scrollTop = body.scrollHeight;
       return el;
     }
+    var REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     function typeLine(text, cls, done) {
       var el = line("", cls);
+      if (REDUCED) { el.textContent = text; if (done) done(); return; }   // 晕动症用户免打字机动画
       var i = 0;
       (function tick() {
         if (i <= text.length) {
