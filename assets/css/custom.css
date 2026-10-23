@@ -129,9 +129,16 @@ article h1, article h2, article h3, article h4 { color: var(--c-text); }
 article blockquote { color: var(--ink-2); }
 article blockquote { border-left: 3px solid var(--c-line-strong); }
 .article-content a, .prose a { color: var(--c-accent); }   /* 链接收敛到赭石点缀 */
+.article-content { font-size: 17px; }   /* 首页/文章正文基准统一 17px（原 18/16 混用） */
+/* 触控目标：筛选 chips 提到 44px（状态徽章非交互，不拉高） */
+.tagchips .chip { min-height: 44px; }
 article h2 { scroll-margin-top: 96px; }
 /* 阅读列保持贴左：跳题导航栏按内容左缘定位（左置构图是有意的）。
    评论区挂载点单独居中，见 .giscus-mount */
+/* 页脚：并列信息统一 13px（原 14/12 混用且基线错位） */
+#site-footer p { font-size: 13px !important; line-height: 1.6 !important; }
+#site-footer { border-top: 1px solid var(--c-line); }
+
 /* 触控目标 ≥44px：明暗切换图标按钮 */
 #appearance-switcher { padding: 12px; min-width: 44px; min-height: 44px; box-sizing: border-box; }
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: .15em 0; }
@@ -334,7 +341,7 @@ html.dark .home-term { background: var(--term-bg); }
 }
 
 /* ===== 首页：目录页（排版驱动）===== */
-.home-dir { max-width: 760px; margin: 2.5em auto 2em; padding: 0 24px; }
+.home-dir { max-width: 760px; margin: 2.5em auto 2em; padding: 0 24px; font-size: 17px; }
 .hd-meta { font-family: Consolas, "Cascadia Mono", monospace; font-size: 13px;
   color: var(--c-muted); letter-spacing: .08em; margin: 0 0 4px; }
 .hd-title { font-size: 44px; font-weight: 400; line-height: 1.15; margin: 0 0 8px; }
@@ -389,6 +396,15 @@ html.dark .home-term { background: var(--term-bg); }
 .term-prompt { color: var(--term-ok); font-weight: 700; margin-right: .15em; }
 .term-input-line { display: flex; align-items: center; gap: .5em; padding: .55em .9em .7em;
   border-top: 1px solid var(--term-line); font-family: Consolas, monospace; }
+
+/* 行内代码：去主题 cyan-400，纸面墨字 + 浅底 */
+article :not(pre) > code {
+  color: var(--c-text);
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line);
+  border-radius: 0;
+  padding: .1em .35em;
+}
 
 /* ===== 评论区挂载点 ===== */
 .giscus-mount { max-width: 75ch; margin: 2.5em auto 0; padding: 0 1.5em; }
