@@ -77,6 +77,10 @@ body {
   font-family: 'LXGW WenKai Screen', 'Kaiti SC', 'STKaiti', 'KaiTi', system-ui, sans-serif;
   background-color: var(--c-bg) !important;
   color: var(--c-text);
+  /* 全站唯一字体只有 400 字重：从 body 继承关闭伪造粗体/斜体（.hd-row-title、
+     .cfrating-now、.probnav-btn 等处的 font-weight 声明得以安全保留）。
+     系统等宽字体有真实 Bold，不受影响 */
+  font-synthesis: none;
 }
 h1, h2, h3, h4, h5, h6 { font-family: inherit; }
 /* 文楷只加载了 400 一个字重：关闭伪造粗体（发毛发糊的根因），
@@ -104,7 +108,7 @@ body::before {
 /* 选了壁纸：首页终端玻璃化；阅读页（非首页）淡化壁纸并叠纸色纱罩——装饰让位内容 */
 html[data-site-bg="on"] body::before { transform: scale(1.05); }
 html[data-site-bg="on"] .home-term {
-  background: rgba(13, 13, 19, .78);
+  background: rgba(16, 13, 10, .78);
   backdrop-filter: blur(9px) saturate(1.05);
   -webkit-backdrop-filter: blur(9px) saturate(1.05);
 }
@@ -116,6 +120,13 @@ html[data-site-bg="on"] body:not(:has(.term-hero))::after {
 html.dark[data-site-bg="on"] body:not(:has(.term-hero))::after {
   background: rgb(21 18 16 / 80%);
 }
+/* 代码块：gruvbox 暖底低饱和（hugo.toml [markup.highlight]，替换 Monokai），
+   块体归入图纸语法：直角 + 墨线描边 */
+article pre {
+  border-radius: 0;
+  border: 1px solid var(--c-line);
+}
+
 /* OMORI 白空间：清空一切装饰，壁纸不进入 */
 html.ws-mode[data-site-bg="on"] body::before { opacity: 0; }
 html.ws-mode .home-term { background: #0a0a0a; backdrop-filter: none; -webkit-backdrop-filter: none; }
@@ -336,7 +347,7 @@ html.dark .home-term { background: var(--term-bg); }
   flex: 1;
   background: transparent !important; border: none !important; outline: none !important;
   box-shadow: none !important; padding: 0 !important; margin: 0 !important;
-  color: #f0f0f8; caret-color: var(--term-ok); font: inherit; border-radius: 0;
+  color: var(--term-text); caret-color: var(--term-ok); font: inherit; border-radius: 0;
   min-height: 0; height: 1.7em; -webkit-appearance: none; appearance: none;
 }
 
@@ -378,7 +389,7 @@ html.dark .home-term { background: var(--term-bg); }
   background: rgba(255, 255, 255, .06); border-bottom: 1px solid var(--term-line); }
 .term-dot { width: 11px; height: 11px; border-radius: 50%; flex: 0 0 auto; }
 .term-title { font-size: .76em; color: var(--term-dim); margin-left: .4em; font-family: Consolas, monospace; }
-.term-hint { margin-left: auto; font-size: .72em; color: #6f6f80; font-family: Consolas, monospace; }
+.term-hint { margin-left: auto; font-size: .72em; color: var(--term-dim); font-family: Consolas, monospace; }
 .term-close { cursor: pointer; padding: 0 .4em; }
 .term-close:hover { color: #fff; }
 .term-body { flex: 1; overflow-y: auto; padding: .7em .9em .3em;
@@ -391,7 +402,7 @@ html.dark .home-term { background: var(--term-bg); }
 .t-err { color: var(--term-err); }
 .t-cmd { color: var(--term-warn); }
 .t-ws { color: #ffffff; letter-spacing: .08em; }
-.t-in { color: #e6e6f0; margin-top: .35em; }
+.t-in { color: var(--term-text); margin-top: .35em; }
 .t-pre { font-family: inherit; margin: .2em 0; color: var(--term-text); }
 .term-prompt { color: var(--term-ok); font-weight: 700; margin-right: .15em; }
 .term-input-line { display: flex; align-items: center; gap: .5em; padding: .55em .9em .7em;
@@ -525,4 +536,10 @@ article :not(pre) > code {
 
 @media (max-width: 900px) {
   .home-term { height: 420px; }
+}
+
+/* 手机端列表呼吸：小屏压到 24px 网格（桌面端保持 Blowfish 默认节奏） */
+@media (max-width: 640px) {
+  main section.space-y-10 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.75rem; }
+  main section.space-y-10 h2 { margin-top: 2rem; }
 }

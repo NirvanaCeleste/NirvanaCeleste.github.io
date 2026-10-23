@@ -65,6 +65,10 @@ title = "NirvanaCeleste's Blog"
   showLanguageSelector = false   # 单语言站点，语言切换器是个点了没反应的按钮
 
 [markup]
+  [markup.highlight]
+    style = "gruvbox"        # Monokai 饱和粉绿与暖纸/赭石体系冲突；gruvbox 暖底低饱和
+    tabWidth = 4
+    lineNos = false
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true  # 这一行必须加上，否则 Giscus 的脚本会被安全机制删掉
