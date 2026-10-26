@@ -41,10 +41,6 @@ title = "NirvanaCeleste's Blog"
 
 [menu]
   [[menu.main]]
-    name = '主页'
-    url = '/'
-    weight = 1
-  [[menu.main]]
     name = 'ACM 题解'
     url = '/acm/'
     weight = 2

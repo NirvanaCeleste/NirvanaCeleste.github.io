@@ -15,6 +15,10 @@ sitemap: true
       <a class="chip" href="https://codeforces.com/profile/NirvanaCeleste" target="_blank" rel="noopener">Codeforces · NirvanaCeleste</a>
       <a class="chip" href="https://atcoder.jp/users/NirvanaCeleste" target="_blank" rel="noopener">AtCoder · NirvanaCeleste</a>
       <a class="chip" href="https://github.com/NirvanaCeleste" target="_blank" rel="noopener">GitHub · NirvanaCeleste</a>
+      <a class="chip" href="https://space.bilibili.com/414300544" target="_blank" rel="noopener">Bilibili</a>
+      <a class="chip" href="https://www.youtube.com/@OmoriModUnwrittenStory" target="_blank" rel="noopener">YouTube</a>
+      <a class="chip" href="https://x.com/NirvanaCelesteZ" target="_blank" rel="noopener">Twitter(X)</a>
+      <a class="chip" href="/index.xml" target="_blank" rel="noopener">RSS</a>
     </div>
   </div>
 </div>

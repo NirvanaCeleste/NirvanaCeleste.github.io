@@ -15,18 +15,10 @@
   {{/* ===== 首页：目录页（排版驱动） ===== */}}
   {{ $recent := sort (where site.RegularPages "Section" "in" (slice "acm" "omori")) "Date" "desc" | first 6 }}
   <section class="home-dir">
-    <p class="hd-meta">⌂ ~/home · {{ now.Format "2006-01-02" }}</p>
     <h1 class="hd-title">NirvanaCeleste</h1>
     <p class="hd-sub">算法竞赛复盘 · OMORI 模组 · 偶尔藏点小彩蛋</p>
-    <p class="hd-social">
-      <a href="https://space.bilibili.com/414300544" target="_blank" rel="noopener">Bilibili</a>
-      <a href="https://www.youtube.com/@OmoriModUnwrittenStory" target="_blank" rel="noopener">YouTube</a>
-      <a href="https://x.com/NirvanaCelesteZ" target="_blank" rel="noopener">X</a>
-      <a href="/index.xml" target="_blank" rel="noopener">RSS</a>
-    </p>
 
     <div class="hd-recent">
-      <p class="hd-label">最近文章</p>
       {{ range $recent }}
         <a class="hd-row" href="{{ .RelPermalink }}">
           <span class="hd-row-title">{{ .Title }}</span>
@@ -38,15 +30,7 @@
     </div>
 
     <div class="hd-term">
-      <p class="hd-label">终端 · help 看命令</p>
       <div class="term-window home-term" id="ht-window">
-        <div class="term-bar">
-          <span class="term-dot" style="background:#ff5f57"></span>
-          <span class="term-dot" style="background:#febc2e"></span>
-          <span class="term-dot" style="background:#28c840"></span>
-          <span class="term-title">nirvana@blog: ~/home</span>
-          <span class="term-hint">输入 help</span>
-        </div>
         <div class="term-body" id="ht-body" aria-live="polite"></div>
         <div class="term-input-line">
           <span class="term-prompt" id="ht-prompt">❯</span>
@@ -61,13 +45,7 @@
 
   {{/* ===== 迷你终端（伏笔层，~ 或 SOMETHING 唤出） ===== */}}
   <div class="term-window mini-term hidden" id="mini-term" aria-hidden="true">
-    <div class="term-bar">
-      <span class="term-dot" style="background:#ff5f57"></span>
-      <span class="term-dot" style="background:#febc2e"></span>
-      <span class="term-dot" style="background:#28c840"></span>
-      <span class="term-title">??@nowhere: ~</span>
-      <span class="term-hint term-close" id="term-close" role="button">✕</span>
-    </div>
+    <span class="term-close term-absolute" id="term-close" role="button">✕</span>
     <div class="term-body" id="term-body"></div>
     <div class="term-input-line">
       <span class="term-prompt">❯</span>
