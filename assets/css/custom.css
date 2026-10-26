@@ -194,9 +194,9 @@ article pre::-webkit-scrollbar { height: 6px; }
 article pre::-webkit-scrollbar-thumb { background: var(--c-line); border-radius: 0; }
 
 /* ===== Pagefind 搜索 ===== */
-/* 搜索页：pagefind 自带 40em 宽度太窄，铺满阅读宽度 */
+/* 搜索页：fit-content 容器会缩到搜索框的固有宽度（实测 403px），强制撑满面板 */
 #pagefind-search .pagefind-ui { max-width: none; width: 100%; }
-body:has(#pagefind-search) .article-content { max-width: min(100%, 56rem); }
+article:has(#pagefind-search) .article-content { width: 100%; max-width: none; }
 #pagefind-search {
   --pagefind-ui-primary: var(--c-accent);
   --pagefind-ui-border: var(--c-line);
