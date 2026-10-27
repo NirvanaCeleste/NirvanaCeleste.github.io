@@ -8,8 +8,8 @@ description: "算法竞赛题解:AtCoder / Codeforces / 牛客"
 按平台与难度筛选:
 
 <span class="tagchips">
-<a class="chip" href="/acm/">全部 27</a>
-<a class="chip" href="/tags/atcoder/">AtCoder 11</a>
+<a class="chip" href="/acm/">全部 28</a>
+<a class="chip" href="/tags/atcoder/">AtCoder 12</a>
 <a class="chip" href="/tags/codeforces/">Codeforces 8</a>
 <a class="chip" href="/tags/nowcoder/">牛客 6</a>
 <a class="chip" href="/tags/div-2/">Div.2 5</a>
