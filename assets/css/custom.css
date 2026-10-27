@@ -194,9 +194,13 @@ article pre::-webkit-scrollbar { height: 6px; }
 article pre::-webkit-scrollbar-thumb { background: var(--c-line); border-radius: 0; }
 
 /* ===== Pagefind 搜索 ===== */
-/* 搜索页：fit-content 容器会缩到搜索框的固有宽度（实测 403px），强制撑满面板 */
+/* 搜索页：fit-content 包裹容器会缩到搜索框的固有宽度（实测 403px），
+   两层都要强制撑满面板宽度 */
 #pagefind-search .pagefind-ui { max-width: none; width: 100%; }
-article:has(#pagefind-search) .article-content { width: 100%; max-width: none; }
+main > article:has(#pagefind-search) section > div,
+main > article:has(#pagefind-search) .article-content {
+  width: 100% !important; max-width: none !important;
+}
 #pagefind-search {
   --pagefind-ui-primary: var(--c-accent);
   --pagefind-ui-border: var(--c-line);

@@ -18,7 +18,6 @@ sitemap: true
       <a class="chip" href="https://space.bilibili.com/414300544" target="_blank" rel="noopener">Bilibili</a>
       <a class="chip" href="https://www.youtube.com/@OmoriModUnwrittenStory" target="_blank" rel="noopener">YouTube</a>
       <a class="chip" href="https://x.com/NirvanaCelesteZ" target="_blank" rel="noopener">Twitter(X)</a>
-      <a class="chip" href="/index.xml" target="_blank" rel="noopener">RSS</a>
     </div>
   </div>
 </div>
