@@ -4,6 +4,9 @@ date: 2026-09-29
 weight: 4
 description: "NirvanaCeleste · 算法竞赛选手 · OMORI 模组开发者"
 sitemap: true
+build:
+  list: never
+  render: always
 ---
 <div class="not-prose about-hero">
   <img src="/img/avatar.jpg" alt="NirvanaCeleste 的头像" class="about-avatar">

@@ -2,6 +2,9 @@
 title: "搜索"
 description: "站内全文搜索（支持中文）"
 sitemap: true
+build:
+  list: never
+  render: always
 showDate: false
 showPagination: false
 comments: false
