@@ -568,3 +568,17 @@ article :not(pre) > code {
   main section.space-y-10 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.75rem; }
   main section.space-y-10 h2 { margin-top: 2rem; }
 }
+
+/* 全站禁止选中/复制：body 设 none，后代 auto 沿用其 used value；
+   输入控件恢复 text，搜索框等不受影响 */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+input, textarea, select, [contenteditable="true"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
+}
