@@ -1,1 +1,65 @@
-[{"contest":"","rank":3332,"old":0,"new":121,"perf":1123},{"contest":"","rank":4805,"old":121,"new":294,"perf":924},{"contest":"JPRS Programming Contest 202","rank":4566,"old":294,"new":432,"perf":895},{"contest":"","rank":3134,"old":432,"new":607,"perf":1160},{"contest":"AtCoder Beginner Contest 472","rank":5975,"old":607,"new":607,"perf":665},{"contest":"","rank":3128,"old":607,"new":711,"perf":1156},{"contest":"","rank":2957,"old":711,"new":728,"perf":847},{"contest":"JIJ Programming Contest 2026","rank":2335,"old":728,"new":803,"perf":1184}]
+[
+ {
+  "contest": "AtCoder Beginner Contest 467",
+  "rank": 3332,
+  "old": 0,
+  "new": 121,
+  "perf": 1123
+ },
+ {
+  "contest": "AtCoder Beginner Contest 468",
+  "rank": 4805,
+  "old": 121,
+  "new": 294,
+  "perf": 924
+ },
+ {
+  "contest": "JPRS Programming Contest 2026#2",
+  "rank": 4566,
+  "old": 294,
+  "new": 432,
+  "perf": 895
+ },
+ {
+  "contest": "AtCoder Beginner Contest 471",
+  "rank": 3134,
+  "old": 432,
+  "new": 607,
+  "perf": 1160
+ },
+ {
+  "contest": "AtCoder Beginner Contest 472",
+  "rank": 5975,
+  "old": 607,
+  "new": 607,
+  "perf": 665
+ },
+ {
+  "contest": "AtCoder Beginner Contest 473",
+  "rank": 3128,
+  "old": 607,
+  "new": 711,
+  "perf": 1156
+ },
+ {
+  "contest": "AtCoder Beginner Contest 474",
+  "rank": 2957,
+  "old": 711,
+  "new": 728,
+  "perf": 847
+ },
+ {
+  "contest": "JIJ Programming Contest 2026",
+  "rank": 2335,
+  "old": 728,
+  "new": 803,
+  "perf": 1184
+ },
+ {
+  "contest": "SMBC Programming Contest #2",
+  "rank": 1715,
+  "old": 803,
+  "new": 894,
+  "perf": 1350
+ }
+]
