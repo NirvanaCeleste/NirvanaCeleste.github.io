@@ -277,3 +277,8 @@ document.addEventListener("DOMContentLoaded",function(){
 {{ $probnav := resources.Get "js/probnav.js" | minify | fingerprint }}
 <script defer src="{{ $probnav.RelPermalink }}" integrity="{{ $probnav.Data.Integrity }}"></script>
 {{ end }}
+
+{{/* 全站代码块「复制」按钮（右上角，程序化剪贴板不受 user-select:none 影响） */}}
+{{ $codeCopy := resources.Get "js/code-copy.js" | minify | fingerprint }}
+<script defer src="{{ $codeCopy.RelPermalink }}" integrity="{{ $codeCopy.Data.Integrity }}"></script>
+
