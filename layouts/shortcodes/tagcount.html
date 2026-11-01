@@ -1,0 +1,7 @@
+{{- /* 用法：{{< tagcount atcoder >}}；all = ACM 分区全部常规页面 */ -}}
+{{- $t := .Get 0 -}}
+{{- if eq $t "all" -}}
+{{- len (where site.RegularPages "Section" "acm") -}}
+{{- else -}}
+{{- len (index site.Taxonomies.tags $t) -}}
+{{- end -}}
