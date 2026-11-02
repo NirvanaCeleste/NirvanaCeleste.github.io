@@ -58,12 +58,12 @@
                   <div class="upsolve-item">
                     <span class="upsolve-letter">{{ .problem }}</span>
                     <div class="upsolve-info">
+                      {{ $pname := .name }}{{ $pprob := .problem }}{{ $purl := .url }}
                       <div class="upsolve-title">
-                        {{ with .name }}{{ . }}{{ else }}题目 {{ .problem }}{{ end }}
-                        {{ with .url }}<a href="{{ . }}" target="_blank" rel="noopener" class="upsolve-link">题面 ↗</a>{{ end }}
+                        {{ if $purl }}<a href="{{ $purl }}" target="_blank" rel="noopener">{{ with $pname }}{{ . }}{{ else }}题目 {{ $pprob }}{{ end }}</a>{{ else }}{{ with $pname }}{{ . }}{{ else }}题目 {{ $pprob }}{{ end }}{{ end }}
                       </div>
                       <div class="upsolve-meta">
-                        <a href="{{ $post.RelPermalink }}" class="upsolve-post">{{ $post.Title }}</a>
+                        <span class="upsolve-post">{{ $post.Title }}</span>
                         <span class="upsolve-date">{{ $post.Date.Format "2006-01-02" }}</span>
                         {{ with .note }}<span class="upsolve-note">{{ . }}</span>{{ end }}
                       </div>

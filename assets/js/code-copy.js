@@ -35,6 +35,7 @@
     btn.setAttribute("aria-label", "复制代码");
     btn.addEventListener("click", function () {
       var text = pre.innerText.replace(/\n$/, "");
+      btn.textContent = "复制中…";          /* 即时反馈，不等剪贴板 promise */
       var done = function () { flash(btn, DONE, "ok"); };
       var fail = function () { flash(btn, FAIL, "fail"); };
       var settled = false;
@@ -45,7 +46,7 @@
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
         /* 个别 WebView 的权限承诺会永远挂起：1 秒不结算就走 execCommand 备援 */
-        var timer = setTimeout(viaFallback, 1000);
+        var timer = setTimeout(viaFallback, 300);
         navigator.clipboard.writeText(text).then(function () {
           if (settled) return;
           settled = true;

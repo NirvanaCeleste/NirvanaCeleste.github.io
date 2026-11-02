@@ -19,10 +19,14 @@ upsolve:
     status: "skip"
     note: "多项式/期望计数题，判断需要 NTT 类工具后直接没落笔"
 ---
+> **30 秒版**：A–E 五题全 AC（1450 分），Rating 803 → 894（+91），Perf 1350。A/B/C 20 分钟三连，D 半小时连踩三坑全爬出来；E 三开方向对了但终场后约 8 分钟才存盘，F/G 弃赛。
+
 
 本场是 SMBC 冠名的 [AtCoder Beginner Contest 481](https://atcoder.jp/contests/abc481)。Rating **803 → 894（+91）**，Performance **1350**。A–E 五题、F/G 弃赛，终场前最后一版 E 存盘时比赛已经结束——差了约 8 分钟。
 
-**做题情况**（按剩余时间）
+<details class="tl-fold">
+<summary>做题情况（按剩余时间） —— 点开展开</summary>
+
 
 - 剩 1h38：A 过
 - 剩 1h25：B 过
@@ -32,6 +36,8 @@ upsolve:
 - 剩 10min：F 只剩空模板——「模拟完然后 dij？？数字会太长，拆位贡献？贪心吗？？没时间了呜呜」
 - 剩 5min：E 三开，象限分类 + 叉积排序的第三版成型
 - 终场铃响：E2 完整版存盘于结束之后约 8 分钟
+
+</details>
 
 ## A - Digits of A+B
 https://atcoder.jp/contests/abc481/tasks/abc481_a
