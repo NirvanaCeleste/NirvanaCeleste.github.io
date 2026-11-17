@@ -31,8 +31,6 @@ OMORI.
 - [OMORI OST Info](https://docs.google.com/spreadsheets/d/1JNYYw37xuOqLewoOAWo6n4xhP9rwQzmcIw5O_IXAjJk/edit#gid=0):<span class="og-g">OMORI</span> 全部音乐的信息索引。
 - [OMORI Audio Resource Index](https://docs.google.com/spreadsheets/d/1K-umUDEsxbIlxnhmtlzh_Rg42zr_zKGPNZO2UJXn-dE/edit?gid=0#gid=0):<span class="og-g">OMORI</span> 全部音频的信息索引。
 - [RPG Maker MZ / MV Script Calls](https://docs.google.com/spreadsheets/d/1-Oa0cRGpjC8L5JO8vdMwOaYMKO75dtfKDOetnvh7OHs/htmlview?pli=1#gid=0):超大型脚本与脚本调用数据库,供 <span class="og-g">RPG Maker MV</span> 使用。
-- [Mods.one Discord Server](https://discord.gg/EDTMF85Hnp):了解 <span class="og-g">mods.one</span> 本站动态的好去处。
-- [OMORI Modding Hub Discord Server](https://discord.gg/pkBEr7ywCG):服务一切 Mod 制作需求的服务器。大多数大型 Mod 的更新和发布都在这里,游玩和制作 Mod 方面的技术支持也触手可及。
 
 ## 开发者内部内容
 
@@ -42,7 +40,6 @@ OMORI.
 
 撰写 GitHub 章节(FruitDragon)(进行中)
 
-添加一个关于在 Discord 中展示 Github Commits 的小节
 
 完成脚本章节(FD)
 

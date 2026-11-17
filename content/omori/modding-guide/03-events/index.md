@@ -258,9 +258,7 @@ Copy Event(复制事件):它的作用是把一个地图上的整个事件原封�
 
 ### 事件代码
 
-这一节大部分内容会是概述,因为要过一遍的东西实在太多了。想要更深入、更详细的讲解,可以去问问
-
-*[Mods.one Discord 服务器](https://discord.gg/EDTMF85Hnp)或 [OMORI Modding Hub](https://discord.gg/pkBEr7ywCG) 里的某个人——说不定就是我们中的谁。*
+这一节大部分内容会是概述,因为要过一遍的东西实在太多了。想要更深入、更详细的讲解,可以去 [OMORI Wiki](https://omori.wiki/) 或 [Mods.one](https://mods.one/) 查文档与现成模组的源码。
 
 双击内容框,你会得到下面这个菜单,里面有三页选项:
 

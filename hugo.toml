@@ -1,4 +1,4 @@
-baseURL = 'https://NirvanaCeleste.github.io/'
+baseURL = 'https://nirvanaceleste.top/'
 locale = 'zh-cn'                   # Hugo 0.158+ 的站点语言键（设 defaultContentLanguage 会开启多语言模式，多出个没用的语言切换按钮）
 title = "NirvanaCeleste's Blog"
 
@@ -22,7 +22,7 @@ title = "NirvanaCeleste's Blog"
   home = ["html", "rss", "json"]
 
   [params.comments]
-    enabled = true
+    enabled = false # 镜像站无仓库绑定，评论下线；giscus 配置保留可随时开回
     provider = "giscus" # 指定使用 giscus
 
   # giscus 必须挂在 comments 子表下（写成独立 [params.giscus] 主题读不到，评论区整块不渲染）

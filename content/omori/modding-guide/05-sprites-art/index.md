@@ -482,7 +482,7 @@ PINKER 确实是有用处的。她被向上偏移了六个像素。在 RPG Maker
 
 风格上,原版始终是黑底白色铅笔画风,但实际上你想做成什么样都行。
 
-不过,用原版那套方法访问这些图标既费劲又不现实。改用 Stahl\_AltItemIcon,你只需指定图集名称再加索引,不管物品是什么类型,都能取到任意图标。这个插件可以在 [OMORI](https://github.com/modsone/omori-modding-resources) [Modding 资源仓库](https://github.com/modsone/omori-modding-resources)里找到;要是那里没有,去 [Omori Modding Hub](https://discord.gg/exu5KTxDvC)问一声也能找到。这个方法还允许你定义新的物品图集。
+不过,用原版那套方法访问这些图标既费劲又不现实。改用 Stahl\_AltItemIcon,你只需指定图集名称再加索引,不管物品是什么类型,都能取到任意图标。这个插件可以在 [OMORI](https://github.com/modsone/omori-modding-resources) [Modding 资源仓库](https://github.com/modsone/omori-modding-resources)里找到;要是那里没有,也可以直接在 [OMORI Modding Hub 的相关仓库](https://github.com/topics/omori-mv)检索现成的插件。这个方法还允许你定义新的物品图集。
 
 不过有一点要记住:图标会被压缩并重新缩放,以塞进游戏指定的位置。因此,直接拿像素精灵当图标用,不模糊是不可能的。如果你就是想用像素精灵,可以用 [FD_ItemIconRescale](https://github.com/modsone/omori-modding-resources/blob/main/Battle%20System%20Plugins/Menu%20and%20UI/FD_ItemIconRescale.js) 创建不会被缩放的图标图集。(请注意,它尚未与商店图标一起测试过,物品放进游戏内商店时可能不起作用。如需协助,请联系 FruitDragon——他是该插件的作者,也是本文档的所有者。)
 
